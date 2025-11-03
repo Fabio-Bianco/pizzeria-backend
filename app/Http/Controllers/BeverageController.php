@@ -2,37 +2,105 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Beverage;
+use App\Support\SlugService;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Model;
 
-class BeverageController extends BaseController
+class BeverageController extends Controller
 {
-    // 🔧 CONFIGURAZIONI SPECIFICHE
-    protected array $searchableFields = ['name', 'description', 'category'];
-    protected array $sortableFields = ['name', 'price', 'created_at'];
-    protected array $eagerLoadRelations = [];
-    protected array $manyToManyRelations = [];
-    protected ?string $uploadFolder = 'beverages';
-
-    // 📝 VALIDAZIONE SPECIFICA
-    protected function getValidationRules(Request $request, ?Model $model = null): array
+    // 📋 Mostra tutte le bevande
+    public function index(Request $request)
     {
-        return [
+        $beverages = Beverage::query();
+        
+        // 🔍 Cerca per nome o categoria
+        if ($request->search) {
+            $beverages->where('name', 'like', "%{$request->search}%")
+                     ->orWhere('category', 'like', "%{$request->search}%");
+        }
+        
+        // 📊 Ordina per nome
+        $beverages->orderBy('name');
+        
+        return view('beverages.index', [
+            'beverages' => $beverages->paginate(10)
+        ]);
+    }
+    
+    // ➕ Form per nuova bevanda
+    public function create()
+    {
+        return view('beverages.create');
+    }
+    
+    // 💾 Salva nuova bevanda
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|max:255|unique:beverages',
+            'description' => 'nullable',
             'price' => 'required|numeric|min:0',
-            'category' => 'nullable|string|max:255',
-            'image' => 'nullable|image|max:2048',
+            'category' => 'nullable|max:255',
             'is_alcoholic' => 'boolean'
-        ];
+        ]);
+        
+        Beverage::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'category' => $request->category,
+            'is_alcoholic' => $request->boolean('is_alcoholic'),
+            'slug' => SlugService::unique(new Beverage(), $request->name)
+        ]);
+        
+        return redirect()->route('beverages.index')
+                        ->with('success', 'Bevanda creata!');
     }
-
-    // 🔧 NOME VARIABILE PERSONALIZZATO PER VIEW
-    protected function getIndexViewData($items): array
+    
+    // 👁️ Mostra bevanda specifica
+    public function show(Beverage $beverage)
     {
-        return ['beverages' => $items]; // View si aspetta $beverages, non $items
+        return view('beverages.show', compact('beverage'));
     }
-
-    protected function getEditViewData($item): array
+    
+    // ✏️ Form per modificare bevanda
+    public function edit(Beverage $beverage)
     {
-        return ['beverage' => $item]; // View si aspetta $beverage, non $item
+        return view('beverages.edit', compact('beverage'));
+    }
+    
+    // 🔄 Aggiorna bevanda
+    public function update(Request $request, Beverage $beverage)
+    {
+        $request->validate([
+            'name' => 'required|max:255|unique:beverages,name,' . $beverage->id,
+            'description' => 'nullable',
+            'price' => 'required|numeric|min:0',
+            'category' => 'nullable|max:255',
+            'is_alcoholic' => 'boolean'
+        ]);
+        
+        $beverage->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'category' => $request->category,
+            'is_alcoholic' => $request->boolean('is_alcoholic'),
+            'slug' => $request->name !== $beverage->name 
+                ? SlugService::unique(new Beverage(), $request->name, $beverage->id)
+                : $beverage->slug
+        ]);
+        
+        return redirect()->route('beverages.index')
+                        ->with('success', 'Bevanda aggiornata!');
+    }
+    
+    // 🗑️ Elimina bevanda
+    public function destroy(Beverage $beverage)
+    {
+        $beverage->delete();
+        
+        return redirect()->route('beverages.index')
+                        ->with('success', 'Bevanda eliminata!');
     }
 }

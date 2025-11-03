@@ -2,33 +2,110 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Support\SlugService;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Model;
 
-class CategoryController extends BaseController
+class CategoryController extends Controller
 {
-    // 🔧 CONFIGURAZIONI SPECIFICHE
-    protected array $searchableFields = ['name', 'description'];
-    protected array $sortableFields = ['name', 'created_at'];
-    protected array $eagerLoadRelations = []; // Categories non hanno relazioni da caricare
-    protected array $manyToManyRelations = [];
-
-    // 📝 VALIDAZIONE SPECIFICA
-    protected function getValidationRules(Request $request, ?Model $model = null): array
+    // 📋 Mostra tutte le categorie
+    public function index(Request $request)
     {
-        return [
+        $categories = Category::query();
+        
+        // 🔍 Cerca per nome o descrizione
+        if ($request->search) {
+            $categories->where('name', 'like', "%{$request->search}%")
+                      ->orWhere('description', 'like', "%{$request->search}%");
+        }
+        
+        // 📊 Ordina i risultati
+        $categories->orderBy('name');
+        
+        return view('categories.index', [
+            'categories' => $categories->paginate(10)
+        ]);
+    }
+    
+    // ➕ Mostra form per creare nuova categoria
+    public function create()
+    {
+        return view('categories.create');
+    }
+    
+    // 💾 Salva nuova categoria
+    public function store(Request $request)
+    {
+        // ✅ Controlla che i dati siano corretti
+        $request->validate([
+            'name' => 'required|max:255|unique:categories',
+            'description' => 'nullable',
             'is_white' => 'boolean'
-        ];
+        ]);
+        
+        // 📝 Crea la categoria
+        Category::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'is_white' => $request->boolean('is_white'),
+            'slug' => SlugService::unique(new Category(), $request->name)
+        ]);
+        
+        // ✅ Torna alla lista con messaggio di successo
+        return redirect()->route('categories.index')
+                        ->with('success', 'Categoria creata!');
     }
-
-    // 🔧 NOME VARIABILE PERSONALIZZATO PER VIEW
-    protected function getIndexViewData($items): array
+    
+    // 👁️ Mostra una categoria specifica
+    public function show(Category $category)
     {
-        return ['categories' => $items]; // View si aspetta $categories, non $items
+        return view('categories.show', compact('category'));
     }
-
-    protected function getEditViewData($item): array
+    
+    // ✏️ Mostra form per modificare categoria
+    public function edit(Category $category)
     {
-        return ['category' => $item]; // View si aspetta $category, non $item
+        return view('categories.edit', compact('category'));
+    }
+    
+    // 🔄 Aggiorna categoria esistente
+    public function update(Request $request, Category $category)
+    {
+        // ✅ Controlla che i dati siano corretti
+        $request->validate([
+            'name' => 'required|max:255|unique:categories,name,' . $category->id,
+            'description' => 'nullable',
+            'is_white' => 'boolean'
+        ]);
+        
+        // 📝 Aggiorna la categoria
+        $category->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'is_white' => $request->boolean('is_white'),
+            'slug' => $request->name !== $category->name 
+                ? SlugService::unique(new Category(), $request->name, $category->id)
+                : $category->slug
+        ]);
+        
+        // ✅ Torna alla lista con messaggio di successo
+        return redirect()->route('categories.index')
+                        ->with('success', 'Categoria aggiornata!');
+    }
+    
+    // 🗑️ Elimina categoria
+    public function destroy(Category $category)
+    {
+        // ⚠️ Controlla se ha pizze associate
+        if ($category->pizzas()->count() > 0) {
+            return back()->with('error', 'Non puoi eliminare una categoria con pizze!');
+        }
+        
+        // 🗑️ Elimina la categoria
+        $category->delete();
+        
+        // ✅ Torna alla lista con messaggio di successo
+        return redirect()->route('categories.index')
+                        ->with('success', 'Categoria eliminata!');
     }
 }

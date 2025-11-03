@@ -2,49 +2,127 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dessert;
+use App\Models\Ingredient;
+use App\Support\SlugService;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Model;
 
-class DessertController extends BaseController
+class DessertController extends Controller
 {
-    // 🔧 CONFIGURAZIONI SPECIFICHE
-    protected array $searchableFields = ['name', 'description'];
-    protected array $sortableFields = ['name', 'price', 'created_at'];
-    protected array $eagerLoadRelations = ['ingredients:id,name'];
-    protected array $manyToManyRelations = ['ingredients'];
-    protected ?string $uploadFolder = 'desserts';
-
-    // 📝 VALIDAZIONE SPECIFICA
-    protected function getValidationRules(Request $request, ?Model $model = null): array
+    // 📋 Mostra tutti i dolci
+    public function index(Request $request)
     {
-        return [
+        $desserts = Dessert::with('ingredients');
+        
+        // 🔍 Cerca per nome
+        if ($request->search) {
+            $desserts->where('name', 'like', "%{$request->search}%");
+        }
+        
+        // 📊 Ordina per nome
+        $desserts->orderBy('name');
+        
+        return view('desserts.index', [
+            'desserts' => $desserts->paginate(10)
+        ]);
+    }
+    
+    // ➕ Form per nuovo dolce
+    public function create()
+    {
+        $ingredients = Ingredient::orderBy('name')->get();
+        return view('desserts.create', compact('ingredients'));
+    }
+    
+    // 💾 Salva nuovo dolce
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|max:255|unique:desserts',
+            'description' => 'nullable',
             'price' => 'required|numeric|min:0',
             'ingredients' => 'array',
             'ingredients.*' => 'exists:ingredients,id',
-            'image' => 'nullable|image|max:2048',
             'is_gluten_free' => 'boolean',
             'is_vegan' => 'boolean'
-        ];
+        ]);
+        
+        // 📝 Crea il dolce
+        $dessert = Dessert::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'is_gluten_free' => $request->boolean('is_gluten_free'),
+            'is_vegan' => $request->boolean('is_vegan'),
+            'slug' => SlugService::unique(new Dessert(), $request->name)
+        ]);
+        
+        // 🔗 Collega gli ingredienti
+        if ($request->ingredients) {
+            $dessert->ingredients()->sync($request->ingredients);
+        }
+        
+        return redirect()->route('desserts.index')
+                        ->with('success', 'Dolce creato!');
     }
-
-    // 🔧 NOME VARIABILE PERSONALIZZATO PER VIEW
-    protected function getIndexViewData($items): array
+    
+    // 👁️ Mostra dolce specifico
+    public function show(Dessert $dessert)
     {
-        return ['desserts' => $items]; // View si aspetta $desserts, non $items
+        $dessert->load('ingredients');
+        return view('desserts.show', compact('dessert'));
     }
-
-    protected function getCreateViewData(): array
+    
+    // ✏️ Form per modificare dolce
+    public function edit(Dessert $dessert)
     {
-        return [
-            'ingredients' => \App\Models\Ingredient::orderBy('name')->get()
-        ];
+        $ingredients = Ingredient::orderBy('name')->get();
+        $dessert->load('ingredients');
+        return view('desserts.edit', compact('dessert', 'ingredients'));
     }
-
-    protected function getEditViewData($item): array
+    
+    // 🔄 Aggiorna dolce
+    public function update(Request $request, Dessert $dessert)
     {
-        return [
-            'dessert' => $item, // View si aspetta $dessert, non $item
-            'ingredients' => \App\Models\Ingredient::orderBy('name')->get()
-        ];
+        $request->validate([
+            'name' => 'required|max:255|unique:desserts,name,' . $dessert->id,
+            'description' => 'nullable',
+            'price' => 'required|numeric|min:0',
+            'ingredients' => 'array',
+            'ingredients.*' => 'exists:ingredients,id',
+            'is_gluten_free' => 'boolean',
+            'is_vegan' => 'boolean'
+        ]);
+        
+        // 📝 Aggiorna il dolce
+        $dessert->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'is_gluten_free' => $request->boolean('is_gluten_free'),
+            'is_vegan' => $request->boolean('is_vegan'),
+            'slug' => $request->name !== $dessert->name 
+                ? SlugService::unique(new Dessert(), $request->name, $dessert->id)
+                : $dessert->slug
+        ]);
+        
+        // 🔗 Aggiorna gli ingredienti
+        $dessert->ingredients()->sync($request->ingredients ?? []);
+        
+        return redirect()->route('desserts.index')
+                        ->with('success', 'Dolce aggiornato!');
+    }
+    
+    // 🗑️ Elimina dolce
+    public function destroy(Dessert $dessert)
+    {
+        // 🔗 Rimuovi collegamenti ingredienti
+        $dessert->ingredients()->detach();
+        
+        // 🗑️ Elimina il dolce
+        $dessert->delete();
+        
+        return redirect()->route('desserts.index')
+                        ->with('success', 'Dolce eliminato!');
     }
 }

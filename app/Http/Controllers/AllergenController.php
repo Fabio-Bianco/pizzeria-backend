@@ -2,33 +2,101 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Allergen;
+use App\Support\SlugService;
 use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Model;
 
-class AllergenController extends BaseController
+class AllergenController extends Controller
 {
-    // 🔧 CONFIGURAZIONI SPECIFICHE
-    protected array $searchableFields = ['name', 'description'];
-    protected array $sortableFields = ['name', 'created_at'];
-    protected array $eagerLoadRelations = [];
-    protected array $manyToManyRelations = [];
-
-    // 📝 VALIDAZIONE SPECIFICA
-    protected function getValidationRules(Request $request, ?Model $model = null): array
+    // 📋 Mostra tutti gli allergeni
+    public function index(Request $request)
     {
-        return [
-            'icon' => 'nullable|string|max:255'
-        ];
+        $allergens = Allergen::query();
+        
+        // 🔍 Cerca per nome
+        if ($request->search) {
+            $allergens->where('name', 'like', "%{$request->search}%");
+        }
+        
+        // 📊 Ordina per nome
+        $allergens->orderBy('name');
+        
+        return view('allergens.index', [
+            'allergens' => $allergens->paginate(10)
+        ]);
     }
-
-    // 🔧 NOME VARIABILE PERSONALIZZATO PER VIEW
-    protected function getIndexViewData($items): array
+    
+    // ➕ Form per nuovo allergene
+    public function create()
     {
-        return ['allergens' => $items]; // View si aspetta $allergens, non $items
+        return view('allergens.create');
     }
-
-    protected function getEditViewData($item): array
+    
+    // 💾 Salva nuovo allergene
+    public function store(Request $request)
     {
-        return ['allergen' => $item]; // View si aspetta $allergen, non $item
+        $request->validate([
+            'name' => 'required|max:255|unique:allergens',
+            'description' => 'nullable',
+            'icon' => 'nullable|max:255'
+        ]);
+        
+        Allergen::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'icon' => $request->icon,
+            'slug' => SlugService::unique(new Allergen(), $request->name)
+        ]);
+        
+        return redirect()->route('allergens.index')
+                        ->with('success', 'Allergene creato!');
+    }
+    
+    // 👁️ Mostra allergene specifico
+    public function show(Allergen $allergen)
+    {
+        return view('allergens.show', compact('allergen'));
+    }
+    
+    // ✏️ Form per modificare allergene
+    public function edit(Allergen $allergen)
+    {
+        return view('allergens.edit', compact('allergen'));
+    }
+    
+    // 🔄 Aggiorna allergene
+    public function update(Request $request, Allergen $allergen)
+    {
+        $request->validate([
+            'name' => 'required|max:255|unique:allergens,name,' . $allergen->id,
+            'description' => 'nullable',
+            'icon' => 'nullable|max:255'
+        ]);
+        
+        $allergen->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'icon' => $request->icon,
+            'slug' => $request->name !== $allergen->name 
+                ? SlugService::unique(new Allergen(), $request->name, $allergen->id)
+                : $allergen->slug
+        ]);
+        
+        return redirect()->route('allergens.index')
+                        ->with('success', 'Allergene aggiornato!');
+    }
+    
+    // 🗑️ Elimina allergene
+    public function destroy(Allergen $allergen)
+    {
+        // ⚠️ Controlla se è usato da ingredienti
+        if ($allergen->ingredients()->count() > 0) {
+            return back()->with('error', 'Non puoi eliminare un allergene usato da ingredienti!');
+        }
+        
+        $allergen->delete();
+        
+        return redirect()->route('allergens.index')
+                        ->with('success', 'Allergene eliminato!');
     }
 }
