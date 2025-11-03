@@ -22,7 +22,7 @@ class BeverageController extends Controller
         // 📊 Ordina per nome
         $beverages->orderBy('name');
         
-        return view('beverages.index', [
+        return view('admin.beverages.index', [
             'beverages' => $beverages->paginate(10)
         ]);
     }
@@ -30,7 +30,7 @@ class BeverageController extends Controller
     // ➕ Form per nuova bevanda
     public function create()
     {
-        return view('beverages.create');
+        return view('admin.beverages.create');
     }
     
     // 💾 Salva nuova bevanda
@@ -60,13 +60,13 @@ class BeverageController extends Controller
     // 👁️ Mostra bevanda specifica
     public function show(Beverage $beverage)
     {
-        return view('beverages.show', compact('beverage'));
+        return view('admin.beverages.show', compact('beverage'));
     }
     
     // ✏️ Form per modificare bevanda
     public function edit(Beverage $beverage)
     {
-        return view('beverages.edit', compact('beverage'));
+        return view('admin.beverages.edit', compact('beverage'));
     }
     
     // 🔄 Aggiorna bevanda

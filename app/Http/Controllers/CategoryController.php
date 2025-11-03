@@ -22,7 +22,7 @@ class CategoryController extends Controller
         // 📊 Ordina i risultati
         $categories->orderBy('name');
         
-        return view('categories.index', [
+        return view('admin.categories.index', [
             'categories' => $categories->paginate(10)
         ]);
     }
@@ -30,7 +30,7 @@ class CategoryController extends Controller
     // ➕ Mostra form per creare nuova categoria
     public function create()
     {
-        return view('categories.create');
+        return view('admin.categories.create');
     }
     
     // 💾 Salva nuova categoria
@@ -59,13 +59,13 @@ class CategoryController extends Controller
     // 👁️ Mostra una categoria specifica
     public function show(Category $category)
     {
-        return view('categories.show', compact('category'));
+        return view('admin.categories.show', compact('category'));
     }
     
     // ✏️ Mostra form per modificare categoria
     public function edit(Category $category)
     {
-        return view('categories.edit', compact('category'));
+        return view('admin.categories.edit', compact('category'));
     }
     
     // 🔄 Aggiorna categoria esistente

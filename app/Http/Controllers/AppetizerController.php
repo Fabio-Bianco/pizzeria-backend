@@ -39,13 +39,13 @@ class AppetizerController extends Controller
             return response()->json(['success' => true, 'data' => $appetizers]);
         }
         
-        return view('appetizers.index', compact('appetizers'));
+        return view('admin.appetizers.index', compact('appetizers'));
     }
     
     public function create()
     {
         $ingredients = Ingredient::orderBy('name')->get();
-        return view('appetizers.create', compact('ingredients'));
+        return view('admin.appetizers.create', compact('ingredients'));
     }
     
     public function store(Request $request)
@@ -105,7 +105,7 @@ class AppetizerController extends Controller
             return response()->json(['success' => true, 'data' => $appetizer]);
         }
         
-        return view('appetizers.show', compact('appetizer'));
+        return view('admin.appetizers.show', compact('appetizer'));
     }
     
     public function edit(Appetizer $appetizer)
@@ -113,7 +113,7 @@ class AppetizerController extends Controller
         $ingredients = Ingredient::orderBy('name')->get();
         $appetizer->load('ingredients');
         
-        return view('appetizers.edit', compact('appetizer', 'ingredients'));
+        return view('admin.appetizers.edit', compact('appetizer', 'ingredients'));
     }
     
     public function update(Request $request, Appetizer $appetizer)

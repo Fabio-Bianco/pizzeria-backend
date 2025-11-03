@@ -16,7 +16,7 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-// Dashboard  (semplificata)
+// 📊 Dashboard (semplificata)
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -35,7 +35,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Backoffice - Rotte unificate per Web e API
+// 🍕 Backoffice - Rotte unificate per Web e API
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('categories', CategoryController::class)->names('admin.categories');
     Route::resource('pizzas', PizzaController::class)->names('admin.pizzas');
@@ -45,8 +45,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('beverages', BeverageController::class)->names('admin.beverages');
     Route::resource('desserts', DessertController::class)->names('admin.desserts');
     
-    // AJAX endpoint
-    Route::get('ajax/ingredients-allergens', [IngredientController::class, 'getAllergensForIngredients'])->name('admin.ajax.ingredients-allergens');
+    // 🔗 AJAX endpoint per ingredienti-allergeni
+    Route::get('ajax/ingredients-allergens', [IngredientController::class, 'getAllergensForIngredients'])
+        ->name('admin.ajax.ingredients-allergens');
 });
 
 require __DIR__ . '/auth.php';

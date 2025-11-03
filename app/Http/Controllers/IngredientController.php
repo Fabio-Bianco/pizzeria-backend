@@ -47,7 +47,7 @@ class IngredientController extends Controller
             ]);
         }
         
-        return view('ingredients.index', compact('ingredients'));
+        return view('admin.ingredients.index', compact('ingredients'));
     }
     
     /**
@@ -56,7 +56,7 @@ class IngredientController extends Controller
     public function create()
     {
         $allergens = Allergen::orderBy('name')->get();
-        return view('ingredients.create', compact('allergens'));
+        return view('admin.ingredients.create', compact('allergens'));
     }
     
     /**
@@ -134,7 +134,7 @@ class IngredientController extends Controller
             ]);
         }
         
-        return view('ingredients.show', compact('ingredient'));
+        return view('admin.ingredients.show', compact('ingredient'));
     }
     
     /**
@@ -145,7 +145,7 @@ class IngredientController extends Controller
         $allergens = Allergen::orderBy('name')->get();
         $ingredient->load('allergens');
         
-        return view('ingredients.edit', compact('ingredient', 'allergens'));
+        return view('admin.ingredients.edit', compact('ingredient', 'allergens'));
     }
     
     /**

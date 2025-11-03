@@ -50,7 +50,7 @@ class PizzaController extends Controller
             ]);
         }
         
-        return view('pizzas.index', compact('pizzas'));
+        return view('admin.pizzas.index', compact('pizzas'));
     }
     
     /**
@@ -62,7 +62,7 @@ class PizzaController extends Controller
         $ingredients = Ingredient::orderBy('name')->get();
         $allergens = Allergen::orderBy('name')->get();
         
-        return view('pizzas.create', compact('categories', 'ingredients', 'allergens'));
+        return view('admin.pizzas.create', compact('categories', 'ingredients', 'allergens'));
     }
     
     /**
@@ -146,7 +146,7 @@ class PizzaController extends Controller
             ]);
         }
         
-        return view('pizzas.show', compact('pizza'));
+        return view('admin.pizzas.show', compact('pizza'));
     }
     
     /**
@@ -159,7 +159,7 @@ class PizzaController extends Controller
         $allergens = Allergen::orderBy('name')->get();
         $pizza->load(['category', 'ingredients']);
         
-        return view('pizzas.edit', compact('pizza', 'categories', 'ingredients', 'allergens'));
+        return view('admin.pizzas.edit', compact('pizza', 'categories', 'ingredients', 'allergens'));
     }
     
     /**

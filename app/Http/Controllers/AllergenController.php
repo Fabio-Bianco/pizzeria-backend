@@ -21,7 +21,7 @@ class AllergenController extends Controller
         // 📊 Ordina per nome
         $allergens->orderBy('name');
         
-        return view('allergens.index', [
+        return view('admin.allergens.index', [
             'allergens' => $allergens->paginate(10)
         ]);
     }
@@ -29,7 +29,7 @@ class AllergenController extends Controller
     // ➕ Form per nuovo allergene
     public function create()
     {
-        return view('allergens.create');
+        return view('admin.allergens.create');
     }
     
     // 💾 Salva nuovo allergene
@@ -55,13 +55,13 @@ class AllergenController extends Controller
     // 👁️ Mostra allergene specifico
     public function show(Allergen $allergen)
     {
-        return view('allergens.show', compact('allergen'));
+        return view('admin.allergens.show', compact('allergen'));
     }
     
     // ✏️ Form per modificare allergene
     public function edit(Allergen $allergen)
     {
-        return view('allergens.edit', compact('allergen'));
+        return view('admin.allergens.edit', compact('allergen'));
     }
     
     // 🔄 Aggiorna allergene

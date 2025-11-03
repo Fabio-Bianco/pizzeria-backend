@@ -22,7 +22,7 @@ class DessertController extends Controller
         // 📊 Ordina per nome
         $desserts->orderBy('name');
         
-        return view('desserts.index', [
+        return view('admin.desserts.index', [
             'desserts' => $desserts->paginate(10)
         ]);
     }
@@ -31,7 +31,7 @@ class DessertController extends Controller
     public function create()
     {
         $ingredients = Ingredient::orderBy('name')->get();
-        return view('desserts.create', compact('ingredients'));
+        return view('admin.desserts.create', compact('ingredients'));
     }
     
     // 💾 Salva nuovo dolce
@@ -70,7 +70,7 @@ class DessertController extends Controller
     public function show(Dessert $dessert)
     {
         $dessert->load('ingredients');
-        return view('desserts.show', compact('dessert'));
+        return view('admin.desserts.show', compact('dessert'));
     }
     
     // ✏️ Form per modificare dolce
@@ -78,7 +78,7 @@ class DessertController extends Controller
     {
         $ingredients = Ingredient::orderBy('name')->get();
         $dessert->load('ingredients');
-        return view('desserts.edit', compact('dessert', 'ingredients'));
+        return view('admin.desserts.edit', compact('dessert', 'ingredients'));
     }
     
     // 🔄 Aggiorna dolce
