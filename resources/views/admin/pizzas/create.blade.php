@@ -208,7 +208,7 @@
                                         Allergeni Aggiuntivi
                                     </label>
                                     <div class="row g-1" id="manual-allergens-container">
-                                        @foreach(($allergens ?? [])->take(8) as $allergen)
+                                        @foreach((collect($allergens ?? []))->take(8) as $allergen)
                                             <div class="col-6">
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" 

@@ -2,57 +2,101 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreAllergenRequest;
-use App\Http\Requests\UpdateAllergenRequest;
 use App\Models\Allergen;
-use Illuminate\Http\RedirectResponse;
+use App\Support\SlugService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Illuminate\View\View;
 
 class AllergenController extends Controller
 {
-    public function index(): View
+    // 📋 Mostra tutti gli allergeni
+    public function index(Request $request)
     {
-        $allergens = Allergen::latest()->paginate(10);
-        return view('admin.allergens.index', compact('allergens'));
+        $allergens = Allergen::query();
+        
+        // 🔍 Cerca per nome
+        if ($request->search) {
+            $allergens->where('name', 'like', "%{$request->search}%");
+        }
+        
+        // 📊 Ordina per nome
+        $allergens->orderBy('name');
+        
+        return view('allergens.index', [
+            'allergens' => $allergens->paginate(10)
+        ]);
     }
-
-    public function create(): View
+    
+    // ➕ Form per nuovo allergene
+    public function create()
     {
-        return view('admin.allergens.create');
+        return view('allergens.create');
     }
-
-    public function store(StoreAllergenRequest $request): RedirectResponse
+    
+    // 💾 Salva nuovo allergene
+    public function store(Request $request)
     {
-        $data = $request->validated();
-        $data['slug'] = Str::slug($data['name']);
-
-        Allergen::create($data);
-    return redirect()->route('admin.allergens.index')->with('status', 'Allergene creato.');
+        $request->validate([
+            'name' => 'required|max:255|unique:allergens',
+            'description' => 'nullable',
+            'icon' => 'nullable|max:255'
+        ]);
+        
+        Allergen::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'icon' => $request->icon,
+            'slug' => SlugService::unique(new Allergen(), $request->name)
+        ]);
+        
+        return redirect()->route('allergens.index')
+                        ->with('success', 'Allergene creato!');
     }
-
-    public function show(Allergen $allergen): View
+    
+    // 👁️ Mostra allergene specifico
+    public function show(Allergen $allergen)
     {
-        return view('admin.allergens.show', compact('allergen'));
+        return view('allergens.show', compact('allergen'));
     }
-
-    public function edit(Allergen $allergen): View
+    
+    // ✏️ Form per modificare allergene
+    public function edit(Allergen $allergen)
     {
-        return view('admin.allergens.edit', compact('allergen'));
+        return view('allergens.edit', compact('allergen'));
     }
-
-    public function update(UpdateAllergenRequest $request, Allergen $allergen): RedirectResponse
+    
+    // 🔄 Aggiorna allergene
+    public function update(Request $request, Allergen $allergen)
     {
-        $data = $request->validated();
-        $data['slug'] = Str::slug($data['name']);
-        $allergen->update($data);
-    return redirect()->route('admin.allergens.index')->with('status', 'Allergene aggiornato.');
+        $request->validate([
+            'name' => 'required|max:255|unique:allergens,name,' . $allergen->id,
+            'description' => 'nullable',
+            'icon' => 'nullable|max:255'
+        ]);
+        
+        $allergen->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'icon' => $request->icon,
+            'slug' => $request->name !== $allergen->name 
+                ? SlugService::unique(new Allergen(), $request->name, $allergen->id)
+                : $allergen->slug
+        ]);
+        
+        return redirect()->route('allergens.index')
+                        ->with('success', 'Allergene aggiornato!');
     }
-
-    public function destroy(Allergen $allergen): RedirectResponse
+    
+    // 🗑️ Elimina allergene
+    public function destroy(Allergen $allergen)
     {
+        // ⚠️ Controlla se è usato da ingredienti
+        if ($allergen->ingredients()->count() > 0) {
+            return back()->with('error', 'Non puoi eliminare un allergene usato da ingredienti!');
+        }
+        
         $allergen->delete();
-    return redirect()->route('admin.allergens.index')->with('status', 'Allergene eliminato.');
+        
+        return redirect()->route('allergens.index')
+                        ->with('success', 'Allergene eliminato!');
     }
 }

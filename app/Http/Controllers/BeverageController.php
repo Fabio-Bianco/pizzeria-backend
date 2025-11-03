@@ -2,134 +2,105 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreBeverageRequest;
-use App\Http\Requests\UpdateBeverageRequest;
 use App\Models\Beverage;
-use Illuminate\Http\RedirectResponse;
+use App\Support\SlugService;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\View\View;
-use Illuminate\Support\Str;
 
 class BeverageController extends Controller
 {
-    public function index(Request $request): View
+    // 📋 Mostra tutte le bevande
+    public function index(Request $request)
     {
-        \DB::enableQueryLog();
-        if ($request->query()) {
-            session(['beverages.index.query' => $request->query()]);
+        $beverages = Beverage::query();
+        
+        // 🔍 Cerca per nome o categoria
+        if ($request->search) {
+            $beverages->where('name', 'like', "%{$request->search}%")
+                     ->orWhere('category', 'like', "%{$request->search}%");
         }
-        $q = Beverage::query()
-            ->select(['id','name','slug','price','description'])
-            ->when($request->filled('search'), function ($qq) use ($request) {
-                $term = '%'.$request->string('search')->trim().'%';
-                $qq->where(function ($w) use ($term) {
-                    $w->where('name', 'like', $term)
-                      ->orWhere('description', 'like', $term);
-                });
-            })
-            ->when($request->filled('sort'), function ($qq) use ($request) {
-                return match ($request->string('sort')->toString()) {
-                    'price_asc'  => $qq->orderBy('price', 'asc'),
-                    'price_desc' => $qq->orderBy('price', 'desc'),
-                    'name_asc'   => $qq->orderBy('name', 'asc'),
-                    'name_desc'  => $qq->orderBy('name', 'desc'),
-                    default      => $qq->latest('id'),
-                };
-            }, fn($qq) => $qq->latest('id'));
-
-        $beverages = $q->paginate(10)->withQueryString();
-
-        $filters = \Cache::remember('admin.beverage.filters', 600, function () {
-            return [
-                // eventuali select future
-            ];
-        });
-
-        foreach (\DB::getQueryLog() as $query) {
-            if (($query['time'] ?? 0) > 100) {
-                \Log::warning('Query lenta BeverageController@index', $query);
-            }
-        }
-
-        return view('admin.beverages.index', compact('beverages'));
+        
+        // 📊 Ordina per nome
+        $beverages->orderBy('name');
+        
+        return view('beverages.index', [
+            'beverages' => $beverages->paginate(10)
+        ]);
     }
-
-    public function create(): View
+    
+    // ➕ Form per nuova bevanda
+    public function create()
     {
-        return view('admin.beverages.create');
+        return view('beverages.create');
     }
-
-    public function store(StoreBeverageRequest $request): RedirectResponse
+    
+    // 💾 Salva nuova bevanda
+    public function store(Request $request)
     {
-        $data = $request->validated();
-        $data['slug'] = $this->generateUniqueSlug($data['name']);
-    $data['is_gluten_free'] = $request->has('is_gluten_free');
-        if ($request->hasFile('image')) {
-            $data['image_path'] = $request->file('image')->store('beverages', 'public');
-        }
-        // Assicura che i nuovi campi siano sempre presenti anche se null
-        $data['formato'] = $data['formato'] ?? null;
-        $data['tipologia'] = $data['tipologia'] ?? null;
-        $data['gradazione_alcolica'] = $data['gradazione_alcolica'] ?? null;
-        Beverage::create($data);
-        $qs = session('beverages.index.query', []);
-        return redirect()->route('admin.beverages.index', $qs)->with('status', 'Bevanda creata.');
+        $request->validate([
+            'name' => 'required|max:255|unique:beverages',
+            'description' => 'nullable',
+            'price' => 'required|numeric|min:0',
+            'category' => 'nullable|max:255',
+            'is_alcoholic' => 'boolean'
+        ]);
+        
+        Beverage::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'category' => $request->category,
+            'is_alcoholic' => $request->boolean('is_alcoholic'),
+            'slug' => SlugService::unique(new Beverage(), $request->name)
+        ]);
+        
+        return redirect()->route('beverages.index')
+                        ->with('success', 'Bevanda creata!');
     }
-
-    public function show(Beverage $beverage): View
+    
+    // 👁️ Mostra bevanda specifica
+    public function show(Beverage $beverage)
     {
-        return view('admin.beverages.show', compact('beverage'));
+        return view('beverages.show', compact('beverage'));
     }
-
-    public function edit(Beverage $beverage): View
+    
+    // ✏️ Form per modificare bevanda
+    public function edit(Beverage $beverage)
     {
-        return view('admin.beverages.edit', compact('beverage'));
+        return view('beverages.edit', compact('beverage'));
     }
-
-    public function update(UpdateBeverageRequest $request, Beverage $beverage): RedirectResponse
+    
+    // 🔄 Aggiorna bevanda
+    public function update(Request $request, Beverage $beverage)
     {
-        $data = $request->validated();
-        $data['slug'] = $this->generateUniqueSlug($data['name'], $beverage->id);
-    $data['is_gluten_free'] = $request->has('is_gluten_free');
-        if ($request->hasFile('image')) {
-            if ($beverage->image_path) {
-                \Storage::disk('public')->delete($beverage->image_path);
-            }
-            $data['image_path'] = $request->file('image')->store('beverages', 'public');
-        }
-        // Assicura che i nuovi campi siano sempre presenti anche se null
-        $data['formato'] = $data['formato'] ?? null;
-        $data['tipologia'] = $data['tipologia'] ?? null;
-        $data['gradazione_alcolica'] = $data['gradazione_alcolica'] ?? null;
-        $beverage->update($data);
-        $qs = session('beverages.index.query', []);
-        return redirect()->route('admin.beverages.index', $qs)->with('status', 'Bevanda aggiornata.');
+        $request->validate([
+            'name' => 'required|max:255|unique:beverages,name,' . $beverage->id,
+            'description' => 'nullable',
+            'price' => 'required|numeric|min:0',
+            'category' => 'nullable|max:255',
+            'is_alcoholic' => 'boolean'
+        ]);
+        
+        $beverage->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'category' => $request->category,
+            'is_alcoholic' => $request->boolean('is_alcoholic'),
+            'slug' => $request->name !== $beverage->name 
+                ? SlugService::unique(new Beverage(), $request->name, $beverage->id)
+                : $beverage->slug
+        ]);
+        
+        return redirect()->route('beverages.index')
+                        ->with('success', 'Bevanda aggiornata!');
     }
-
-    public function destroy(Beverage $beverage): RedirectResponse
+    
+    // 🗑️ Elimina bevanda
+    public function destroy(Beverage $beverage)
     {
-        if ($beverage->image_path) {
-            \Storage::disk('public')->delete($beverage->image_path);
-        }
         $beverage->delete();
-        $qs = session('beverages.index.query', []);
-        return redirect()->route('admin.beverages.index', $qs)->with('status', 'Bevanda eliminata.');
-    }
-
-    private function generateUniqueSlug(string $name, ?int $ignoreId = null): string
-    {
-        $baseSlug = Str::slug($name);
-        $slug = $baseSlug;
-        $suffixCounter = 2;
-        while (
-            Beverage::where('slug', $slug)
-                ->when($ignoreId, fn($query) => $query->where('id', '!=', $ignoreId))
-                ->exists()
-        ) {
-            $slug = $baseSlug.'-'.$suffixCounter;
-            $suffixCounter++;
-        }
-        return $slug;
+        
+        return redirect()->route('beverages.index')
+                        ->with('success', 'Bevanda eliminata!');
     }
 }

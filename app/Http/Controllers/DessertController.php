@@ -2,148 +2,127 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreDessertRequest;
-use App\Http\Requests\UpdateDessertRequest;
-use App\Models\Allergen;
 use App\Models\Dessert;
 use App\Models\Ingredient;
-use Illuminate\Http\RedirectResponse;
+use App\Support\SlugService;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\View\View;
-use Illuminate\Support\Str;
 
 class DessertController extends Controller
 {
-    public function index(Request $request): View
+    // 📋 Mostra tutti i dolci
+    public function index(Request $request)
     {
-        \DB::enableQueryLog();
-        $q = Dessert::query()
-            ->with(['ingredients:id,name'])
-            ->withCount('ingredients')
-            ->select(['id', 'name', 'slug', 'price', 'description'])
-            ->when($request->filled('search'), function ($q) use ($request) {
-                $term = '%' . $request->string('search')->trim() . '%';
-                $q->where(function ($w) use ($term) {
-                    $w->where('name', 'like', $term)
-                        ->orWhere('description', 'like', $term);
-                });
-            })
-            ->when($request->filled('ingredient'), function ($q) use ($request) {
-                $q->whereHas('ingredients', fn ($w) => $w->where('ingredients.id', $request->integer('ingredient')));
-            })
-            ->when($request->filled('sort'), function ($q) use ($request) {
-                return match ($request->string('sort')->toString()) {
-                    'price_asc'  => $q->orderBy('price', 'asc'),
-                    'price_desc' => $q->orderBy('price', 'desc'),
-                    'name_asc'   => $q->orderBy('name', 'asc'),
-                    'name_desc'  => $q->orderBy('name', 'desc'),
-                    default      => $q->latest('id'),
-                };
-            }, fn ($q) => $q->latest('id'));
-
-        $desserts = $q->paginate(10)->withQueryString();
-
-        $filters = \Cache::remember('admin.dessert.filters', 600, function () {
-            return [
-                'ingredients' => Ingredient::orderBy('name')->pluck('name', 'id'),
-                'allergens'   => Allergen::orderBy('name')->pluck('name', 'id'),
-            ];
-        });
-
-        foreach (\DB::getQueryLog() as $query) {
-            if (($query['time'] ?? 0) > 100) {
-                \Log::warning('Query lenta DessertController@index', $query);
-            }
+        $desserts = Dessert::with('ingredients');
+        
+        // 🔍 Cerca per nome
+        if ($request->search) {
+            $desserts->where('name', 'like', "%{$request->search}%");
         }
-
-        return view('admin.desserts.index', compact('desserts', 'filters'));
+        
+        // 📊 Ordina per nome
+        $desserts->orderBy('name');
+        
+        return view('desserts.index', [
+            'desserts' => $desserts->paginate(10)
+        ]);
     }
-
-    public function create(): View
+    
+    // ➕ Form per nuovo dolce
+    public function create()
     {
         $ingredients = Ingredient::orderBy('name')->get();
-        $allergens = Allergen::orderBy('name')->get();
-        return view('admin.desserts.create', compact('ingredients', 'allergens'));
+        return view('desserts.create', compact('ingredients'));
     }
-
-    public function store(StoreDessertRequest $request): RedirectResponse
+    
+    // 💾 Salva nuovo dolce
+    public function store(Request $request)
     {
-        $data = $request->validated();
-        $data['slug'] = $this->generateUniqueSlug($data['name']);
-    $data['is_gluten_free'] = $request->has('is_gluten_free');
-        if ($request->hasFile('image')) {
-            $data['image_path'] = $request->file('image')->store('desserts', 'public');
+        $request->validate([
+            'name' => 'required|max:255|unique:desserts',
+            'description' => 'nullable',
+            'price' => 'required|numeric|min:0',
+            'ingredients' => 'array',
+            'ingredients.*' => 'exists:ingredients,id',
+            'is_gluten_free' => 'boolean',
+            'is_vegan' => 'boolean'
+        ]);
+        
+        // 📝 Crea il dolce
+        $dessert = Dessert::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'is_gluten_free' => $request->boolean('is_gluten_free'),
+            'is_vegan' => $request->boolean('is_vegan'),
+            'slug' => SlugService::unique(new Dessert(), $request->name)
+        ]);
+        
+        // 🔗 Collega gli ingredienti
+        if ($request->ingredients) {
+            $dessert->ingredients()->sync($request->ingredients);
         }
-        $dessert = Dessert::create($data);
-        $dessert->ingredients()->sync($request->input('ingredients', []));
-        return redirect()->route('admin.desserts.index')->with('status', 'Dessert creato.');
+        
+        return redirect()->route('desserts.index')
+                        ->with('success', 'Dolce creato!');
     }
-
-    public function show(Dessert $dessert): View
+    
+    // 👁️ Mostra dolce specifico
+    public function show(Dessert $dessert)
     {
         $dessert->load('ingredients');
-        return view('admin.desserts.show', compact('dessert'));
+        return view('desserts.show', compact('dessert'));
     }
-
-    public function edit(Dessert $dessert): View
+    
+    // ✏️ Form per modificare dolce
+    public function edit(Dessert $dessert)
     {
-        $categories = \App\Models\Category::all()->sortBy(function($cat) {
-            if (strtolower($cat->name) === 'classiche') return 0;
-            if ($cat->is_white) return 1;
-            if (strtolower($cat->name) === 'speciali') return 2;
-            return 3;
-        })->values();
         $ingredients = Ingredient::orderBy('name')->get();
-        $allergens = Allergen::orderBy('name')->get();
-        $dessert->load(['ingredients', 'allergens']);
-        return view('admin.desserts.edit', compact('dessert', 'categories', 'ingredients', 'allergens'));
+        $dessert->load('ingredients');
+        return view('desserts.edit', compact('dessert', 'ingredients'));
     }
-
-    public function update(UpdateDessertRequest $request, Dessert $dessert): RedirectResponse
+    
+    // 🔄 Aggiorna dolce
+    public function update(Request $request, Dessert $dessert)
     {
-        $data = $request->validated();
-        $data['slug'] = $this->generateUniqueSlug($data['name'], $dessert->id);
-    $data['is_gluten_free'] = $request->has('is_gluten_free');
-        if ($request->hasFile('image')) {
-            if ($dessert->image_path) {
-                \Storage::disk('public')->delete($dessert->image_path);
-            }
-            $data['image_path'] = $request->file('image')->store('desserts', 'public');
-        }
-        $dessert->update($data);
-        $dessert->ingredients()->sync($request->input('ingredients', []));
-        return redirect()->route('admin.desserts.index')->with('status', 'Dessert aggiornato.');
+        $request->validate([
+            'name' => 'required|max:255|unique:desserts,name,' . $dessert->id,
+            'description' => 'nullable',
+            'price' => 'required|numeric|min:0',
+            'ingredients' => 'array',
+            'ingredients.*' => 'exists:ingredients,id',
+            'is_gluten_free' => 'boolean',
+            'is_vegan' => 'boolean'
+        ]);
+        
+        // 📝 Aggiorna il dolce
+        $dessert->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'price' => $request->price,
+            'is_gluten_free' => $request->boolean('is_gluten_free'),
+            'is_vegan' => $request->boolean('is_vegan'),
+            'slug' => $request->name !== $dessert->name 
+                ? SlugService::unique(new Dessert(), $request->name, $dessert->id)
+                : $dessert->slug
+        ]);
+        
+        // 🔗 Aggiorna gli ingredienti
+        $dessert->ingredients()->sync($request->ingredients ?? []);
+        
+        return redirect()->route('desserts.index')
+                        ->with('success', 'Dolce aggiornato!');
     }
-
-    public function destroy(Dessert $dessert): RedirectResponse
+    
+    // 🗑️ Elimina dolce
+    public function destroy(Dessert $dessert)
     {
-        if ($dessert->image_path) {
-            \Storage::disk('public')->delete($dessert->image_path);
-        }
+        // 🔗 Rimuovi collegamenti ingredienti
+        $dessert->ingredients()->detach();
+        
+        // 🗑️ Elimina il dolce
         $dessert->delete();
-        return redirect()->route('admin.desserts.index')->with('status', 'Dessert eliminato.');
-    }
-
-    /**
-     * Genera uno slug unico per il dessert
-     */
-    private function generateUniqueSlug(string $name, ?int $excludeId = null): string
-    {
-        $baseSlug = Str::slug($name);
-        $slug = $baseSlug;
-        $counter = 1;
-        while (true) {
-            $query = Dessert::where('slug', $slug);
-            if ($excludeId) {
-                $query->where('id', '!=', $excludeId);
-            }
-            if (!$query->exists()) {
-                break;
-            }
-            $slug = $baseSlug . '-' . $counter;
-            $counter++;
-        }
-        return $slug;
+        
+        return redirect()->route('desserts.index')
+                        ->with('success', 'Dolce eliminato!');
     }
 }

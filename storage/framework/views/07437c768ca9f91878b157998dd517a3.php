@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
-        <title>@yield('title', config('app.name', 'Laravel'))</title>
+        <title><?php echo $__env->yieldContent('title', config('app.name', 'Laravel')); ?></title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -15,7 +15,7 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
         <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
     </head>
     <body>
         <!-- Skip navigation link per screen reader -->
@@ -36,37 +36,39 @@
 
         <!-- Sidebar with proper navigation role -->
         <nav id="sidebar" role="navigation" aria-label="Menu principale">
-            @include('layouts.sidebar')
+            <?php echo $__env->make('layouts.sidebar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
         </nav>
 
         <!-- Main content with proper landmark -->
         <main class="main-content" id="main-content" role="main" aria-label="Contenuto principale">
             <div class="content-wrapper">
                 <!-- Page Header with proper heading structure -->
-                @hasSection('header')
+                <?php if (! empty(trim($__env->yieldContent('header')))): ?>
                     <header class="page-header fade-in" role="banner">
-                        @yield('header')
+                        <?php echo $__env->yieldContent('header'); ?>
                     </header>
-                @elseif(isset($header))
+                <?php elseif(isset($header)): ?>
                     <header class="page-header fade-in" role="banner">
-                        {{ $header }}
+                        <?php echo e($header); ?>
+
                     </header>
-                @endif
+                <?php endif; ?>
 
                 <!-- Flash Messages with proper ARIA live region -->
                 <div aria-live="polite" aria-atomic="true">
-                    @include('partials.flash-modern')
+                    <?php echo $__env->make('partials.flash-modern', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
                 </div>
 
                 <!-- Page Content -->
                 <section class="slide-up" aria-label="Contenuto della pagina">
-                    @if (isset($slot))
-                        {{ $slot }}
-                    @else
-                        @yield('content')
-                    @endif
+                    <?php if(isset($slot)): ?>
+                        <?php echo e($slot); ?>
+
+                    <?php else: ?>
+                        <?php echo $__env->yieldContent('content'); ?>
+                    <?php endif; ?>
                 </section>
             </div>
         </main>
     </body>
-</html>
+</html><?php /**PATH C:\Users\Utente\Desktop\Backoffice-vetrrina-pizzeria-laravel\pizzeria-backend\resources\views/layouts/app-modern.blade.php ENDPATH**/ ?>

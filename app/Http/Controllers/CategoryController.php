@@ -3,106 +3,109 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use Illuminate\Http\RedirectResponse;
+use App\Support\SlugService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
-    public function index(Request $request): View
+    // 📋 Mostra tutte le categorie
+    public function index(Request $request)
     {
-        \DB::enableQueryLog();
-        if ($request->query()) {
-            session(['categories.index.query' => $request->query()]);
+        $categories = Category::query();
+        
+        // 🔍 Cerca per nome o descrizione
+        if ($request->search) {
+            $categories->where('name', 'like', "%{$request->search}%")
+                      ->orWhere('description', 'like', "%{$request->search}%");
         }
-        $q = Category::query()
-            ->withCount('pizzas')
-            ->select(['id','name','slug','description'])
-            ->when($request->filled('search'), function ($qq) use ($request) {
-                $term = '%'.$request->string('search')->trim().'%';
-                $qq->where(function ($w) use ($term) {
-                    $w->where('name', 'like', $term)
-                      ->orWhere('description', 'like', $term);
-                });
-            })
-            ->when($request->filled('sort'), function ($qq) use ($request) {
-                return match ($request->string('sort')->toString()) {
-                    'name_asc'  => $qq->orderBy('name', 'asc'),
-                    'name_desc' => $qq->orderBy('name', 'desc'),
-                    default     => $qq->latest('id'),
-                };
-            }, fn($qq) => $qq->latest('id'));
-
-        $categories = $q->paginate(10)->withQueryString();
-
-        $filters = \Cache::remember('admin.category.filters', 600, function () {
-            return [
-                // eventuali select future
-            ];
-        });
-
-        foreach (\DB::getQueryLog() as $query) {
-            if (($query['time'] ?? 0) > 100) {
-                \Log::warning('Query lenta CategoryController@index', $query);
-            }
+        
+        // 📊 Ordina i risultati
+        $categories->orderBy('name');
+        
+        return view('categories.index', [
+            'categories' => $categories->paginate(10)
+        ]);
+    }
+    
+    // ➕ Mostra form per creare nuova categoria
+    public function create()
+    {
+        return view('categories.create');
+    }
+    
+    // 💾 Salva nuova categoria
+    public function store(Request $request)
+    {
+        // ✅ Controlla che i dati siano corretti
+        $request->validate([
+            'name' => 'required|max:255|unique:categories',
+            'description' => 'nullable',
+            'is_white' => 'boolean'
+        ]);
+        
+        // 📝 Crea la categoria
+        Category::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'is_white' => $request->boolean('is_white'),
+            'slug' => SlugService::unique(new Category(), $request->name)
+        ]);
+        
+        // ✅ Torna alla lista con messaggio di successo
+        return redirect()->route('categories.index')
+                        ->with('success', 'Categoria creata!');
+    }
+    
+    // 👁️ Mostra una categoria specifica
+    public function show(Category $category)
+    {
+        return view('categories.show', compact('category'));
+    }
+    
+    // ✏️ Mostra form per modificare categoria
+    public function edit(Category $category)
+    {
+        return view('categories.edit', compact('category'));
+    }
+    
+    // 🔄 Aggiorna categoria esistente
+    public function update(Request $request, Category $category)
+    {
+        // ✅ Controlla che i dati siano corretti
+        $request->validate([
+            'name' => 'required|max:255|unique:categories,name,' . $category->id,
+            'description' => 'nullable',
+            'is_white' => 'boolean'
+        ]);
+        
+        // 📝 Aggiorna la categoria
+        $category->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'is_white' => $request->boolean('is_white'),
+            'slug' => $request->name !== $category->name 
+                ? SlugService::unique(new Category(), $request->name, $category->id)
+                : $category->slug
+        ]);
+        
+        // ✅ Torna alla lista con messaggio di successo
+        return redirect()->route('categories.index')
+                        ->with('success', 'Categoria aggiornata!');
+    }
+    
+    // 🗑️ Elimina categoria
+    public function destroy(Category $category)
+    {
+        // ⚠️ Controlla se ha pizze associate
+        if ($category->pizzas()->count() > 0) {
+            return back()->with('error', 'Non puoi eliminare una categoria con pizze!');
         }
-
-        return view('admin.categories.index', compact('categories'));
-    }
-
-    public function create(): View
-    {
-        return view('admin.categories.create');
-    }
-
-    public function store(Request $request): RedirectResponse
-    {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'is_white' => ['nullable','boolean'],
-        ]);
-
-        $data['slug'] = Str::slug($data['name']);
-        $data['is_white'] = $request->boolean('is_white');
-
-        Category::create($data);
-
-    $qs = session('categories.index.query', []);
-    return redirect()->route('admin.categories.index', $qs)->with('status', 'Categoria creata.');
-    }
-
-    public function show(Category $category): View
-    {
-        return view('admin.categories.show', compact('category'));
-    }
-
-    public function edit(Category $category): View
-    {
-        return view('admin.categories.edit', compact('category'));
-    }
-
-    public function update(Request $request, Category $category): RedirectResponse
-    {
-        $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'is_white' => ['nullable','boolean'],
-        ]);
-
-        $data['slug'] = Str::slug($data['name']);
-        $data['is_white'] = $request->boolean('is_white');
-        $category->update($data);
-
-    $qs = session('categories.index.query', []);
-    return redirect()->route('admin.categories.index', $qs)->with('status', 'Categoria aggiornata.');
-    }
-
-    public function destroy(Category $category): RedirectResponse
-    {
+        
+        // 🗑️ Elimina la categoria
         $category->delete();
-    $qs = session('categories.index.query', []);
-    return redirect()->route('admin.categories.index', $qs)->with('status', 'Categoria eliminata.');
+        
+        // ✅ Torna alla lista con messaggio di successo
+        return redirect()->route('categories.index')
+                        ->with('success', 'Categoria eliminata!');
     }
 }
