@@ -99,20 +99,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Backoffice URLs senza prefisso /admin; i nomi sono in namespace admin.* per coerenza
+// Backoffice - Rotte unificate per Web e API
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('categories', CategoryController::class)->names('admin.categories');
     Route::resource('pizzas', PizzaController::class)->names('admin.pizzas');
-    
-    // DEBUG: Route temporanea per testare performance
-    
     Route::resource('ingredients', IngredientController::class)->names('admin.ingredients');
     Route::resource('allergens', AllergenController::class)->names('admin.allergens');
     Route::resource('appetizers', AppetizerController::class)->names('admin.appetizers');
     Route::resource('beverages', BeverageController::class)->names('admin.beverages');
     Route::resource('desserts', DessertController::class)->names('admin.desserts');
     
-    // AJAX endpoints per form intelligenti
+    // AJAX endpoint
     Route::get('ajax/ingredients-allergens', [IngredientController::class, 'getAllergensForIngredients'])->name('admin.ajax.ingredients-allergens');
 });
 

@@ -2,57 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreAllergenRequest;
-use App\Http\Requests\UpdateAllergenRequest;
-use App\Models\Allergen;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Illuminate\View\View;
+use Illuminate\Database\Eloquent\Model;
 
-class AllergenController extends Controller
+class AllergenController extends BaseController
 {
-    public function index(): View
+    // 🔧 CONFIGURAZIONI SPECIFICHE
+    protected array $searchableFields = ['name', 'description'];
+    protected array $sortableFields = ['name', 'created_at'];
+    protected array $eagerLoadRelations = [];
+    protected array $manyToManyRelations = [];
+
+    // 📝 VALIDAZIONE SPECIFICA
+    protected function getValidationRules(Request $request, ?Model $model = null): array
     {
-        $allergens = Allergen::latest()->paginate(10);
-        return view('admin.allergens.index', compact('allergens'));
+        return [
+            'icon' => 'nullable|string|max:255'
+        ];
     }
 
-    public function create(): View
+    // 🔧 NOME VARIABILE PERSONALIZZATO PER VIEW
+    protected function getIndexViewData($items): array
     {
-        return view('admin.allergens.create');
+        return ['allergens' => $items]; // View si aspetta $allergens, non $items
     }
 
-    public function store(StoreAllergenRequest $request): RedirectResponse
+    protected function getEditViewData($item): array
     {
-        $data = $request->validated();
-        $data['slug'] = Str::slug($data['name']);
-
-        Allergen::create($data);
-    return redirect()->route('admin.allergens.index')->with('status', 'Allergene creato.');
-    }
-
-    public function show(Allergen $allergen): View
-    {
-        return view('admin.allergens.show', compact('allergen'));
-    }
-
-    public function edit(Allergen $allergen): View
-    {
-        return view('admin.allergens.edit', compact('allergen'));
-    }
-
-    public function update(UpdateAllergenRequest $request, Allergen $allergen): RedirectResponse
-    {
-        $data = $request->validated();
-        $data['slug'] = Str::slug($data['name']);
-        $allergen->update($data);
-    return redirect()->route('admin.allergens.index')->with('status', 'Allergene aggiornato.');
-    }
-
-    public function destroy(Allergen $allergen): RedirectResponse
-    {
-        $allergen->delete();
-    return redirect()->route('admin.allergens.index')->with('status', 'Allergene eliminato.');
+        return ['allergen' => $item]; // View si aspetta $allergen, non $item
     }
 }

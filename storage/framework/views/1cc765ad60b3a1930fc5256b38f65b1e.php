@@ -1,13 +1,10 @@
+<?php $__env->startSection('title', 'Nuova Pizza'); ?>
 
-@extends('layouts.app-modern')
-
-@section('title', 'Nuova Pizza')
-
-@section('header')
+<?php $__env->startSection('header'); ?>
 <div class="d-flex justify-content-between align-items-center">
     <div>
         <div class="d-flex align-items-center mb-2">
-            <a href="{{ route('admin.pizzas.index') }}" class="btn btn-outline-secondary btn-sm me-3">
+            <a href="<?php echo e(route('admin.pizzas.index')); ?>" class="btn btn-outline-secondary btn-sm me-3">
                 <i class="fas fa-arrow-left me-1"></i>
                 Indietro
             </a>
@@ -25,18 +22,18 @@
         </span>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 
     <div class="row justify-content-center">
         <div class="col-12">
-            <form action="{{ route('admin.pizzas.store') }}" method="POST" enctype="multipart/form-data" novalidate class="needs-validation">
-                @csrf
+            <form action="<?php echo e(route('admin.pizzas.store')); ?>" method="POST" enctype="multipart/form-data" novalidate class="needs-validation">
+                <?php echo csrf_field(); ?>
                 
-                {{-- Layout Affiancato: Informazioni Base + Ingredienti --}}
+                
                 <div class="row g-4 mb-4">
-                    {{-- COLONNA SINISTRA: Informazioni Base --}}
+                    
                     <div class="col-12 col-lg-6">
                         <div class="card border-0 shadow-sm h-100">
                             <div class="card-header bg-white border-bottom">
@@ -53,11 +50,25 @@
                                             Nome Pizza <span class="text-danger">*</span>
                                         </label>
                                         <input id="name" name="name" type="text" 
-                                               class="form-control @error('name') is-invalid @enderror" 
-                                               value="{{ old('name') }}" 
+                                               class="form-control <?php $__errorArgs = ['name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" 
+                                               value="<?php echo e(old('name')); ?>" 
                                                placeholder="Es. Margherita, Marinara..."
                                                required>
-                                        @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                        <?php $__errorArgs = ['name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?><div class="invalid-feedback"><?php echo e($message); ?></div><?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                     </div>
 
                                     <div class="col-6">
@@ -68,12 +79,26 @@
                                         <div class="input-group">
                                             <span class="input-group-text">€</span>
                                             <input id="price" name="price" type="number" step="0.01" 
-                                                   class="form-control @error('price') is-invalid @enderror" 
-                                                   value="{{ old('price') }}" 
+                                                   class="form-control <?php $__errorArgs = ['price'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" 
+                                                   value="<?php echo e(old('price')); ?>" 
                                                    placeholder="12.50"
                                                    required>
                                         </div>
-                                        @error('price')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                        <?php $__errorArgs = ['price'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?><div class="invalid-feedback"><?php echo e($message); ?></div><?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                     </div>
 
                                     <div class="col-6">
@@ -82,19 +107,34 @@
                                             Categoria
                                         </label>
                                         <select id="category_id" name="category_id" 
-                                                class="form-select @error('category_id') is-invalid @enderror" 
+                                                class="form-select <?php $__errorArgs = ['category_id'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" 
                                                 data-choices>
                                             <option value="">Seleziona...</option>
-                                            @foreach ($categories as $category)
-                                                <option value="{{ $category->id }}" 
-                                                        data-is-white="{{ $category->is_white ? '1' : '0' }}" 
-                                                        @selected(old('category_id') == $category->id)>
-                                                    {{ $category->name }}
-                                                    @if($category->is_white) (Bianca) @endif
+                                            <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                <option value="<?php echo e($category->id); ?>" 
+                                                        data-is-white="<?php echo e($category->is_white ? '1' : '0'); ?>" 
+                                                        <?php if(old('category_id') == $category->id): echo 'selected'; endif; ?>>
+                                                    <?php echo e($category->name); ?>
+
+                                                    <?php if($category->is_white): ?> (Bianca) <?php endif; ?>
                                                 </option>
-                                            @endforeach
+                                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                         </select>
-                                        @error('category_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                        <?php $__errorArgs = ['category_id'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?><div class="invalid-feedback"><?php echo e($message); ?></div><?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                     </div>
 
                                     <div class="col-12">
@@ -103,9 +143,23 @@
                                             Immagine
                                         </label>
                                         <input id="image" name="image" type="file" 
-                                               class="form-control @error('image') is-invalid @enderror" 
+                                               class="form-control <?php $__errorArgs = ['image'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" 
                                                accept=".jpg,.jpeg,.png,.webp">
-                                        @error('image')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                        <?php $__errorArgs = ['image'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?><div class="invalid-feedback"><?php echo e($message); ?></div><?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                         <div class="form-text">JPG, PNG, WebP. Max: 2MB</div>
                                     </div>
 
@@ -115,16 +169,30 @@
                                             Descrizione
                                         </label>
                                         <textarea id="description" name="description" rows="3"
-                                                  class="form-control @error('description') is-invalid @enderror"
-                                                  placeholder="Descrizione della pizza...">{{ old('description') }}</textarea>
-                                        @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                                  class="form-control <?php $__errorArgs = ['description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>"
+                                                  placeholder="Descrizione della pizza..."><?php echo e(old('description')); ?></textarea>
+                                        <?php $__errorArgs = ['description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?><div class="invalid-feedback"><?php echo e($message); ?></div><?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    {{-- COLONNA DESTRA: Ingredienti --}}
+                    
                     <div class="col-12 col-lg-6">
                         <div class="card border-0 shadow-sm h-100">
                             <div class="card-header bg-white border-bottom">
@@ -146,31 +214,46 @@
                                         Seleziona ingredienti
                                     </label>
                                     <select id="ingredients" name="ingredients[]" multiple 
-                                            class="form-select @error('ingredients') is-invalid @enderror" 
+                                            class="form-select <?php $__errorArgs = ['ingredients'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" 
                                             data-choices 
                                             placeholder="Cerca ingredienti..." 
-                                            data-store-url="{{ route('admin.ingredients.store') }}">
-                                        @foreach ($ingredients as $ingredient)
-                                            <option value="{{ $ingredient->id }}" 
-                                                    data-is-tomato="{{ $ingredient->is_tomato ? '1' : '0' }}" 
-                                                    @selected(collect(old('ingredients',[]))->contains($ingredient->id))>
-                                                {{ $ingredient->name }}
+                                            data-store-url="<?php echo e(route('admin.ingredients.store')); ?>">
+                                        <?php $__currentLoopData = $ingredients; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ingredient): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($ingredient->id); ?>" 
+                                                    data-is-tomato="<?php echo e($ingredient->is_tomato ? '1' : '0'); ?>" 
+                                                    <?php if(collect(old('ingredients',[]))->contains($ingredient->id)): echo 'selected'; endif; ?>>
+                                                <?php echo e($ingredient->name); ?>
+
                                             </option>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
-                                    @error('ingredients')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+                                    <?php $__errorArgs = ['ingredients'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?><div class="invalid-feedback d-block"><?php echo e($message); ?></div><?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                     <div id="whiteHelp" class="alert alert-warning mt-2 d-none">
                                         <i class="fas fa-info-circle me-1"></i>
                                         <strong>Pizza Bianca:</strong> Il pomodoro non può essere utilizzato.
                                     </div>
                                 </div>
 
-                                {{-- CHECKBOX VEGANO --}}
+                                
                                 <div class="mb-3">
                                     <div class="form-check form-switch mb-2">
                                         <input class="form-check-input" type="checkbox" role="switch" 
                                                id="is_vegan" name="is_vegan" value="1"
-                                               @checked(old('is_vegan'))>
+                                               <?php if(old('is_vegan')): echo 'checked'; endif; ?>>
                                         <label class="form-check-label fw-semibold" for="is_vegan">
                                             <i class="fas fa-leaf text-success me-1"></i>
                                             <span class="text-success">Vegano</span>
@@ -179,7 +262,7 @@
                                     <div class="form-check form-switch">
                                         <input class="form-check-input" type="checkbox" role="switch" 
                                                id="is_gluten_free" name="is_gluten_free" value="1"
-                                               @checked(old('is_gluten_free'))>
+                                               <?php if(old('is_gluten_free')): echo 'checked'; endif; ?>>
                                         <label class="form-check-label fw-semibold text-dark" for="is_gluten_free">
                                             <i class="fas fa-bread-slice me-1 text-dark"></i>
                                             <span class="text-dark">Senza Glutine</span>
@@ -188,7 +271,7 @@
                                     <small class="text-muted">Spunta se la pizza è senza glutine</small>
                                 </div>
 
-                                {{-- Allergeni automatici compatti --}}
+                                
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold text-warning">
                                         <i class="fas fa-exclamation-triangle me-1"></i>
@@ -201,36 +284,44 @@
                                     </div>
                                 </div>
 
-                                {{-- Allergeni manuali compatti --}}
+                                
                                 <div>
                                     <label class="form-label fw-semibold">
                                         <i class="fas fa-hand-paper me-1 text-warning"></i>
                                         Allergeni Aggiuntivi
                                     </label>
                                     <div class="row g-1" id="manual-allergens-container">
-                                        @foreach((collect($allergens ?? []))->take(8) as $allergen)
+                                        <?php $__currentLoopData = (collect($allergens ?? []))->take(8); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $allergen): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <div class="col-6">
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" 
                                                            name="manual_allergens[]" 
-                                                           value="{{ $allergen->id }}" 
-                                                           id="allergen_{{ $allergen->id }}" 
-                                                           @checked(collect(old('manual_allergens',[]))->contains($allergen->id))>
-                                                    <label class="form-check-label small" for="allergen_{{ $allergen->id }}">
-                                                        {{ $allergen->name }}
+                                                           value="<?php echo e($allergen->id); ?>" 
+                                                           id="allergen_<?php echo e($allergen->id); ?>" 
+                                                           <?php if(collect(old('manual_allergens',[]))->contains($allergen->id)): echo 'checked'; endif; ?>>
+                                                    <label class="form-check-label small" for="allergen_<?php echo e($allergen->id); ?>">
+                                                        <?php echo e($allergen->name); ?>
+
                                                     </label>
                                                 </div>
                                             </div>
-                                        @endforeach
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </div>
-                                    @error('manual_allergens')<div class="text-danger mt-1 small">{{ $message }}</div>@enderror
+                                    <?php $__errorArgs = ['manual_allergens'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?><div class="text-danger mt-1 small"><?php echo e($message); ?></div><?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {{-- Sistema Allergeni Finale (sotto, compatto) --}}
+                
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-body py-3">
                         <div class="d-flex align-items-center">
@@ -243,7 +334,7 @@
                     </div>
                 </div>
 
-                {{-- Pulsanti azione --}}
+                
                 <div class="card border-0 shadow-sm">
                     <div class="card-body py-3">
                         <div class="d-flex justify-content-between align-items-center">
@@ -252,7 +343,7 @@
                                 I campi con <span class="text-danger">*</span> sono obbligatori
                             </small>
                             <div class="d-flex gap-2">
-                                <a href="{{ route('admin.pizzas.index') }}" class="btn btn-outline-secondary">
+                                <a href="<?php echo e(route('admin.pizzas.index')); ?>" class="btn btn-outline-secondary">
                                     <i class="fas fa-times me-1"></i>
                                     Annulla
                                 </a>
@@ -268,7 +359,7 @@
         </div>
     </div>
 
-    {{-- Modal nuovo ingrediente --}}
+    
     <div class="modal fade" id="newIngredientModal" tabindex="-1" aria-labelledby="newIngredientModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -299,7 +390,7 @@
         </div>
     </div>
 
-    {{-- Script per sistema allergeni intelligente --}}
+    
     <script>
     document.addEventListener('DOMContentLoaded', function() {
         const ingredientsSelect = document.getElementById('ingredients');
@@ -354,7 +445,7 @@
             automaticAllergensDiv.innerHTML = '<div class="d-flex align-items-center text-muted"><div class="spinner-border spinner-border-sm me-2"></div>Caricamento allergeni...</div>';
             
             // Chiamata AJAX per ottenere allergeni
-            fetch('{{ route("admin.ajax.ingredients-allergens") }}?' + new URLSearchParams({
+            fetch('<?php echo e(route("admin.ajax.ingredients-allergens")); ?>?' + new URLSearchParams({
                 ingredient_ids: selectedIngredients
             }), {
                 headers: {
@@ -445,4 +536,6 @@
         border-color: var(--success-color);
     }
     </style>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app-modern', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\Utente\Desktop\Backoffice-vetrrina-pizzeria-laravel\pizzeria-backend\resources\views/admin/pizzas/create.blade.php ENDPATH**/ ?>

@@ -2,134 +2,48 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreAppetizerRequest;
-use App\Http\Requests\UpdateAppetizerRequest;
-use App\Models\Allergen;
-use App\Models\Appetizer;
-use App\Models\Ingredient;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\View\View;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Model;
 
-class AppetizerController extends Controller
+class AppetizerController extends BaseController
 {
-    public function store(StoreAppetizerRequest $request): RedirectResponse
+    // 🔧 CONFIGURAZIONI SPECIFICHE
+    protected array $searchableFields = ['name', 'description'];
+    protected array $sortableFields = ['name', 'price', 'created_at'];
+    protected array $eagerLoadRelations = ['ingredients:id,name'];
+    protected array $manyToManyRelations = ['ingredients'];
+    protected ?string $uploadFolder = 'appetizers';
+
+    // 📝 VALIDAZIONE SPECIFICA
+    protected function getValidationRules(Request $request, ?Model $model = null): array
     {
-        $data = $request->validated();
-        $data['slug'] = $this->generateUniqueSlug($data['name']);
-    $data['is_gluten_free'] = $request->has('is_gluten_free');
-        if ($request->hasFile('image')) {
-            $data['image_path'] = $request->file('image')->store('appetizers', 'public');
-        }
-        $appetizer = Appetizer::create($data);
-        $appetizer->ingredients()->sync($request->input('ingredients', []));
-        return redirect()->route('admin.appetizers.index')->with('status', 'Antipasto creato.');
-    }
-    public function index(Request $request): View
-    {
-        \DB::enableQueryLog();
-        $query = Appetizer::query()
-            ->with(['ingredients:id,name'])
-            ->withCount('ingredients')
-            ->select(['id', 'name', 'slug', 'price', 'description'])
-            ->when($request->filled('search'), function ($q) use ($request) {
-                $term = '%' . $request->string('search')->trim() . '%';
-                $q->where(function ($w) use ($term) {
-                    $w->where('name', 'like', $term)
-                        ->orWhere('description', 'like', $term);
-                });
-            })
-            ->when($request->filled('ingredient'), function ($q) use ($request) {
-                $q->whereHas('ingredients', function ($w) use ($request) {
-                    $w->where('ingredients.id', $request->integer('ingredient'));
-                });
-            })
-            ->when($request->filled('sort'), function ($q) use ($request) {
-                return match ($request->string('sort')->toString()) {
-                    'price_asc'  => $q->orderBy('price', 'asc'),
-                    'price_desc' => $q->orderBy('price', 'desc'),
-                    'name_asc'   => $q->orderBy('name', 'asc'),
-                    'name_desc'  => $q->orderBy('name', 'desc'),
-                    default      => $q->latest('id'),
-                };
-            }, function ($q) {
-                return $q->latest('id');
-            });
-
-        $appetizers = $query->paginate(10)->withQueryString();
-
-        $filters = \Cache::remember('admin.appetizer.filters', 600, function () {
-            return [
-                'ingredients' => Ingredient::orderBy('name')->pluck('name', 'id'),
-                'allergens'   => Allergen::orderBy('name')->pluck('name', 'id'),
-            ];
-        });
-
-        foreach (\DB::getQueryLog() as $query) {
-            if (($query['time'] ?? 0) > 100) {
-                \Log::warning('Query lenta AppetizerController@index', $query);
-            }
-        }
-
-        return view('admin.appetizers.index', compact('appetizers', 'filters'));
+        return [
+            'price' => 'required|numeric|min:0',
+            'ingredients' => 'array',
+            'ingredients.*' => 'exists:ingredients,id',
+            'image' => 'nullable|image|max:2048',
+            'is_gluten_free' => 'boolean'
+        ];
     }
 
-    public function create(): View
+    // 🔧 NOME VARIABILE PERSONALIZZATO PER VIEW
+    protected function getIndexViewData($items): array
     {
-        $ingredients = Ingredient::orderBy('name')->get();
-        $allergens = Allergen::orderBy('name')->get();
-        return view('admin.appetizers.create', compact('ingredients', 'allergens'));
+        return ['appetizers' => $items]; // View si aspetta $appetizers, non $items
     }
 
-    public function edit(Appetizer $appetizer): View
+    protected function getCreateViewData(): array
     {
-        $ingredients = Ingredient::orderBy('name')->get();
-        $allergens = Allergen::orderBy('name')->get();
-        return view('admin.appetizers.edit', compact('appetizer', 'ingredients', 'allergens'));
+        return [
+            'ingredients' => \App\Models\Ingredient::orderBy('name')->get()
+        ];
     }
 
-    public function update(UpdateAppetizerRequest $request, Appetizer $appetizer): RedirectResponse
+    protected function getEditViewData($item): array
     {
-        $data = $request->validated();
-        $data['slug'] = $this->generateUniqueSlug($data['name'], $appetizer->id);
-    $data['is_gluten_free'] = $request->has('is_gluten_free');
-        if ($request->hasFile('image')) {
-            if ($appetizer->image_path) {
-                \Storage::disk('public')->delete($appetizer->image_path);
-            }
-            $data['image_path'] = $request->file('image')->store('appetizers', 'public');
-        }
-        $appetizer->update($data);
-        $appetizer->ingredients()->sync($request->input('ingredients', []));
-        return redirect()->route('admin.appetizers.index')->with('status', 'Antipasto aggiornato.');
-    }
-    public function destroy(Appetizer $appetizer): RedirectResponse
-    {
-        if ($appetizer->image_path) {
-            \Storage::disk('public')->delete($appetizer->image_path);
-        }
-        $appetizer->delete();
-        return redirect()->route('admin.appetizers.index')->with('status', 'Antipasto eliminato.');
-    }
-
-    /**
-     * Genera uno slug unico per l'antipasto
-     */
-    private function generateUniqueSlug(string $name, ?int $ignoreId = null): string
-    {
-        $baseSlug = Str::slug($name);
-        $slug = $baseSlug;
-        $counter = 1;
-        while (
-            Appetizer::where('slug', $slug)
-                ->when($ignoreId, fn($query) => $query->where('id', '!=', $ignoreId))
-                ->exists()
-        ) {
-            $slug = $baseSlug . '-' . $counter;
-            $counter++;
-        }
-        return $slug;
+        return [
+            'appetizer' => $item, // View si aspetta $appetizer, non $item
+            'ingredients' => \App\Models\Ingredient::orderBy('name')->get()
+        ];
     }
 }
