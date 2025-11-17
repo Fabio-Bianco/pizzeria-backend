@@ -34,6 +34,19 @@
             <span class="sr-only">Menu</span>
         </button>
 
+        <!-- 🌙 Dark Mode Toggle (Optional - 3 states: Auto/Light/Dark) -->
+        <div x-data="darkMode" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
+            <button 
+                @click="toggle()" 
+                class="btn btn-sm btn-outline-secondary rounded-circle" 
+                style="width: 50px; height: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"
+                :aria-label="'Tema: ' + label"
+                :title="'Tema: ' + label"
+            >
+                <i class="fas" :class="icon" style="font-size: 1.2rem;"></i>
+            </button>
+        </div>
+
         <!-- Sidebar with proper navigation role -->
         <nav id="sidebar" role="navigation" aria-label="Menu principale">
             @include('layouts.sidebar')

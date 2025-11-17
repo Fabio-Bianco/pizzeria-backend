@@ -4,6 +4,51 @@ import * as bootstrap from "bootstrap";
 
 window.Alpine = Alpine;
 window.bootstrap = bootstrap;
+
+// 🌙 Dark Mode Toggle Component
+Alpine.data('darkMode', () => ({
+    theme: localStorage.getItem('theme') || 'auto',
+    
+    init() {
+        this.applyTheme();
+        
+        // Rileva cambio preferenza sistema
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (this.theme === 'auto') {
+                this.applyTheme();
+            }
+        });
+    },
+    
+    toggle() {
+        const themes = ['auto', 'light', 'dark'];
+        const currentIndex = themes.indexOf(this.theme);
+        this.theme = themes[(currentIndex + 1) % themes.length];
+        localStorage.setItem('theme', this.theme);
+        this.applyTheme();
+    },
+    
+    applyTheme() {
+        if (this.theme === 'auto') {
+            document.documentElement.removeAttribute('data-theme');
+        } else {
+            document.documentElement.setAttribute('data-theme', this.theme);
+        }
+    },
+    
+    get icon() {
+        if (this.theme === 'auto') return 'fa-circle-half-stroke';
+        if (this.theme === 'light') return 'fa-sun';
+        return 'fa-moon';
+    },
+    
+    get label() {
+        if (this.theme === 'auto') return 'Auto';
+        if (this.theme === 'light') return 'Chiaro';
+        return 'Scuro';
+    }
+}));
+
 Alpine.start();
 
 // 📱 Gestione sidebar collassabile
