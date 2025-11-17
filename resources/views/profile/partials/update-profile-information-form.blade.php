@@ -5,9 +5,30 @@
                 @csrf
             </form>
 
-            <form method="post" action="{{ route('profile.update') }}" class="card p-4 shadow-sm border-0">
+            <form method="post" action="{{ route('profile.update') }}" class="card p-4 shadow-sm border-0" enctype="multipart/form-data">
                 @csrf
                 @method('patch')
+
+                {{-- Avatar --}}
+                <div class="mb-4 text-center">
+                    <div class="mb-3">
+                        @if($user->avatar)
+                            <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #e5e7eb;">
+                        @else
+                            <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px; border: 3px solid #e5e7eb;">
+                                <i data-lucide="user" style="width: 60px; height: 60px; color: white;"></i>
+                            </div>
+                        @endif
+                    </div>
+                    <div>
+                        <label for="avatar" class="btn btn-sm btn-outline-primary">
+                            <i data-lucide="camera" style="width: 16px; height: 16px;"></i> Cambia foto
+                        </label>
+                        <input type="file" id="avatar" name="avatar" class="d-none" accept="image/*">
+                        <small class="text-muted d-block mt-2">JPG, PNG, GIF (max 2MB)</small>
+                        <x-input-error class="mt-2 text-danger" :messages="$errors->get('avatar')" />
+                    </div>
+                </div>
 
                 <div class="mb-3">
                     <x-input-label for="name" value="Nome" />
