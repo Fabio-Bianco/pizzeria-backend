@@ -91,20 +91,9 @@
 @endsection
 
 @push('styles')
-<style>
-  .list-wrapper, .list-container { overflow: visible; }
-  .actions-flex .btn { min-width: 110px; white-space: nowrap; }
-  @media (max-width: 576px) { .actions-flex .btn { min-width: 100%; } }
-</style>
+<link rel="stylesheet" href="{{ asset('css/pizza-index.css') }}">
 @endpush
 
 @push('scripts')
-<script>
-(function () {
-  if (window.bootstrap) {
-    const triggers = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    triggers.forEach(el => new bootstrap.Tooltip(el));
-  }
-})();
-</script>
+<script src="{{ asset('js/pizza-index.js') }}"></script>
 @endpush

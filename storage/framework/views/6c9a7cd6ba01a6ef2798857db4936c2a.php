@@ -149,29 +149,11 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startPush('styles'); ?>
-<style>
-  .list-wrapper, .list-container { overflow: visible; }
-  .actions-flex .btn { min-width: 110px; white-space: nowrap; }
-  @media (max-width: 576px) { .actions-flex .btn { min-width: 100%; } }
-  .bg-green-veg {
-    background: #e6f4ea;
-    border: 1.5px solid #6bbf59;
-  }
-  .text-green-veg {
-    color: #388e3c !important;
-  }
-</style>
+<link rel="stylesheet" href="<?php echo e(asset('css/pizza-index.css')); ?>">
 <?php $__env->stopPush(); ?>
 
 <?php $__env->startPush('scripts'); ?>
-<script>
-(function () {
-  if (window.bootstrap) {
-    const triggers = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    triggers.forEach(el => new bootstrap.Tooltip(el));
-  }
-})();
-</script>
+<script src="<?php echo e(asset('js/pizza-index.js')); ?>"></script>
 <?php $__env->stopPush(); ?>
 
 <?php echo $__env->make('layouts.app-modern', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\Utente\Desktop\Backoffice-vetrrina-pizzeria-laravel\pizzeria-backend\resources\views/admin/pizzas/index.blade.php ENDPATH**/ ?>

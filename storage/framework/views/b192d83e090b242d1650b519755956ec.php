@@ -1,20 +1,18 @@
-@extends('layouts.app-modern')
-
-@section('header')
+<?php $__env->startSection('header'); ?>
     <h3 class="fw-semibold text-center mb-0">
         <i data-lucide="pencil" style="width: 24px; height: 24px; vertical-align: -4px;"></i>
         Modifica Antipasto
     </h3>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@section('content')
+<?php $__env->startSection('content'); ?>
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-10">
             
-            <form action="{{ route('admin.appetizers.update', $appetizer) }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
+            <form action="<?php echo e(route('admin.appetizers.update', $appetizer)); ?>" method="POST" enctype="multipart/form-data">
+                <?php echo csrf_field(); ?>
+                <?php echo method_field('PUT'); ?>
 
                 <!-- Informazioni Base -->
                 <div class="card border mb-4" style="border-color: #e5e7eb !important;">
@@ -25,16 +23,30 @@
                             <label for="name" class="form-label small text-muted mb-1">Nome Antipasto</label>
                             <input 
                                 type="text" 
-                                class="form-control @error('name') is-invalid @enderror" 
+                                class="form-control <?php $__errorArgs = ['name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" 
                                 id="name" 
                                 name="name" 
-                                value="{{ old('name', $appetizer->name) }}" 
+                                value="<?php echo e(old('name', $appetizer->name)); ?>" 
                                 required 
                                 autofocus
                             >
-                            @error('name')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <?php $__errorArgs = ['name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <div class="invalid-feedback"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         </div>
 
                         <div class="mb-3">
@@ -42,48 +54,90 @@
                             <input 
                                 type="number" 
                                 step="0.01" 
-                                class="form-control @error('price') is-invalid @enderror" 
+                                class="form-control <?php $__errorArgs = ['price'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" 
                                 id="price" 
                                 name="price" 
-                                value="{{ old('price', $appetizer->price) }}" 
+                                value="<?php echo e(old('price', $appetizer->price)); ?>" 
                                 required
                             >
-                            @error('price')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <?php $__errorArgs = ['price'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <div class="invalid-feedback"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         </div>
 
                         <div class="mb-3">
                             <label for="description" class="form-label small text-muted mb-1">Descrizione</label>
                             <textarea 
-                                class="form-control @error('description') is-invalid @enderror" 
+                                class="form-control <?php $__errorArgs = ['description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" 
                                 id="description" 
                                 name="description" 
                                 rows="3"
-                            >{{ old('description', $appetizer->description) }}</textarea>
-                            @error('description')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            ><?php echo e(old('description', $appetizer->description)); ?></textarea>
+                            <?php $__errorArgs = ['description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <div class="invalid-feedback"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         </div>
 
                         <div class="mb-3">
                             <label for="image" class="form-label small text-muted mb-1">Immagine</label>
-                            @if($appetizer->image_path)
+                            <?php if($appetizer->image_path): ?>
                                 <div class="mb-2">
-                                    <img src="{{ asset('storage/' . $appetizer->image_path) }}" alt="{{ $appetizer->name }}" class="img-thumbnail" style="max-width: 200px;">
+                                    <img src="<?php echo e(asset('storage/' . $appetizer->image_path)); ?>" alt="<?php echo e($appetizer->name); ?>" class="img-thumbnail" style="max-width: 200px;">
                                 </div>
-                            @endif
+                            <?php endif; ?>
                             <input 
                                 type="file" 
-                                class="form-control @error('image') is-invalid @enderror" 
+                                class="form-control <?php $__errorArgs = ['image'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" 
                                 id="image" 
                                 name="image" 
                                 accept="image/*"
                             >
                             <small class="text-muted">Lascia vuoto per mantenere l'immagine corrente</small>
-                            @error('image')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <?php $__errorArgs = ['image'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <div class="invalid-feedback"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         </div>
 
                         <div class="row">
@@ -95,7 +149,8 @@
                                         id="is_vegan" 
                                         name="is_vegan" 
                                         value="1"
-                                        {{ old('is_vegan', $appetizer->is_vegan) ? 'checked' : '' }}
+                                        <?php echo e(old('is_vegan', $appetizer->is_vegan) ? 'checked' : ''); ?>
+
                                     >
                                     <label class="form-check-label small" for="is_vegan">
                                         Vegano
@@ -110,7 +165,8 @@
                                         id="is_gluten_free" 
                                         name="is_gluten_free" 
                                         value="1"
-                                        {{ old('is_gluten_free', $appetizer->is_gluten_free) ? 'checked' : '' }}
+                                        <?php echo e(old('is_gluten_free', $appetizer->is_gluten_free) ? 'checked' : ''); ?>
+
                                     >
                                     <label class="form-check-label small" for="is_gluten_free">
                                         Senza Glutine
@@ -135,23 +191,39 @@
                         <div class="mb-3">
                             <label for="ingredients" class="form-label small text-muted mb-1">Seleziona ingredienti</label>
                             <select 
-                                class="form-select @error('ingredients') is-invalid @enderror" 
+                                class="form-select <?php $__errorArgs = ['ingredients'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" 
                                 id="ingredients" 
                                 name="ingredients[]" 
                                 multiple
                             >
-                                @foreach($ingredients as $ingredient)
+                                <?php $__currentLoopData = $ingredients; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ingredient): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <option 
-                                        value="{{ $ingredient->id }}"
-                                        {{ in_array($ingredient->id, old('ingredients', $appetizer->ingredients ? $appetizer->ingredients->pluck('id')->toArray() : [])) ? 'selected' : '' }}
+                                        value="<?php echo e($ingredient->id); ?>"
+                                        <?php echo e(in_array($ingredient->id, old('ingredients', $appetizer->ingredients ? $appetizer->ingredients->pluck('id')->toArray() : [])) ? 'selected' : ''); ?>
+
                                     >
-                                        {{ $ingredient->name }}
+                                        <?php echo e($ingredient->name); ?>
+
                                     </option>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
-                            @error('ingredients')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <?php $__errorArgs = ['ingredients'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <div class="invalid-feedback"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                         </div>
                     </div>
                 </div>
@@ -167,21 +239,23 @@
                         </div>
 
                         <div id="allergen-checkboxes" class="mb-3">
-                            @foreach($allergens as $allergen)
+                            <?php $__currentLoopData = $allergens; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $allergen): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <div class="form-check">
                                     <input 
                                         class="form-check-input allergen-checkbox" 
                                         type="checkbox" 
                                         name="allergens[]" 
-                                        value="{{ $allergen->id }}" 
-                                        id="allergen_{{ $allergen->id }}"
-                                        {{ in_array($allergen->id, old('allergens', $appetizer->allergens ? $appetizer->allergens->pluck('id')->toArray() : [])) ? 'checked' : '' }}
+                                        value="<?php echo e($allergen->id); ?>" 
+                                        id="allergen_<?php echo e($allergen->id); ?>"
+                                        <?php echo e(in_array($allergen->id, old('allergens', $appetizer->allergens ? $appetizer->allergens->pluck('id')->toArray() : [])) ? 'checked' : ''); ?>
+
                                     >
-                                    <label class="form-check-label small" for="allergen_{{ $allergen->id }}">
-                                        {{ $allergen->name }}
+                                    <label class="form-check-label small" for="allergen_<?php echo e($allergen->id); ?>">
+                                        <?php echo e($allergen->name); ?>
+
                                     </label>
                                 </div>
-                            @endforeach
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         </div>
 
                         <div id="final-allergen-preview" class="mt-3 p-3" style="background-color: #f8f9fa; border-radius: 0.375rem; display: none;">
@@ -193,7 +267,7 @@
 
                 <!-- Pulsanti Azione -->
                 <div class="d-flex justify-content-between">
-                    <a href="{{ route('admin.appetizers.index') }}" class="btn btn-outline-secondary">
+                    <a href="<?php echo e(route('admin.appetizers.index')); ?>" class="btn btn-outline-secondary">
                         <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
                         Annulla
                     </a>
@@ -224,9 +298,9 @@
                 <div class="mb-3">
                     <label for="new_ingredient_allergens" class="form-label small text-muted mb-1">Allergeni</label>
                     <select class="form-select" id="new_ingredient_allergens" multiple size="5">
-                        @foreach($allergens as $allergen)
-                            <option value="{{ $allergen->id }}">{{ $allergen->name }}</option>
-                        @endforeach
+                        <?php $__currentLoopData = $allergens; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $allergen): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($allergen->id); ?>"><?php echo e($allergen->name); ?></option>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
             </div>
@@ -247,7 +321,9 @@
 <script src="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/scripts/choices.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/styles/choices.min.css">
 
-<link rel="stylesheet" href="{{ asset('css/choices-custom.css') }}">
+<link rel="stylesheet" href="<?php echo e(asset('css/choices-custom.css')); ?>">
 
-@include('partials.appetizer-edit-script')
-@endsection
+<?php echo $__env->make('partials.appetizer-edit-script', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app-modern', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\Utente\Desktop\Backoffice-vetrrina-pizzeria-laravel\pizzeria-backend\resources\views/admin/appetizers/edit.blade.php ENDPATH**/ ?>

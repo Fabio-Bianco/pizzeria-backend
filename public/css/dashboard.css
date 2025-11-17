@@ -1,0 +1,41 @@
+/* Focus accessibile per navigazione da tastiera (WCAG 2.2) */
+.hover-card:focus-visible {
+    outline: 3px solid #3b82f6;
+    outline-offset: 2px;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3) !important;
+}
+
+.hover-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+
+.hover-card:hover .btn {
+    transform: scale(1.05);
+}
+
+.hover-card .btn {
+    transition: transform 0.2s ease;
+}
+
+/* Rispetto prefers-reduced-motion per accessibilità */
+@media (prefers-reduced-motion: reduce) {
+    .hover-card,
+    .hover-card .btn,
+    .hover-card:focus-visible {
+        transform: none !important;
+        transition: none !important;
+    }
+    
+    .pulse {
+        animation: none !important;
+    }
+}
+
+/* Animazione pulse per badge nuovi prodotti */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}

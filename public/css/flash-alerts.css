@@ -1,0 +1,107 @@
+.alert {
+    border-radius: 12px;
+    border: none;
+    margin-bottom: 1.5rem;
+    padding: 1.25rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+    font-weight: 500;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.alert::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: currentColor;
+    opacity: 0.7;
+}
+
+/* Light Mode Alerts */
+.alert-success {
+    background: linear-gradient(135deg, #ECFDF5 0%, #D1FAE5 100%);
+    color: #047857;
+    border-left: 4px solid #10B981;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+    color: #991B1B;
+    border-left: 4px solid #EF4444;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+    color: #92400E;
+    border-left: 4px solid #F59E0B;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+    color: #1E40AF;
+    border-left: 4px solid #3B82F6;
+}
+
+/* Dark Mode Alerts */
+[data-theme="dark"] .alert-success {
+    background: linear-gradient(135deg, #064E3B 0%, #065F46 100%);
+    color: #6EE7B7;
+}
+
+[data-theme="dark"] .alert-danger {
+    background: linear-gradient(135deg, #7F1D1D 0%, #991B1B 100%);
+    color: #FCA5A5;
+}
+
+[data-theme="dark"] .alert-warning {
+    background: linear-gradient(135deg, #78350F 0%, #92400E 100%);
+    color: #FCD34D;
+}
+
+[data-theme="dark"] .alert-info {
+    background: linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%);
+    color: #93C5FD;
+}
+
+/* Icon Styling */
+.alert .alert-icon {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    margin-right: 1rem;
+}
+
+.alert .btn-close {
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.alert .btn-close:hover {
+    opacity: 1;
+}
+
+/* Animazione entrata */
+@keyframes slideInDown {
+    from {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.alert {
+    animation: slideInDown 0.3s ease-out;
+}
+
+/* Rispetto prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+    .alert {
+        animation: none;
+    }
+}
