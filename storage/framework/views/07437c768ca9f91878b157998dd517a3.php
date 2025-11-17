@@ -11,8 +11,8 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <!-- Lucide Icons -->
+        <script src="https://unpkg.com/lucide@latest"></script>
 
         <!-- Scripts -->
         <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
@@ -30,9 +30,36 @@
             aria-controls="sidebar"
             aria-label="Apri/chiudi menu di navigazione"
         >
-            <i class="fas fa-bars" aria-hidden="true"></i>
+            <i data-lucide="menu" aria-hidden="true"></i>
             <span class="sr-only">Menu</span>
         </button>
+
+        <!-- 🌙 Dark Mode Toggle (Optional - 3 states: Auto/Light/Dark) -->
+        <div x-data="darkMode" style="position: fixed; bottom: 20px; right: 20px; z-index: 9999;">
+            <button 
+                @click="toggle()" 
+                class="btn btn-sm btn-outline-secondary rounded-circle" 
+                style="width: 50px; height: 50px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"
+                :aria-label="'Tema: ' + label"
+                :title="'Tema: ' + label"
+            >
+                <i data-lucide="sun" x-show="theme === 'light'" style="width: 20px; height: 20px;"></i>
+                <i data-lucide="moon" x-show="theme === 'dark'" style="width: 20px; height: 20px;"></i>
+                <i data-lucide="monitor" x-show="theme === 'auto'" style="width: 20px; height: 20px;"></i>
+            </button>
+        </div>
+        
+        <script>
+            // Inizializza Lucide Icons
+            document.addEventListener('DOMContentLoaded', () => {
+                lucide.createIcons();
+            });
+            
+            // Reinizializza icone dopo toggle Alpine
+            document.addEventListener('alpine:initialized', () => {
+                setTimeout(() => lucide.createIcons(), 100);
+            });
+        </script>
 
         <!-- Sidebar with proper navigation role -->
         <nav id="sidebar" role="navigation" aria-label="Menu principale">

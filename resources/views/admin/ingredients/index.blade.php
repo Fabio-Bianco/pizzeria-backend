@@ -4,7 +4,7 @@
 
 @section('header')
 <div class="text-center py-4">
-  <div class="mb-2" style="font-size:3rem;">🥄</div>
+  <div class="mb-2"><i data-lucide="leaf" style="width: 48px; height: 48px; color: #10b981;"></i></div>
   <h1 class="display-6 fw-bold text-dark mb-2">Ingredienti</h1>
   <p class="lead text-muted mb-4">Gestisci gli ingredienti per le tue ricette</p>
 
@@ -41,7 +41,7 @@
     <div class="row justify-content-center">
       <div class="col-lg-6">
         <div class="text-center py-5">
-          <div class="mb-4" style="font-size:5rem;opacity:.5;">🥄</div>
+          <div class="mb-4"><i data-lucide="leaf" style="width: 80px; height: 80px; color: #10b981; opacity: .5;"></i></div>
           <h3 class="fw-bold text-dark mb-3">Nessun ingrediente presente</h3>
           <p class="text-muted mb-4">Crea il tuo primo ingrediente per iniziare.</p>
           <a class="btn btn-create btn-lg px-4 py-3" href="{{ route('admin.ingredients.create') }}">

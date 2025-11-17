@@ -31,7 +31,7 @@
 
 @section('header')
 <div class="text-center py-4">
-    <div class="mb-2" style="font-size:3rem;">👤</div>
+    <div class="mb-2"><i data-lucide="user-cog" style="width: 48px; height: 48px; color: #6366f1;"></i></div>
     <h1 class="display-6 fw-bold text-dark mb-2">Profilo personale</h1>
     <p class="lead text-muted mb-4">Gestisci i dati del tuo profilo, la password e l'account</p>
 </div>
@@ -76,7 +76,7 @@
 <div id="profile-success-overlay" class="position-fixed top-0 start-0 w-100 h-100 d-none" style="z-index: 2000; background: rgba(0,0,0,0.35);" data-status="{{ session('status') }}">
     <div class="d-flex justify-content-center align-items-center h-100">
         <div class="bg-white rounded shadow p-4 text-center" style="min-width:320px;max-width:90vw;">
-            <div class="mb-3" style="font-size:2.5rem;">✅</div>
+            <div class="mb-3"><i data-lucide="check-circle" style="width: 40px; height: 40px; color: #10b981;"></i></div>
             @php $status = session('status'); @endphp
             @if($status === 'profile-updated')
                 <h5 class="mb-3">Dati profilo aggiornati correttamente.</h5>

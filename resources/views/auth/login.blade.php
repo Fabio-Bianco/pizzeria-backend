@@ -22,7 +22,7 @@
 
         @if (session('status'))
             <div class="alert alert-success d-flex align-items-center mb-4">
-                <i class="fas fa-check-circle me-2"></i>
+                <i data-lucide="check-circle" style="width: 20px; height: 20px; margin-right: 8px;"></i>
                 {{ session('status') }}
             </div>
         @endif
@@ -32,7 +32,7 @@
             
             <div class="mb-4">
                 <label for="email" class="form-label fw-semibold">
-                    <i class="fas fa-envelope me-1"></i>
+                    <i data-lucide="mail" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
                     Email
                 </label>
                 <input id="email" type="email" name="email" 
@@ -47,7 +47,7 @@
 
             <div class="mb-4">
                 <label for="password" class="form-label fw-semibold">
-                    <i class="fas fa-lock me-1"></i>
+                    <i data-lucide="lock" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
                     Password
                 </label>
                 <input id="password" type="password" name="password" 
@@ -70,7 +70,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary btn-lg w-100">
-                <i class="fas fa-sign-in-alt me-2"></i>
+                <i data-lucide="log-in" style="width: 18px; height: 18px; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>
                 Accedi
             </button>
         </form>

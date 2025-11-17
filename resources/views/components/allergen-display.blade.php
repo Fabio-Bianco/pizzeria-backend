@@ -5,7 +5,7 @@
 ])
 
 @php
-    // 🚀 OTTIMIZZAZIONE: Collezione allergeni unificata con cache-aware loading
+    // OTTIMIZZAZIONE: Collezione allergeni unificata con cache-aware loading
     $allergenCollection = collect();
     
     if($allergens && method_exists($allergens, 'getAllAllergens')) {
@@ -36,22 +36,22 @@
     
     // Icone semantiche per allergeni comuni
     $allergenIcons = [
-        'glutine' => '🌾',
-        'latte' => '🥛', 
-        'lattosio' => '🥛',
-        'uova' => '🥚',
-        'pesce' => '🐟',
-        'crostacei' => '🦐',
-        'frutta a guscio' => '🥜',
-        'arachidi' => '🥜',
-        'soia' => '🌱',
-        'sedano' => '🥬',
-        'senape' => '🌿',
-        'sesamo' => '🌰',
-        'solfiti' => '⚠️',
-        'nichel' => '⚙️',
-        'molluschi' => '🐚',
-        'lupini' => '🌿'
+        'glutine' => 'Glutine',
+        'latte' => 'Latte', 
+        'lattosio' => 'Lattosio',
+        'uova' => 'Uova',
+        'pesce' => 'Pesce',
+        'crostacei' => 'Crostacei',
+        'frutta a guscio' => 'Frutta guscio',
+        'arachidi' => 'Arachidi',
+        'soia' => 'Soia',
+        'sedano' => 'Sedano',
+        'senape' => 'Senape',
+        'sesamo' => 'Sesamo',
+        'solfiti' => 'Solfiti',
+        'nichel' => 'Nichel',
+        'molluschi' => 'Molluschi',
+        'lupini' => 'Lupini'
     ];
 @endphp
 
@@ -83,7 +83,7 @@
                     @foreach($allergenCollection as $allergen)
                         @php
                             $name = strtolower($allergen->name);
-                            $icon = '⚠️'; // default
+                            $icon = 'Allergene'; // default
                             foreach($allergenIcons as $key => $value) {
                                 if(str_contains($name, $key)) {
                                     $icon = $value;
@@ -109,7 +109,7 @@
                     @foreach($allergenCollection->take($maxVisible) as $allergen)
                         @php
                             $name = strtolower($allergen->name);
-                            $icon = '⚠️';
+                            $icon = 'Allergene';
                             foreach($allergenIcons as $key => $value) {
                                 if(str_contains($name, $key)) {
                                     $icon = $value;
@@ -137,7 +137,7 @@
                 @foreach($allergenCollection->take($maxVisible) as $allergen)
                     @php
                         $name = strtolower($allergen->name);
-                        $icon = '⚠️';
+                        $icon = 'Allergene';
                         foreach($allergenIcons as $key => $value) {
                             if(str_contains($name, $key)) {
                                 $icon = $value;

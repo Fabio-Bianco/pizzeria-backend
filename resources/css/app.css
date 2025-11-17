@@ -1,13 +1,188 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import "choices.js/public/assets/styles/choices.min.css";
 
+/* ============================================
+   🌙 DARK MODE - CSS VARIABLES
+   ============================================ */
+
+:root {
+  /* 🎨 Light Mode (Default) */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e9ecef;
+  
+  --text-primary: #212529;
+  --text-secondary: #6c757d;
+  --text-tertiary: #adb5bd;
+  
+  --border-light: #dee2e6;
+  --border-medium: #ced4da;
+  --border-dark: #adb5bd;
+  
+  --card-bg: #ffffff;
+  --card-shadow: rgba(0, 0, 0, 0.075);
+  --card-shadow-hover: rgba(0, 0, 0, 0.1);
+  
+  --sidebar-bg: #ffffff;
+  --sidebar-border: #dee2e6;
+  --sidebar-link-color: #495057;
+  --sidebar-link-hover-bg: #f8f9fa;
+  --sidebar-link-hover-color: #007bff;
+  --sidebar-link-active-bg: #007bff;
+  --sidebar-link-active-color: #ffffff;
+  
+  --input-bg: #ffffff;
+  --input-border: #ced4da;
+  --input-focus-border: #80bdff;
+  --input-text: #495057;
+  
+  --btn-primary-bg: #007bff;
+  --btn-primary-hover: #0056b3;
+  --btn-secondary-bg: #6c757d;
+  --btn-secondary-hover: #545b62;
+  
+  --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --shadow-md: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0.5rem 1rem 2rem rgba(0, 0, 0, 0.15);
+  
+  --overlay-bg: rgba(0, 0, 0, 0.5);
+}
+
+/* 🌙 Dark Mode Automatico (Preferenze Browser) */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg-primary: #0f172a;
+    --bg-secondary: #1e293b;
+    --bg-tertiary: #334155;
+    
+    --text-primary: #f8fafc;
+    --text-secondary: #cbd5e1;
+    --text-tertiary: #94a3b8;
+    
+    --border-light: #334155;
+    --border-medium: #475569;
+    --border-dark: #64748b;
+    
+    --card-bg: #1e293b;
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3), inset 0 1px 0 0 rgba(148, 163, 184, 0.1);
+    --card-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -2px rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(148, 163, 184, 0.15);
+    
+    --sidebar-bg: #0f172a;
+    --sidebar-border: #334155;
+    --sidebar-link-color: #cbd5e1;
+    --sidebar-link-hover-bg: #1e293b;
+    --sidebar-link-hover-color: #60a5fa;
+    --sidebar-link-active-bg: #3b82f6;
+    --sidebar-link-active-color: #ffffff;
+    
+    --input-bg: #1e293b;
+    --input-border: #475569;
+    --input-focus-border: #60a5fa;
+    --input-text: #f8fafc;
+    
+    --btn-primary-bg: #3b82f6;
+    --btn-primary-hover: #2563eb;
+    --btn-secondary-bg: #475569;
+    --btn-secondary-hover: #64748b;
+    
+    --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0.5rem 1rem 2rem rgba(0, 0, 0, 0.6);
+    
+    --overlay-bg: rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* 🌙 Dark Mode Manuale (Opzionale) */
+[data-theme="dark"] {
+  --bg-primary: #0f172a;
+  --bg-secondary: #1e293b;
+  --bg-tertiary: #334155;
+  
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #94a3b8;
+  
+  --border-light: #334155;
+  --border-medium: #475569;
+  --border-dark: #64748b;
+  
+  --card-bg: #1e293b;
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3), inset 0 1px 0 0 rgba(148, 163, 184, 0.1);
+  --card-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -2px rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(148, 163, 184, 0.15);
+  
+  --sidebar-bg: #0f172a;
+  --sidebar-border: #334155;
+  --sidebar-link-color: #cbd5e1;
+  --sidebar-link-hover-bg: #1e293b;
+  --sidebar-link-hover-color: #60a5fa;
+  --sidebar-link-active-bg: #3b82f6;
+  --sidebar-link-active-color: #ffffff;
+  
+  --input-bg: #1e293b;
+  --input-border: #475569;
+  --input-focus-border: #60a5fa;
+  --input-text: #f8fafc;
+  
+  --btn-primary-bg: #3b82f6;
+  --btn-primary-hover: #2563eb;
+  --btn-secondary-bg: #475569;
+  --btn-secondary-hover: #64748b;
+  
+  --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0.5rem 1rem 2rem rgba(0, 0, 0, 0.6);
+  
+  --overlay-bg: rgba(0, 0, 0, 0.7);
+}
+
+/* ============================================
+   🎨 APPLICAZIONE VARIABILI CSS
+   ============================================ */
+
 body {
-    background-color: #f8f9fa;
+    background-color: var(--bg-secondary) !important;
+    color: var(--text-primary) !important;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html {
+    background-color: var(--bg-primary);
 }
 
 .card {
-    border: none;
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border: 1px solid var(--border-light);
+    box-shadow: var(--card-shadow);
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-2px);
+}
+
+/* Dark mode: bordo superiore luminoso per effetto 3D */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .card {
+        border-top: 1px solid rgba(148, 163, 184, 0.15);
+    }
+}
+
+[data-theme="dark"] .card {
+    border-top: 1px solid rgba(148, 163, 184, 0.15);
+}
+
+.card-header {
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-primary);
+}
+
+.card-footer {
+    background-color: var(--bg-secondary);
+    border-top: 1px solid var(--border-light);
 }
 
 /* 🏗️ Sidebar moderna */
@@ -18,16 +193,17 @@ body {
     width: 280px;
     height: 100vh;
     z-index: 1050;
-    background: white;
-    border-right: 1px solid #dee2e6;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--sidebar-border);
     overflow-y: auto;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .sidebar .nav-link {
     padding: 12px 16px;
     margin: 4px 8px;
     border-radius: 8px;
-    color: #495057;
+    color: var(--sidebar-link-color);
     text-decoration: none;
     display: flex;
     align-items: center;
@@ -35,15 +211,15 @@ body {
 }
 
 .sidebar .nav-link:hover {
-    background-color: #f8f9fa;
-    color: #007bff;
+    background-color: var(--sidebar-link-hover-bg);
+    color: var(--sidebar-link-hover-color);
     transform: translateX(4px);
 }
 
 .sidebar .nav-link.active {
-    background-color: #007bff;
-    color: white;
-    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+    background-color: var(--sidebar-link-active-bg);
+    color: var(--sidebar-link-active-color);
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
 }
 
 .sidebar .nav-icon {
@@ -66,7 +242,8 @@ body {
     margin-left: 280px;
     min-height: 100vh;
     padding: 20px;
-    background: #f8f9fa;
+    background: var(--bg-secondary);
+    transition: background-color 0.3s ease;
 }
 
 /* 🎯 Menu collassabili */
@@ -76,11 +253,12 @@ body {
     padding: 8px 16px;
     margin: 4px 8px;
     border-radius: 6px;
-    transition: background-color 0.2s ease;
+    color: var(--text-primary);
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .nav-section-header:hover {
-    background-color: #f8f9fa;
+    background-color: var(--sidebar-link-hover-bg);
 }
 
 .nav-section-header .transition-icon {
@@ -175,5 +353,533 @@ body {
 .card:hover {
     transform: translateY(-2px);
     transition: transform 0.2s ease;
-    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-md);
+}
+
+/* ============================================
+   🎨 FORM CONTROLS DARK MODE
+   ============================================ */
+
+.form-control,
+.form-select {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--input-text);
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: var(--input-bg);
+    border-color: var(--input-focus-border);
+    color: var(--input-text);
+    box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
+}
+
+.form-control::placeholder {
+    color: var(--text-tertiary);
+}
+
+.form-label {
+    color: var(--text-primary);
+}
+
+.form-text {
+    color: var(--text-secondary);
+}
+
+/* ============================================
+   🎨 BUTTONS DARK MODE
+   ============================================ */
+
+.btn-primary {
+    background-color: var(--btn-primary-bg);
+    border-color: var(--btn-primary-bg);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: var(--btn-primary-hover);
+    border-color: var(--btn-primary-hover);
+}
+
+.btn-secondary {
+    background-color: var(--btn-secondary-bg);
+    border-color: var(--btn-secondary-bg);
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+    background-color: var(--btn-secondary-hover);
+    border-color: var(--btn-secondary-hover);
+}
+
+/* ============================================
+   🎨 TABLES DARK MODE
+   ============================================ */
+
+.table {
+    color: var(--text-primary);
+    border-color: var(--border-light);
+}
+
+.table thead th {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+    border-color: var(--border-medium);
+}
+
+.table tbody tr {
+    background-color: var(--card-bg);
+    border-color: var(--border-light);
+}
+
+.table tbody tr:hover {
+    background-color: var(--bg-secondary);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: var(--bg-secondary);
+}
+
+/* ============================================
+   🎨 BADGES & ALERTS DARK MODE
+   ============================================ */
+
+.badge {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.alert {
+    background-color: var(--card-bg);
+    border-color: var(--border-medium);
+    color: var(--text-primary);
+}
+
+/* ============================================
+   🎨 MODAL DARK MODE
+   ============================================ */
+
+.modal-content {
+    background-color: var(--card-bg);
+    border-color: var(--border-medium);
+    color: var(--text-primary);
+}
+
+.modal-header {
+    background-color: var(--bg-secondary);
+    border-bottom-color: var(--border-light);
+}
+
+.modal-footer {
+    background-color: var(--bg-secondary);
+    border-top-color: var(--border-light);
+}
+
+.modal-backdrop {
+    background-color: var(--overlay-bg);
+}
+
+/* ============================================
+   🎨 BREADCRUMB & PAGINATION DARK MODE
+   ============================================ */
+
+.breadcrumb {
+    background-color: var(--bg-tertiary);
+}
+
+.breadcrumb-item,
+.breadcrumb-item a {
+    color: var(--text-secondary);
+}
+
+.breadcrumb-item.active {
+    color: var(--text-primary);
+}
+
+.page-link {
+    background-color: var(--card-bg);
+    border-color: var(--border-medium);
+    color: var(--sidebar-link-color);
+}
+
+.page-link:hover {
+    background-color: var(--sidebar-link-hover-bg);
+    border-color: var(--border-dark);
+    color: var(--sidebar-link-hover-color);
+}
+
+.page-item.active .page-link {
+    background-color: var(--btn-primary-bg);
+    border-color: var(--btn-primary-bg);
+}
+
+/* ============================================
+   🎨 DROPDOWN DARK MODE
+   ============================================ */
+
+.dropdown-menu {
+    background-color: var(--card-bg);
+    border-color: var(--border-medium);
+}
+
+.dropdown-item {
+    color: var(--text-primary);
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: var(--sidebar-link-hover-bg);
+    color: var(--sidebar-link-hover-color);
+}
+
+.dropdown-divider {
+    border-top-color: var(--border-light);
+}
+
+/* ============================================
+   🎨 NAV TABS DARK MODE
+   ============================================ */
+
+.nav-tabs {
+    border-bottom-color: var(--border-medium);
+}
+
+.nav-tabs .nav-link {
+    color: var(--text-secondary);
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.nav-tabs .nav-link:hover {
+    border-color: var(--border-light) var(--border-light) var(--border-medium);
+    background-color: var(--bg-secondary);
+}
+
+.nav-tabs .nav-link.active {
+    color: var(--text-primary);
+    background-color: var(--card-bg);
+    border-color: var(--border-medium) var(--border-medium) var(--card-bg);
+}
+
+/* ============================================
+   🎨 LIST GROUP DARK MODE
+   ============================================ */
+
+.list-group-item {
+    background-color: var(--card-bg);
+    border-color: var(--border-light);
+    color: var(--text-primary);
+}
+
+.list-group-item:hover {
+    background-color: var(--bg-secondary);
+}
+
+.list-group-item.active {
+    background-color: var(--btn-primary-bg);
+    border-color: var(--btn-primary-bg);
+}
+
+/* ============================================
+   🎨 ACCORDION DARK MODE
+   ============================================ */
+
+.accordion-item {
+    background-color: var(--card-bg);
+    border-color: var(--border-light);
+}
+
+.accordion-button {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.accordion-button:focus {
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
+}
+
+.accordion-body {
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+}
+
+/* ============================================
+   🎨 TOAST NOTIFICATIONS DARK MODE
+   ============================================ */
+
+.toast {
+    background-color: var(--card-bg);
+    border-color: var(--border-medium);
+    color: var(--text-primary);
+}
+
+.toast-header {
+    background-color: var(--bg-secondary);
+    border-bottom-color: var(--border-light);
+    color: var(--text-primary);
+}
+
+/* ============================================
+   🎨 PROGRESS BAR DARK MODE
+   ============================================ */
+
+.progress {
+    background-color: var(--bg-tertiary);
+}
+
+/* ============================================
+   🎨 CHOICES.JS DARK MODE
+   ============================================ */
+
+.choices__inner {
+    background-color: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--input-text);
+}
+
+.choices__list--dropdown,
+.choices__list[aria-expanded] {
+    background-color: var(--card-bg);
+    border-color: var(--border-medium);
+}
+
+.choices__item {
+    color: var(--text-primary);
+}
+
+.choices__item--selectable.is-highlighted {
+    background-color: var(--sidebar-link-hover-bg);
+}
+
+/* ============================================
+   🎨 AUTH PAGES DARK MODE
+   ============================================ */
+
+.auth-container {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.auth-card {
+    background-color: var(--card-bg);
+    border-color: var(--border-light);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Fix per pagine login/register */
+.min-vh-100 {
+    background-color: var(--bg-secondary) !important;
+}
+
+.h3, h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+}
+
+.text-dark {
+    color: var(--text-primary) !important;
+}
+
+/* ============================================
+   🎨 HR & DIVIDERS
+   ============================================ */
+
+hr {
+    border-color: var(--border-medium);
+    opacity: 1;
+}
+
+/* ============================================
+   🎨 TEXT UTILITIES
+   ============================================ */
+
+.text-muted {
+    color: var(--text-secondary) !important;
+}
+
+/* ============================================
+   🎨 MOBILE TOGGLE BUTTON
+   ============================================ */
+
+.mobile-toggle {
+    background: var(--btn-primary-bg);
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+.mobile-toggle:hover {
+    background: var(--btn-primary-hover);
+}
+
+/* ============================================
+   🎨 SCROLLBAR DARK MODE (WebKit)
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--border-dark);
+    border-radius: 6px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--text-tertiary);
+  }
+}
+
+[data-theme="dark"] ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: var(--border-dark);
+  border-radius: 6px;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
+}
+
+/* ============================================
+   🔥 OVERRIDE BOOTSTRAP CLASSES
+   ============================================ */
+
+/* Bootstrap override per bg utilities */
+.bg-light {
+  background-color: var(--bg-secondary) !important;
+}
+
+.bg-white {
+  background-color: var(--bg-primary) !important;
+}
+
+.bg-dark {
+  background-color: var(--bg-tertiary) !important;
+}
+
+/* Bootstrap override per text utilities */
+.text-muted {
+  color: var(--text-secondary) !important;
+}
+
+.text-dark {
+  color: var(--text-primary) !important;
+}
+
+.text-light {
+  color: var(--text-secondary) !important;
+}
+
+/* Bootstrap override per border utilities */
+.border {
+  border-color: var(--border-light) !important;
+}
+
+/* ============================================
+   🎴 EFFETTI 3D CARD - DARK MODE ONLY
+   ============================================ */
+
+/* Dark mode: card del dashboard e menu con effetto raised */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .hover-card {
+        background: linear-gradient(135deg, #1e293b 0%, #1a2332 100%);
+        border: 1px solid rgba(148, 163, 184, 0.1);
+        box-shadow: 
+            0 4px 6px -1px rgba(0, 0, 0, 0.5),
+            0 2px 4px -1px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 0 rgba(148, 163, 184, 0.1),
+            inset 0 -1px 0 0 rgba(15, 23, 42, 0.3);
+    }
+    
+    :root:not([data-theme="light"]) .hover-card:hover {
+        background: linear-gradient(135deg, #1e293b 0%, #1a2332 100%);
+        box-shadow: 
+            0 20px 25px -5px rgba(0, 0, 0, 0.7),
+            0 10px 10px -5px rgba(0, 0, 0, 0.5),
+            inset 0 2px 0 0 rgba(148, 163, 184, 0.2),
+            inset 0 -2px 0 0 rgba(15, 23, 42, 0.4);
+        transform: translateY(-5px) scale(1.01);
+        border-color: rgba(96, 165, 250, 0.3);
+    }
+    
+    /* Menu recap cards - effetto subtle ma visibile */
+    :root:not([data-theme="light"]) .card.border-2 {
+        background: linear-gradient(135deg, #1e293b 0%, #1a2332 100%);
+        box-shadow: 
+            0 4px 6px -1px rgba(0, 0, 0, 0.5),
+            0 2px 4px -1px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 0 rgba(148, 163, 184, 0.15);
+        border-top: 2px solid rgba(40, 167, 69, 0.3) !important;
+    }
+    
+    :root:not([data-theme="light"]) .card.border-2:hover {
+        box-shadow: 
+            0 10px 15px -3px rgba(0, 0, 0, 0.6),
+            0 4px 6px -2px rgba(0, 0, 0, 0.4),
+            inset 0 2px 0 0 rgba(148, 163, 184, 0.2);
+        transform: translateY(-3px);
+        border-top-color: rgba(40, 167, 69, 0.5) !important;
+    }
+}
+
+[data-theme="dark"] .hover-card {
+    background: linear-gradient(135deg, #1e293b 0%, #1a2332 100%);
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.5),
+        0 2px 4px -1px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 0 rgba(148, 163, 184, 0.1),
+        inset 0 -1px 0 0 rgba(15, 23, 42, 0.3);
+}
+
+[data-theme="dark"] .hover-card:hover {
+    background: linear-gradient(135deg, #1e293b 0%, #1a2332 100%);
+    box-shadow: 
+        0 20px 25px -5px rgba(0, 0, 0, 0.7),
+        0 10px 10px -5px rgba(0, 0, 0, 0.5),
+        inset 0 2px 0 0 rgba(148, 163, 184, 0.2),
+        inset 0 -2px 0 0 rgba(15, 23, 42, 0.4);
+    transform: translateY(-5px) scale(1.01);
+    border-color: rgba(96, 165, 250, 0.3);
+}
+
+[data-theme="dark"] .card.border-2 {
+    background: linear-gradient(135deg, #1e293b 0%, #1a2332 100%);
+    box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.5),
+        0 2px 4px -1px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 0 rgba(148, 163, 184, 0.15);
+    border-top: 2px solid rgba(40, 167, 69, 0.3) !important;
+}
+
+[data-theme="dark"] .card.border-2:hover {
+    box-shadow: 
+        0 10px 15px -3px rgba(0, 0, 0, 0.6),
+        0 4px 6px -2px rgba(0, 0, 0, 0.4),
+        inset 0 2px 0 0 rgba(148, 163, 184, 0.2);
+    transform: translateY(-3px);
+    border-top-color: rgba(40, 167, 69, 0.5) !important;
+}
+
+.border-light {
+  border-color: var(--border-light) !important;
 }

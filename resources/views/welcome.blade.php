@@ -40,11 +40,11 @@
 </head>
 <body>
     <div class="container">
-        <h1>🍕 Benvenuto alla Pizzeria</h1>
+        <h1><i data-lucide="pizza" style="width: 40px; height: 40px; color: #ef4444; vertical-align: middle; margin-right: 8px;"></i> Benvenuto alla Pizzeria</h1>
         <p>Il menu pubblico è in fase di sviluppo.<br>
         Per ora, accedi al backoffice per gestire il contenuto.</p>
         <a href="{{ route('login') }}" class="btn">
-            🔑 Accedi al Backoffice
+            Accedi al Backoffice
         </a>
     </div>
 </body>
