@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Allergen;
 use App\Models\Appetizer;
 use App\Models\Ingredient;
 use App\Support\SlugService;
@@ -111,9 +112,10 @@ class AppetizerController extends Controller
     public function edit(Appetizer $appetizer)
     {
         $ingredients = Ingredient::orderBy('name')->get();
+        $allergens = Allergen::orderBy('name')->get();
         $appetizer->load('ingredients');
         
-        return view('admin.appetizers.edit', compact('appetizer', 'ingredients'));
+        return view('admin.appetizers.edit', compact('appetizer', 'ingredients', 'allergens'));
     }
     
     public function update(Request $request, Appetizer $appetizer)

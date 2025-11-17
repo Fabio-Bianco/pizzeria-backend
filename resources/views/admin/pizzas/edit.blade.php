@@ -1,559 +1,436 @@
 @extends('layouts.app-modern')
 
-@section('title', 'Modifica: ' . $pizza->name)
-
 @section('header')
-<div class="d-flex justify-content-between align-items-center">
-    <div>
-        <div class="d-flex align-items-center mb-2">
-            <a href="{{ route('admin.pizzas.index') }}" class="btn btn-outline-secondary btn-sm me-3">
-                <i class="fas fa-arrow-left me-1"></i>
-                Indietro
-            </a>
-            <h1 class="page-title mb-0">
-                <i class="fas fa-edit text-primary me-2"></i>
-                Modifica: {{ $pizza->name }}
-            </h1>
-        </div>
-        <p class="page-subtitle">Aggiorna le informazioni della pizza</p>
-    </div>
-    <div>
-        <span class="badge bg-light text-dark fs-6 px-3 py-2">
-            <i class="fas fa-pizza-slice me-1"></i>
-            Gestione Menu
-        </span>
-    </div>
-</div>
+    <h3 class="fw-semibold text-center mb-0">
+        <i data-lucide="pencil" style="width: 24px; height: 24px; vertical-align: -4px;"></i>
+        Modifica Pizza
+    </h3>
 @endsection
 
 @section('content')
-    @include('partials.flash-modern')
-    
+<div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-12">
-            <form action="{{ route('admin.pizzas.update', $pizza) }}" method="POST" enctype="multipart/form-data" novalidate>
-                @csrf @method('PUT')
+        <div class="col-lg-10">
+            
+            <form action="{{ route('admin.pizzas.update', $pizza) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
 
-                {{-- Layout Affiancato: Informazioni Base + Ingredienti --}}
-                <div class="row g-4 mb-4">
-                    {{-- COLONNA SINISTRA: Informazioni Base --}}
-                    <div class="col-12 col-lg-6">
-                        <div class="card border-0 shadow-sm h-100">
-                            <div class="card-header bg-white border-bottom">
-                                <h5 class="card-title mb-0">
-                                    <i class="fas fa-info-circle text-primary me-2"></i>
-                                    Informazioni Base
-                                </h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="row g-3">
-                                    <div class="col-12">
-                                        <label for="name" class="form-label fw-semibold">
-                                            <i class="fas fa-pizza-slice me-1"></i>
-                                            Nome Pizza <span class="text-danger">*</span>
-                                        </label>
-                                        <input id="name" name="name" type="text" 
-                                               class="form-control @error('name') is-invalid @enderror" 
-                                               value="{{ old('name', $pizza->name) }}" 
-                                               required>
-                                        @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                    </div>
+                <!-- Informazioni Base -->
+                <div class="card border mb-4" style="border-color: #e5e7eb !important;">
+                    <div class="card-body p-4">
+                        <h6 class="fw-semibold mb-4">Informazioni Base</h6>
 
-                                    <div class="col-6">
-                                        <label for="price" class="form-label fw-semibold">
-                                            <i class="fas fa-euro-sign me-1"></i>
-                                            Prezzo <span class="text-danger">*</span>
-                                        </label>
-                                        <div class="input-group">
-                                            <span class="input-group-text">€</span>
-                                            <input id="price" name="price" type="number" step="0.01" 
-                                                   class="form-control @error('price') is-invalid @enderror" 
-                                                   value="{{ old('price', $pizza->price) }}" 
-                                                   required>
-                                        </div>
-                                        @error('price')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                    </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label small text-muted mb-1">Nome Pizza</label>
+                            <input 
+                                type="text" 
+                                class="form-control @error('name') is-invalid @enderror" 
+                                id="name" 
+                                name="name" 
+                                value="{{ old('name', $pizza->name) }}" 
+                                required 
+                                autofocus
+                            >
+                            @error('name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                                    <div class="col-6">
-                                        <label for="category_id" class="form-label fw-semibold">
-                                            <i class="fas fa-tags me-1"></i>
-                                            Categoria
-                                        </label>
-                                        <select id="category_id" name="category_id" 
-                                                class="form-select @error('category_id') is-invalid @enderror" 
-                                                data-choices>
-                                            <option value="">Seleziona...</option>
-                                            @foreach ($categories as $category)
-                                                <option value="{{ $category->id }}" 
-                                                        data-is-white="{{ $category->is_white ? '1' : '0' }}" 
-                                                        @selected(old('category_id', $pizza->category_id) == $category->id)>
-                                                    {{ $category->name }}
-                                                    @if($category->is_white) (Bianca) @endif
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                        @error('category_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                    </div>
+                        <div class="mb-3">
+                            <label for="price" class="form-label small text-muted mb-1">Prezzo (€)</label>
+                            <input 
+                                type="number" 
+                                step="0.01" 
+                                class="form-control @error('price') is-invalid @enderror" 
+                                id="price" 
+                                name="price" 
+                                value="{{ old('price', $pizza->price) }}" 
+                                required
+                            >
+                            @error('price')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                                    @if($pizza->image_path)
-                                    <div class="col-12">
-                                        <label class="form-label fw-semibold">Immagine Attuale</label>
-                                        <div class="mb-2">
-                                            <img src="{{ Storage::url($pizza->image_path) }}" 
-                                                 alt="{{ $pizza->name }}" 
-                                                 class="img-thumbnail" 
-                                                 style="max-height: 120px;">
-                                        </div>
-                                    </div>
-                                    @endif
+                        <div class="mb-3">
+                            <label for="category_id" class="form-label small text-muted mb-1">Categoria</label>
+                            <select 
+                                class="form-select @error('category_id') is-invalid @enderror" 
+                                id="category_id" 
+                                name="category_id" 
+                                required
+                            >
+                                <option value="">Seleziona categoria...</option>
+                                @foreach($categories as $category)
+                                    <option 
+                                        value="{{ $category->id }}" 
+                                        data-is-white="{{ $category->is_white ? '1' : '0' }}"
+                                        {{ old('category_id', $pizza->category_id) == $category->id ? 'selected' : '' }}
+                                    >
+                                        {{ $category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('category_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                                    <div class="col-12">
-                                        <label for="image" class="form-label fw-semibold">
-                                            <i class="fas fa-image me-1"></i>
-                                            {{ $pizza->image_path ? 'Sostituisci Immagine' : 'Immagine' }}
-                                        </label>
-                                        <input id="image" name="image" type="file" 
-                                               class="form-control @error('image') is-invalid @enderror" 
-                                               accept=".jpg,.jpeg,.png,.webp">
-                                        @error('image')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                        <div class="form-text">JPG, PNG, WebP. Max: 2MB</div>
-                                    </div>
+                        <div class="mb-3">
+                            <label for="notes" class="form-label small text-muted mb-1">Note</label>
+                            <textarea 
+                                class="form-control @error('notes') is-invalid @enderror" 
+                                id="notes" 
+                                name="notes" 
+                                rows="3"
+                            >{{ old('notes', $pizza->notes) }}</textarea>
+                            @error('notes')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                                    <div class="col-12">
-                    <label for="description" class="form-label fw-semibold">
-                      <i class="fas fa-align-left me-1"></i>
-                      Descrizione
-                    </label>
-                    <textarea id="description" name="description" rows="3"
-                          class="form-control @error('description') is-invalid @enderror"
-                          placeholder="Descrizione della pizza...">{{ old('description', $pizza->description) }}</textarea>
-                    @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                    </div>
+                        <div class="mb-3">
+                            <label for="image" class="form-label small text-muted mb-1">Immagine</label>
+                            @if($pizza->image)
+                                <div class="mb-2">
+                                    <img src="{{ asset('storage/' . $pizza->image) }}" alt="{{ $pizza->name }}" class="img-thumbnail" style="max-width: 200px;">
                                 </div>
-                            </div>
+                            @endif
+                            <input 
+                                type="file" 
+                                class="form-control @error('image') is-invalid @enderror" 
+                                id="image" 
+                                name="image" 
+                                accept="image/*"
+                            >
+                            <small class="text-muted">Lascia vuoto per mantenere l'immagine corrente</small>
+                            @error('image')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
-
-                    {{-- COLONNA DESTRA: Ingredienti --}}
-                    <div class="col-12 col-lg-6">
-                        <div class="card border-0 shadow-sm h-100">
-                            <div class="card-header bg-white border-bottom">
-                <div class="d-flex justify-content-between align-items-center">
-                  <h5 class="card-title mb-0">
-                    <i class="fas fa-seedling text-success me-2"></i>
-                    Ingredienti e Opzioni
-                  </h5>
-                  <button type="button" class="btn btn-outline-success btn-sm" 
-                      data-bs-toggle="modal" data-bs-target="#newIngredientModal">
-                    <i class="fas fa-plus me-1"></i>
-                    Nuovo
-                  </button>
                 </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <label for="ingredients" class="form-label fw-semibold">
-                                        Seleziona ingredienti
+
+                <!-- Ingredienti -->
+                <div class="card border mb-4" style="border-color: #e5e7eb !important;">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h6 class="fw-semibold mb-0">Ingredienti</h6>
+                            <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#newIngredientModal">
+                                <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+                                Nuovo Ingrediente
+                            </button>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="ingredients" class="form-label small text-muted mb-1">Seleziona ingredienti</label>
+                            <select 
+                                class="form-select @error('ingredients') is-invalid @enderror" 
+                                id="ingredients" 
+                                name="ingredients[]" 
+                                multiple
+                            >
+                                @foreach($ingredients as $ingredient)
+                                    <option 
+                                        value="{{ $ingredient->id }}"
+                                        data-is-tomato="{{ $ingredient->is_tomato ? '1' : '0' }}"
+                                        {{ in_array($ingredient->id, old('ingredients', $pizza->ingredients ? $pizza->ingredients->pluck('id')->toArray() : [])) ? 'selected' : '' }}
+                                    >
+                                        {{ $ingredient->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('ingredients')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Allergeni -->
+                <div class="card border mb-4" style="border-color: #e5e7eb !important;">
+                    <div class="card-body p-4">
+                        <h6 class="fw-semibold mb-3">Gestione Allergeni</h6>
+                        
+                        <div class="alert alert-info mb-3">
+                            <i data-lucide="info" style="width: 16px; height: 16px; vertical-align: -2px;"></i>
+                            Gli allergeni vengono rilevati automaticamente dagli ingredienti selezionati
+                        </div>
+
+                        <div id="allergen-checkboxes" class="mb-3">
+                            @foreach($allergens as $allergen)
+                                <div class="form-check">
+                                    <input 
+                                        class="form-check-input allergen-checkbox" 
+                                        type="checkbox" 
+                                        name="allergens[]" 
+                                        value="{{ $allergen->id }}" 
+                                        id="allergen_{{ $allergen->id }}"
+                                        {{ in_array($allergen->id, old('allergens', $pizza->allergens ? $pizza->allergens->pluck('id')->toArray() : [])) ? 'checked' : '' }}
+                                    >
+                                    <label class="form-check-label small" for="allergen_{{ $allergen->id }}">
+                                        {{ $allergen->name }}
                                     </label>
-                                    <select id="ingredients" name="ingredients[]" multiple 
-                                            class="form-select @error('ingredients') is-invalid @enderror" 
-                                            data-choices 
-                                            placeholder="Cerca ingredienti..." 
-                                            data-store-url="{{ route('admin.ingredients.store') }}">
-                                        @foreach ($ingredients as $ingredient)
-                                            <option value="{{ $ingredient->id }}" 
-                                                    data-is-tomato="{{ $ingredient->is_tomato ? '1' : '0' }}" 
-                                                    @selected(collect(old('ingredients', $pizza->ingredients->pluck('id')))->contains($ingredient->id))>
-                                                {{ $ingredient->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    @error('ingredients')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
-                                    <div id="whiteHelp" class="alert alert-warning mt-2 d-none">
-                                        <i class="fas fa-info-circle me-1"></i>
-                                        <strong>Pizza Bianca:</strong> Il pomodoro non può essere utilizzato.
-                                    </div>
                                 </div>
+                            @endforeach
+                        </div>
 
-                                {{-- CHECKBOX VEGANO --}}
-                <div class="mb-3">
-                  <div class="form-check form-switch mb-2">
-                    <input class="form-check-input" type="checkbox" role="switch" 
-                         id="is_vegan" name="is_vegan" value="1"
-                         @checked(old('is_vegan', $pizza->is_vegan))>
-                    <label class="form-check-label fw-semibold" for="is_vegan">
-                      <i class="fas fa-leaf text-success me-1"></i>
-                      <span class="text-success">Vegano</span>
-                    </label>
-                  </div>
-                  <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" role="switch" 
-                         id="is_gluten_free" name="is_gluten_free" value="1"
-                         @checked(old('is_gluten_free', $pizza->is_gluten_free))>
-                    <label class="form-check-label fw-semibold text-dark" for="is_gluten_free">
-                      <i class="fas fa-bread-slice me-1 text-dark"></i>
-                      <span class="text-dark">Senza Glutine</span>
-                    </label>
-                  </div>
-                  <small class="text-muted">Spunta se la pizza è senza glutine</small>
-                </div>
-
-                                {{-- Allergeni automatici compatti --}}
-                                <div class="mb-3">
-                                    <label class="form-label fw-semibold text-warning">
-                                        <i class="fas fa-exclamation-triangle me-1"></i>
-                                        Allergeni Rilevati
-                                    </label>
-                                    <div id="automatic-allergens" class="p-2 bg-light border rounded">
-                                        <em class="text-muted small">
-                                            Caricamento...
-                                        </em>
-                                    </div>
-                                </div>
-
-                                {{-- Allergeni manuali compatti --}}
-                                <div>
-                                    <label class="form-label fw-semibold">
-                                        <i class="fas fa-hand-paper me-1 text-warning"></i>
-                                        Allergeni Aggiuntivi
-                                    </label>
-                                    <div class="row g-1" id="manual-allergens-container">
-                                        @foreach(($allergens ?? [])->take(8) as $allergen)
-                                            <div class="col-6">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" 
-                                                           name="manual_allergens[]" 
-                                                           value="{{ $allergen->id }}" 
-                                                           id="allergen_{{ $allergen->id }}" 
-                                                           @checked(collect(old('manual_allergens', $pizza->manual_allergens ?? []))->contains($allergen->id))>
-                                                    <label class="form-check-label small" for="allergen_{{ $allergen->id }}">
-                                                        {{ $allergen->name }}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                    @error('manual_allergens')<div class="text-danger mt-1 small">{{ $message }}</div>@enderror
-                                </div>
-                            </div>
+                        <div id="final-allergen-preview" class="mt-3 p-3" style="background-color: #f8f9fa; border-radius: 0.375rem; display: none;">
+                            <h6 class="fw-semibold small mb-2">Allergeni Finali:</h6>
+                            <div id="final-allergen-list" class="d-flex flex-wrap gap-2"></div>
                         </div>
                     </div>
                 </div>
 
-                {{-- Sistema Allergeni Finale (sotto, compatto) --}}
-                <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-body py-3">
-                        <div class="d-flex align-items-center">
-                            <i class="fas fa-eye me-2 text-info"></i>
-                            <strong class="me-3">Anteprima allergeni per i clienti:</strong>
-                            <div id="final-allergens-preview">
-                                <em class="text-muted">Caricamento...</em>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Pulsanti Azione -->
+                <div class="d-flex justify-content-between">
+                    <a href="{{ route('admin.pizzas.index') }}" class="btn btn-outline-secondary">
+                        <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+                        Annulla
+                    </a>
+                    <button type="submit" class="btn btn-outline-success">
+                        <i data-lucide="save" style="width: 16px; height: 16px;"></i>
+                        Salva Modifiche
+                    </button>
                 </div>
 
-                {{-- Pulsanti azione --}}
-                <div class="card border-0 shadow-sm">
-                    <div class="card-body py-3">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <small class="text-muted">
-                                <i class="fas fa-info-circle me-1"></i>
-                                I campi con <span class="text-danger">*</span> sono obbligatori
-                            </small>
-                            <div class="d-flex gap-2">
-                                <a href="{{ route('admin.pizzas.index') }}" class="btn btn-outline-secondary">
-                                    <i class="fas fa-times me-1"></i>
-                                    Annulla
-                                </a>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save me-1"></i>
-                                    Aggiorna Pizza
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </form>
         </div>
-    </div> 
-                       class="form-control form-control-lg @error('name') is-invalid @enderror" 
-                       value="{{ old('name', $pizza->name) }}" 
-                       required>
-                @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
-              </div>
-
-              <div class="col-12 col-md-4">
-                <label for="price" class="form-label fw-semibold">
-                    <i class="fas fa-euro-sign me-1"></i>
-                    Prezzo <span class="text-danger">*</span>
-                </label>
-                <div class="input-group">
-                    <span class="input-group-text">€</span>
-                    <input id="price" name="price" type="number" step="0.01" 
-                           class="form-control form-control-lg @error('price') is-invalid @enderror" 
-                           value="{{ old('price', $pizza->price) }}" 
-                           required>
-                </div>
-                @error('price')<div class="invalid-feedback">{{ $message }}</div>@enderror
-              </div>
-
-              <div class="col-12">
-                <label for="category_id" class="form-label fw-semibold">
-                    <i class="fas fa-tags me-1"></i>
-                    Categoria <span class="text-danger">*</span>
-                </label>
-                <select id="category_id" name="category_id" 
-                        class="form-select @error('category_id') is-invalid @enderror" 
-                        data-choices required>
-                  <option value="">-</option>
-                  @foreach ($categories as $category)
-                    <option value="{{ $category->id }}" data-is-white="{{ $category->is_white ? '1' : '0' }}" @selected(old('category_id', $pizza->category_id) == $category->id)>{{ $category->name }}</option>
-                  @endforeach
-                </select>
-                @error('category_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
-              </div>
-
-              <div class="col-12">
-                <label for="notes" class="form-label">Note</label>
-                <textarea id="notes" name="notes" rows="2" class="form-control @error('notes') is-invalid @enderror" placeholder="Aggiunte speciali, cottura, richiami, ecc.">{{ old('notes', $pizza->notes) }}</textarea>
-                @error('notes')<div class="invalid-feedback">{{ $message }}</div>@enderror
-              </div>
-
-              <div class="col-12 col-md-6">
-                <div class="d-flex justify-content-between align-items-center mb-1">
-                  <label for="ingredients" class="form-label mb-0">Ingredienti</label>
-                  <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#newIngredientModal">+ Nuovo ingrediente</button>
-                </div>
-                <select id="ingredients" name="ingredients[]" multiple class="form-select @error('ingredients') is-invalid @enderror" data-choices placeholder="Seleziona ingredienti..." data-store-url="{{ route('admin.ingredients.store') }}">
-                  @foreach ($ingredients as $ingredient)
-                    <option value="{{ $ingredient->id }}" data-is-tomato="{{ $ingredient->is_tomato ? '1' : '0' }}" @selected($pizza->ingredients->pluck('id')->contains($ingredient->id))>{{ $ingredient->name }}</option>
-                  @endforeach
-                </select>
-                @error('ingredients')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
-                <div id="whiteHelp" class="form-text text-warning d-none">Il pomodoro è disabilitato per le pizze bianche.</div>
-              </div>
-
-              <div class="col-12 col-md-6">
-                <label for="image" class="form-label">Immagine</label>
-                <input id="image" name="image" type="file" class="form-control @error('image') is-invalid @enderror" accept=".jpg,.jpeg,.png,.webp">
-                @error('image')<div class="invalid-feedback">{{ $message }}</div>@enderror
-
-                @if($pizza->image_path)
-                  <div class="mt-2">
-                    <img src="{{ asset('storage/'.$pizza->image_path) }}" alt="{{ $pizza->name }}" class="rounded" style="width:120px;height:120px;object-fit:cover;">
-                  </div>
-                @endif
-              </div>
-
-              {{-- Sezione Allergeni Intelligenti --}}
-              <div class="col-12">
-                <div class="card border-info">
-                  <div class="card-header bg-info-subtle">
-                    <h6 class="mb-0"><i class="fas fa-exclamation-triangle me-1"></i> Allergeni</h6>
-                  </div>
-                  <div class="card-body">
-                    {{-- Allergeni automatici --}}
-                    <div class="mb-3">
-                      <label class="form-label fw-bold">Allergeni automatici (da ingredienti)</label>
-                      <div id="automatic-allergens" class="border rounded p-2 bg-light">
-                        {{-- Sarà popolato via JavaScript --}}
-                      </div>
-                    </div>
-
-                    {{-- Allergeni manuali --}}
-                    <div class="mb-3">
-                      <label for="manual_allergens" class="form-label fw-bold">Allergeni aggiuntivi <small class="text-muted">(opzionale)</small></label>
-                      <div class="row" id="manual-allergens-container">
-                        @foreach($allergens as $allergen)
-                          <div class="col-md-4 col-sm-6">
-                            <div class="form-check">
-                              <input class="form-check-input" type="checkbox" name="manual_allergens[]" value="{{ $allergen->id }}" id="allergen_{{ $allergen->id }}" 
-                                @checked(collect(old('manual_allergens', $pizza->manual_allergens ?? []))->contains($allergen->id))>
-                              <label class="form-check-label" for="allergen_{{ $allergen->id }}">{{ $allergen->name }}</label>
-                            </div>
-                          </div>
-                        @endforeach
-                      </div>
-                      @error('manual_allergens')<div class="text-danger mt-1">{{ $message }}</div>@enderror
-                    </div>
-
-                    {{-- Preview finale --}}
-                    <div class="alert alert-info mb-0">
-                      <strong>Allergeni finali che vedranno i clienti:</strong>
-                      <div id="final-allergens-preview" class="mt-1">
-                        <em class="text-muted">Caricamento...</em>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="d-flex justify-content-end gap-2 mt-4">
-              <a href="{{ route('admin.pizzas.index') }}" class="btn btn-outline-secondary">Annulla</a>
-              <button type="submit" class="btn btn-primary">Salva</button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      {{-- Modal nuovo ingrediente --}}
-      <div class="modal fade" id="newIngredientModal" tabindex="-1" aria-labelledby="newIngredientModalLabel" aria-hidden="true">
-        <div class="modal-dialog"><div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="newIngredientModalLabel">Nuovo ingrediente</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
-          </div>
-          <div class="modal-body">
-            <div class="mb-3">
-              <label for="ni_name" class="form-label">Nome</label>
-              <input type="text" id="ni_name" class="form-control" />
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
-            <button type="button" id="ni_save" class="btn btn-primary">Crea</button>
-          </div>
-        </div></div>
-      </div>
     </div>
-  </div>
+</div>
 
-  {{-- Script per sistema allergeni intelligente --}}
-  <script>
+<!-- Modal per Nuovo Ingrediente -->
+<div class="modal fade" id="newIngredientModal" tabindex="-1" aria-labelledby="newIngredientModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newIngredientModalLabel">Nuovo Ingrediente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="new_ingredient_name" class="form-label small text-muted mb-1">Nome Ingrediente</label>
+                    <input type="text" class="form-control" id="new_ingredient_name" required>
+                </div>
+                <div class="form-check mb-3">
+                    <input class="form-check-input" type="checkbox" id="new_ingredient_is_tomato">
+                    <label class="form-check-label small" for="new_ingredient_is_tomato">
+                        Contiene pomodoro
+                    </label>
+                </div>
+                <div class="mb-3">
+                    <label for="new_ingredient_allergens" class="form-label small text-muted mb-1">Allergeni</label>
+                    <select class="form-select" id="new_ingredient_allergens" multiple size="5">
+                        @foreach($allergens as $allergen)
+                            <option value="{{ $allergen->id }}">{{ $allergen->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">
+                    <i data-lucide="x" style="width: 16px; height: 16px;"></i>
+                    Annulla
+                </button>
+                <button type="button" class="btn btn-outline-success btn-sm" id="saveNewIngredient">
+                    <i data-lucide="check" style="width: 16px; height: 16px;"></i>
+                    Salva
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/scripts/choices.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/styles/choices.min.css">
+
+<style>
+    /* Migliora contrasto Choices.js */
+    .choices__inner {
+        background-color: #ffffff !important;
+        border: 1px solid #dee2e6 !important;
+        min-height: 44px !important;
+    }
+    .choices__list--multiple .choices__item {
+        background-color: #10b981 !important;
+        border: 1px solid #059669 !important;
+        color: #ffffff !important;
+        font-weight: 500 !important;
+    }
+    .choices__list--dropdown .choices__item--selectable {
+        background-color: #ffffff !important;
+        color: #1f2937 !important;
+    }
+    .choices__list--dropdown .choices__item--selectable.is-highlighted {
+        background-color: #10b981 !important;
+        color: #ffffff !important;
+    }
+    [data-theme="dark"] .choices__inner {
+        background-color: #1f2937 !important;
+        border-color: #374151 !important;
+    }
+    [data-theme="dark"] .choices__list--dropdown .choices__item--selectable {
+        background-color: #1f2937 !important;
+        color: #f3f4f6 !important;
+    }
+    [data-theme="dark"] .choices__list--dropdown .choices__item--selectable.is-highlighted {
+        background-color: #10b981 !important;
+    }
+</style>
+
+<script>
     document.addEventListener('DOMContentLoaded', function() {
-      const ingredientsSelect = document.getElementById('ingredients');
-      const automaticAllergensDiv = document.getElementById('automatic-allergens');
-      const manualAllergensContainer = document.getElementById('manual-allergens-container');
-      const finalAllergensPreview = document.getElementById('final-allergens-preview');
-      
-      let automaticAllergens = [];
-      
-      function updateAutomaticAllergens() {
-        const selectedIngredients = Array.from(ingredientsSelect.selectedOptions).map(option => option.value);
-        
-        if (selectedIngredients.length === 0) {
-          automaticAllergens = [];
-          automaticAllergensDiv.innerHTML = '<em class="text-muted">Seleziona ingredienti per vedere gli allergeni automatici</em>';
-          updateFinalPreview();
-          return;
-        }
-        
-        fetch('{{ route("admin.ajax.ingredients-allergens") }}?' + new URLSearchParams({
-          ingredient_ids: selectedIngredients
-        }), {
-          headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        })
-        .then(response => response.json())
-        .then(data => {
-          automaticAllergens = data.allergens || [];
-          
-          if (automaticAllergens.length === 0) {
-            automaticAllergensDiv.innerHTML = '<em class="text-muted">Nessun allergene automatico</em>';
-          } else {
-            automaticAllergensDiv.innerHTML = automaticAllergens.map(allergen => 
-              `<span class="badge bg-warning text-dark me-1">${allergen.name}</span>`
-            ).join('');
-          }
-          
-          updateFinalPreview();
+        // Inizializza Choices.js per il select degli ingredienti
+        const ingredientsSelect = new Choices('#ingredients', {
+            removeItemButton: true,
+            searchEnabled: true,
+            searchPlaceholderValue: 'Cerca ingredienti...',
+            noResultsText: 'Nessun risultato trovato',
+            itemSelectText: 'Clicca per selezionare',
+            placeholderValue: 'Seleziona ingredienti',
         });
-      }
-      
-      function updateFinalPreview() {
-        const manualCheckboxes = manualAllergensContainer.querySelectorAll('input[type="checkbox"]:checked');
-        const manualAllergens = Array.from(manualCheckboxes).map(cb => ({
-          id: cb.value,
-          name: cb.nextElementSibling.textContent
-        }));
-        
-        const allAllergens = [...automaticAllergens];
-        manualAllergens.forEach(manual => {
-          if (!allAllergens.find(auto => auto.id == manual.id)) {
-            allAllergens.push(manual);
-          }
-        });
-        
-        if (allAllergens.length === 0) {
-          finalAllergensPreview.innerHTML = '<em class="text-muted">Nessun allergene</em>';
-        } else {
-          finalAllergensPreview.innerHTML = allAllergens.map(allergen => 
-            `<span class="badge bg-danger me-1">${allergen.name}</span>`
-          ).join('');
+
+        const categorySelect = document.getElementById('category_id');
+        let currentCategoryIsWhite = false;
+
+        // Controlla categoria iniziale
+        function checkCategory() {
+            const selectedOption = categorySelect.options[categorySelect.selectedIndex];
+            currentCategoryIsWhite = selectedOption && selectedOption.dataset.isWhite === '1';
+            updateTomatoIngredients();
         }
-      }
-      
-      ingredientsSelect.addEventListener('change', updateAutomaticAllergens);
-      manualAllergensContainer.addEventListener('change', function(e) {
-        if (e.target.type === 'checkbox') updateFinalPreview();
-      });
-      
-      // Inizializzazione con dati esistenti
-      updateAutomaticAllergens();
-      
-      // Gestione modal nuovo ingrediente
-      const newIngredientModal = document.getElementById('newIngredientModal');
-      const saveButton = document.getElementById('ni_save');
-      const nameInput = document.getElementById('ni_name');
-      
-      if (saveButton && nameInput) {
-        saveButton.addEventListener('click', function() {
-          const name = nameInput.value.trim();
-          if (!name) {
-            alert('Inserisci il nome dell\'ingrediente');
-            return;
-          }
-          
-          const storeUrl = ingredientsSelect.dataset.storeUrl;
-          if (!storeUrl) {
-            alert('URL di creazione non configurato');
-            return;
-          }
-          
-          fetch(storeUrl, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
-            },
-            body: JSON.stringify({ name: name })
-          })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              // Aggiungi la nuova opzione al select
-              const option = document.createElement('option');
-              option.value = data.ingredient.id;
-              option.textContent = data.ingredient.name;
-              option.selected = true;
-              ingredientsSelect.appendChild(option);
-              
-              // Aggiorna Choices.js se presente
-              if (ingredientsSelect._choices) {
-                ingredientsSelect._choices.setChoiceByValue(data.ingredient.id.toString());
-              }
-              
-              // Chiudi modal e reset
-              bootstrap.Modal.getInstance(newIngredientModal).hide();
-              nameInput.value = '';
-              
-              // Aggiorna allergeni
-              updateAutomaticAllergens();
-            } else {
-              alert('Errore nella creazione: ' + (data.message || 'Errore sconosciuto'));
+
+        // Disabilita ingredienti con pomodoro per pizze bianche
+        function updateTomatoIngredients() {
+            const allChoices = ingredientsSelect._currentState.choices;
+            allChoices.forEach(choice => {
+                const option = document.querySelector(`#ingredients option[value="${choice.value}"]`);
+                if (option && option.dataset.isTomato === '1') {
+                    if (currentCategoryIsWhite) {
+                        ingredientsSelect.removeActiveItemsByValue(choice.value);
+                        choice.disabled = true;
+                    } else {
+                        choice.disabled = false;
+                    }
+                }
+            });
+            ingredientsSelect.setChoices(allChoices, 'value', 'label', true);
+        }
+
+        categorySelect.addEventListener('change', checkCategory);
+        checkCategory();
+
+        // Rilevamento automatico allergeni
+        function updateAllergens() {
+            const selectedIngredients = ingredientsSelect.getValue(true);
+            
+            if (selectedIngredients.length === 0) {
+                document.querySelectorAll('.allergen-checkbox').forEach(cb => cb.checked = false);
+                document.getElementById('final-allergen-preview').style.display = 'none';
+                return;
             }
-          })
-          .catch(error => {
-            console.error('Errore:', error);
-            alert('Errore di rete');
-          });
+
+            fetch('{{ route('admin.ajax.ingredients-allergens') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({ ingredients: selectedIngredients })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.querySelectorAll('.allergen-checkbox').forEach(checkbox => {
+                    if (data.allergens.includes(parseInt(checkbox.value))) {
+                        checkbox.checked = true;
+                    }
+                });
+                updateFinalAllergenPreview();
+            })
+            .catch(error => console.error('Errore:', error));
+        }
+
+        // Aggiorna preview allergeni finali
+        function updateFinalAllergenPreview() {
+            const checkedAllergens = Array.from(document.querySelectorAll('.allergen-checkbox:checked'));
+            const previewDiv = document.getElementById('final-allergen-preview');
+            const listDiv = document.getElementById('final-allergen-list');
+
+            if (checkedAllergens.length === 0) {
+                previewDiv.style.display = 'none';
+                return;
+            }
+
+            listDiv.innerHTML = checkedAllergens.map(cb => {
+                const label = document.querySelector(`label[for="${cb.id}"]`).textContent.trim();
+                return `<span class="badge bg-danger">${label}</span>`;
+            }).join('');
+
+            previewDiv.style.display = 'block';
+        }
+
+        document.getElementById('ingredients').addEventListener('change', updateAllergens);
+        document.querySelectorAll('.allergen-checkbox').forEach(cb => {
+            cb.addEventListener('change', updateFinalAllergenPreview);
         });
-      }
+
+        // Inizializza stato
+        updateAllergens();
+
+        // Gestione creazione nuovo ingrediente
+        document.getElementById('saveNewIngredient').addEventListener('click', function() {
+            const name = document.getElementById('new_ingredient_name').value.trim();
+            const isTomato = document.getElementById('new_ingredient_is_tomato').checked;
+            const allergenSelect = document.getElementById('new_ingredient_allergens');
+            const selectedAllergens = Array.from(allergenSelect.selectedOptions).map(opt => opt.value);
+
+            if (!name) {
+                alert('Inserisci il nome dell\'ingrediente');
+                return;
+            }
+
+            fetch('{{ route('admin.ingredients.store') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    name: name,
+                    is_tomato: isTomato ? 1 : 0,
+                    allergens: selectedAllergens
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    ingredientsSelect.setChoices([{
+                        value: data.ingredient.id,
+                        label: data.ingredient.name,
+                        selected: true,
+                        customProperties: {
+                            isTomato: data.ingredient.is_tomato
+                        }
+                    }], 'value', 'label', false);
+
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('newIngredientModal'));
+                    modal.hide();
+
+                    document.getElementById('new_ingredient_name').value = '';
+                    document.getElementById('new_ingredient_is_tomato').checked = false;
+                    allergenSelect.selectedIndex = -1;
+
+                    updateAllergens();
+                } else {
+                    alert('Errore durante la creazione dell\'ingrediente');
+                }
+            })
+            .catch(error => {
+                console.error('Errore:', error);
+                alert('Errore durante la creazione dell\'ingrediente');
+            });
+        });
     });
-  </script>
+</script>
 @endsection

@@ -4,27 +4,24 @@
 
 @section('header')
 <div class="text-center py-4">
-  <div class="mb-2"><i data-lucide="cake" style="width: 48px; height: 48px; color: #f59e0b;"></i></div>
-  <h1 class="display-6 fw-bold text-dark mb-2">I Tuoi Dolci</h1>
-  <p class="lead text-muted mb-4">Tiramisù, gelati e delizie dolci</p>
+  <h1 class="h3 fw-semibold text-dark mb-2">
+    <i data-lucide="cake" style="width: 28px; height: 28px; color: #d97706; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>
+    Dessert
+  </h1>
+  <p class="text-muted small mb-4">Gestisci i dessert del tuo menu</p>
 
-  {{-- CTA crea --}}
-  <div class="d-flex justify-content-center mb-4">
+  <div class="d-flex justify-content-center align-items-center gap-3 mb-3">
     <a href="{{ route('admin.desserts.create') }}"
-       class="btn btn-create btn-lg px-4 py-3"
-       role="button"
-       aria-label="Aggiungi un nuovo dolce"
-       data-bs-toggle="tooltip" title="Crea un nuovo dolce">
-      <i class="fas fa-plus me-2" aria-hidden="true"></i> Aggiungi Nuovo Dolce
+       class="btn btn-outline-warning btn-sm"
+       aria-label="Aggiungi un nuovo dessert">
+      <i data-lucide="plus" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>Nuovo Dessert
     </a>
+    <span class="text-muted small">
+      @php $total = method_exists($desserts,'total') ? $desserts->total() : ($desserts->count() ?? 0); @endphp
+      {{ $total }} {{ $total == 1 ? 'elemento' : 'elementi' }}
+    </span>
   </div>
-
-  {{-- Announcer + contatore --}}
   <div class="visually-hidden" aria-live="polite" aria-atomic="true" id="view-change-announce"></div>
-  <div class="mt-3">
-    @php $total = method_exists($desserts,'total') ? $desserts->total() : ($desserts->count() ?? 0); @endphp
-    <span class="badge bg-success fs-6 px-3 py-2">Hai {{ $total }} {{ $total == 1 ? 'dolce' : 'dolci' }} nel menu</span>
-  </div>
 </div>
 @endsection
 
@@ -35,11 +32,11 @@
     <div class="row justify-content-center">
       <div class="col-lg-6">
         <div class="text-center py-5">
-          <div class="mb-4"><i data-lucide="cake" style="width: 80px; height: 80px; color: #f59e0b; opacity: .5;"></i></div>
-          <h3 class="fw-bold text-dark mb-3">Nessun dessert presente</h3>
-          <p class="text-muted mb-4">Aggiungi il primo dolce al tuo menu.</p>
-          <a class="btn btn-success btn-lg px-4 py-3 fw-bold" href="{{ route('admin.desserts.create') }}">
-            <i class="fas fa-rocket me-2" aria-hidden="true"></i> Crea il Primo Dessert
+          <div class="mb-4"><i data-lucide="cake" style="width: 64px; height: 64px; color: #d97706; opacity: .4;"></i></div>
+          <h3 class="h5 fw-semibold text-dark mb-3">Nessun dessert presente</h3>
+          <p class="text-muted small mb-4">Crea il primo dessert per iniziare.</p>
+          <a class="btn btn-outline-warning btn-sm" href="{{ route('admin.desserts.create') }}" aria-label="Crea il primo dessert">
+            <i data-lucide="plus" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>Crea Primo Dessert
           </a>
         </div>
       </div>

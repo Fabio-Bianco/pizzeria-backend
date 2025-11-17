@@ -4,25 +4,24 @@
 
 @section('header')
 <div class="text-center py-4">
-  <div class="mb-2"><i data-lucide="salad" style="width: 48px; height: 48px; color: #10b981;"></i></div>
-  <h1 class="display-6 fw-bold text-dark mb-2">I Tuoi Antipasti</h1>
-  <p class="lead text-muted mb-4">Tutti gli antipasti e stuzzichini del tuo menu</p>
+  <h1 class="h3 fw-semibold text-dark mb-2">
+    <i data-lucide="salad" style="width: 28px; height: 28px; color: #059669; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>
+    Antipasti
+  </h1>
+  <p class="text-muted small mb-4">Gestisci gli antipasti del tuo menu</p>
 
-  <div class="d-flex justify-content-center mb-4">
+  <div class="d-flex justify-content-center align-items-center gap-3 mb-3">
     <a href="{{ route('admin.appetizers.create') }}"
-       class="btn btn-create btn-lg px-4 py-3"
-       role="button"
-       aria-label="Aggiungi un nuovo antipasto"
-       data-bs-toggle="tooltip" title="Crea un nuovo antipasto">
-      <i class="fas fa-plus me-2" aria-hidden="true"></i> Aggiungi Nuovo Antipasto
+       class="btn btn-outline-success btn-sm"
+       aria-label="Aggiungi un nuovo antipasto">
+      <i data-lucide="plus" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>Nuovo Antipasto
     </a>
+    <span class="text-muted small">
+      @php $total = method_exists($appetizers,'total') ? $appetizers->total() : ($appetizers->count() ?? 0); @endphp
+      {{ $total }} {{ $total == 1 ? 'elemento' : 'elementi' }}
+    </span>
   </div>
-
   <div class="visually-hidden" aria-live="polite" aria-atomic="true" id="view-change-announce"></div>
-  <div class="mt-3">
-    @php $total = method_exists($appetizers,'total') ? $appetizers->total() : ($appetizers->count() ?? 0); @endphp
-    <span class="badge bg-success fs-6 px-3 py-2">Hai {{ $total }} {{ $total == 1 ? 'antipasto' : 'antipasti' }} nel menu</span>
-  </div>
 </div>
 @endsection
 
@@ -33,11 +32,11 @@
     <div class="row justify-content-center">
       <div class="col-lg-6">
         <div class="text-center py-5">
-          <div class="mb-4"><i data-lucide="salad" style="width: 80px; height: 80px; color: #10b981; opacity: .5;"></i></div>
-          <h3 class="fw-bold text-dark mb-3">Non hai ancora nessun antipasto!</h3>
-          <p class="text-muted mb-4">Inizia subito creando il tuo primo antipasto per il menu.</p>
-          <a class="btn btn-success btn-lg px-4 py-3 fw-bold" href="{{ route('admin.appetizers.create') }}">
-            <i class="fas fa-rocket me-2" aria-hidden="true"></i> Crea il Primo Antipasto
+          <div class="mb-4"><i data-lucide="salad" style="width: 64px; height: 64px; color: #059669; opacity: .4;"></i></div>
+          <h3 class="h5 fw-semibold text-dark mb-3">Nessun antipasto presente</h3>
+          <p class="text-muted small mb-4">Crea il primo antipasto per iniziare.</p>
+          <a class="btn btn-outline-success btn-sm" href="{{ route('admin.appetizers.create') }}" aria-label="Crea il primo antipasto">
+            <i data-lucide="plus" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>Crea Primo Antipasto
           </a>
         </div>
       </div>

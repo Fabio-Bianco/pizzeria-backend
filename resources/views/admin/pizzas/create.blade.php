@@ -4,25 +4,18 @@
 @section('title', 'Nuova Pizza')
 
 @section('header')
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex align-items-center gap-3 py-3">
+    <a href="{{ route('admin.pizzas.index') }}" 
+       class="btn btn-outline-secondary btn-sm"
+       aria-label="Torna alle pizze">
+        <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+    </a>
     <div>
-        <div class="d-flex align-items-center mb-2">
-            <a href="{{ route('admin.pizzas.index') }}" class="btn btn-outline-secondary btn-sm me-3">
-                <i class="fas fa-arrow-left me-1"></i>
-                Indietro
-            </a>
-            <h1 class="page-title mb-0">
-                <i class="fas fa-plus-circle text-success me-2"></i>
-                Nuova Pizza
-            </h1>
-        </div>
-        <p class="page-subtitle">Aggiungi una nuova pizza al tuo menu</p>
-    </div>
-    <div>
-        <span class="badge bg-light text-dark fs-6 px-3 py-2">
-            <i class="fas fa-list me-1"></i>
-            Gestione Menu
-        </span>
+        <h1 class="h4 fw-semibold text-dark mb-1">
+            <i data-lucide="pizza" style="width: 24px; height: 24px; color: #dc2626; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>
+            Nuova Pizza
+        </h1>
+        <p class="text-muted small mb-0">Compila i campi per aggiungere una pizza</p>
     </div>
 </div>
 @endsection
@@ -30,57 +23,44 @@
 @section('content')
 
     <div class="row justify-content-center">
-        <div class="col-12">
+        <div class="col-12 col-lg-8">
             <form action="{{ route('admin.pizzas.store') }}" method="POST" enctype="multipart/form-data" novalidate class="needs-validation">
                 @csrf
                 
-                {{-- Layout Affiancato: Informazioni Base + Ingredienti --}}
-                <div class="row g-4 mb-4">
-                    {{-- COLONNA SINISTRA: Informazioni Base --}}
-                    <div class="col-12 col-lg-6">
-                        <div class="card border-0 shadow-sm h-100">
-                            <div class="card-header bg-white border-bottom">
-                                <h5 class="card-title mb-0">
-                                    <i class="fas fa-info-circle text-primary me-2"></i>
-                                    Informazioni Base
-                                </h5>
+                {{-- Informazioni Base --}}
+                <div class="card border mb-3" style="border-color: #e5e7eb !important;">
+                    <div class="card-body">
+                        <h6 class="fw-semibold text-dark mb-3">
+                            <i data-lucide="file-text" style="width: 18px; height: 18px; display: inline-block; vertical-align: middle; margin-right: 6px; color: #6b7280;"></i>
+                            Informazioni Base
+                        </h6>
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <label for="name" class="form-label small fw-semibold text-dark">Nome Pizza <span class="text-danger">*</span></label>
+                                <input id="name" name="name" type="text" 
+                                       class="form-control @error('name') is-invalid @enderror" 
+                                       value="{{ old('name') }}" 
+                                       placeholder="Es. Margherita, Marinara"
+                                       required
+                                       autofocus>
+                                @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
-                            <div class="card-body">
-                                <div class="row g-3">
-                                    <div class="col-12">
-                                        <label for="name" class="form-label fw-semibold">
-                                            <i class="fas fa-pizza-slice me-1"></i>
-                                            Nome Pizza <span class="text-danger">*</span>
-                                        </label>
-                                        <input id="name" name="name" type="text" 
-                                               class="form-control @error('name') is-invalid @enderror" 
-                                               value="{{ old('name') }}" 
-                                               placeholder="Es. Margherita, Marinara..."
-                                               required>
-                                        @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                    </div>
 
-                                    <div class="col-6">
-                                        <label for="price" class="form-label fw-semibold">
-                                            <i class="fas fa-euro-sign me-1"></i>
-                                            Prezzo <span class="text-danger">*</span>
-                                        </label>
-                                        <div class="input-group">
-                                            <span class="input-group-text">€</span>
-                                            <input id="price" name="price" type="number" step="0.01" 
-                                                   class="form-control @error('price') is-invalid @enderror" 
-                                                   value="{{ old('price') }}" 
-                                                   placeholder="12.50"
-                                                   required>
-                                        </div>
-                                        @error('price')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                    </div>
+                            <div class="col-md-4">
+                                <label for="price" class="form-label small fw-semibold text-dark">Prezzo <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">€</span>
+                                    <input id="price" name="price" type="number" step="0.01" 
+                                           class="form-control @error('price') is-invalid @enderror" 
+                                           value="{{ old('price') }}" 
+                                           placeholder="12.50"
+                                           required>
+                                </div>
+                                @error('price')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
 
-                                    <div class="col-6">
-                                        <label for="category_id" class="form-label fw-semibold">
-                                            <i class="fas fa-tags me-1"></i>
-                                            Categoria
-                                        </label>
+                            <div class="col-md-6">
+                                <label for="category_id" class="form-label small fw-semibold text-dark">Categoria</label>
                                         <select id="category_id" name="category_id" 
                                                 class="form-select @error('category_id') is-invalid @enderror" 
                                                 data-choices>
@@ -97,54 +77,40 @@
                                         @error('category_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                     </div>
 
-                                    <div class="col-12">
-                                        <label for="image" class="form-label fw-semibold">
-                                            <i class="fas fa-image me-1"></i>
-                                            Immagine
-                                        </label>
-                                        <input id="image" name="image" type="file" 
-                                               class="form-control @error('image') is-invalid @enderror" 
-                                               accept=".jpg,.jpeg,.png,.webp">
-                                        @error('image')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                        <div class="form-text">JPG, PNG, WebP. Max: 2MB</div>
-                                    </div>
+                            <div class="col-md-6">
+                                <label for="image" class="form-label small fw-semibold text-dark">Immagine</label>
+                                <input id="image" name="image" type="file" 
+                                       class="form-control form-control-sm @error('image') is-invalid @enderror" 
+                                       accept=".jpg,.jpeg,.png,.webp">
+                                @error('image')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
 
-                                    <div class="col-12">
-                                        <label for="description" class="form-label fw-semibold">
-                                            <i class="fas fa-align-left me-1"></i>
-                                            Descrizione
-                                        </label>
-                                        <textarea id="description" name="description" rows="3"
-                                                  class="form-control @error('description') is-invalid @enderror"
-                                                  placeholder="Descrizione della pizza...">{{ old('description') }}</textarea>
-                                        @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                    </div>
-                                </div>
+                            <div class="col-12">
+                                <label for="description" class="form-label small fw-semibold text-dark">Descrizione</label>
+                                <textarea id="description" name="description" rows="2"
+                                          class="form-control @error('description') is-invalid @enderror"
+                                          placeholder="Breve descrizione della pizza">{{ old('description') }}</textarea>
+                                @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    {{-- COLONNA DESTRA: Ingredienti --}}
-                    <div class="col-12 col-lg-6">
-                        <div class="card border-0 shadow-sm h-100">
-                            <div class="card-header bg-white border-bottom">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <h5 class="card-title mb-0">
-                                        <i class="fas fa-seedling text-success me-2"></i>
-                                        Ingredienti
-                                    </h5>
-                                    <button type="button" class="btn btn-outline-success btn-sm" 
-                                            data-bs-toggle="modal" data-bs-target="#newIngredientModal">
-                                        <i class="fas fa-plus me-1"></i>
-                                        Nuovo
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <label for="ingredients" class="form-label fw-semibold">
-                                        Seleziona ingredienti
-                                    </label>
+                {{-- Ingredienti --}}
+                <div class="card border mb-3" style="border-color: #e5e7eb !important;">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-semibold text-dark mb-0">
+                                <i data-lucide="wheat" style="width: 18px; height: 18px; display: inline-block; vertical-align: middle; margin-right: 6px; color: #6b7280;"></i>
+                                Ingredienti
+                            </h6>
+                            <button type="button" class="btn btn-outline-success btn-sm" 
+                                    data-bs-toggle="modal" data-bs-target="#newIngredientModal">
+                                <i data-lucide="plus" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>Nuovo
+                            </button>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ingredients" class="form-label small fw-semibold text-dark">Seleziona ingredienti</label>
                                     <select id="ingredients" name="ingredients[]" multiple 
                                             class="form-select @error('ingredients') is-invalid @enderror" 
                                             data-choices 
@@ -252,13 +218,11 @@
                                 I campi con <span class="text-danger">*</span> sono obbligatori
                             </small>
                             <div class="d-flex gap-2">
-                                <a href="{{ route('admin.pizzas.index') }}" class="btn btn-outline-secondary">
-                                    <i class="fas fa-times me-1"></i>
-                                    Annulla
+                                <a href="{{ route('admin.pizzas.index') }}" class="btn btn-outline-secondary btn-sm" aria-label="Annulla">
+                                    <i data-lucide="x" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>Annulla
                                 </a>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save me-1"></i>
-                                    Salva Pizza
+                                <button type="submit" class="btn btn-primary btn-sm" aria-label="Salva pizza">
+                                    <i data-lucide="check" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>Salva Pizza
                                 </button>
                             </div>
                         </div>
@@ -272,29 +236,23 @@
     <div class="modal fade" id="newIngredientModal" tabindex="-1" aria-labelledby="newIngredientModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                                <div class="modal-header">
                     <h5 class="modal-title" id="newIngredientModalLabel">
-                        <i class="fas fa-plus-circle text-success me-2"></i>
+                        <i data-lucide="plus" style="width: 20px; height: 20px; display: inline-block; vertical-align: middle; margin-right: 8px; color: #059669;"></i>
                         Nuovo Ingrediente
                     </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="ni_name" class="form-label fw-semibold">Nome Ingrediente</label>
-                        <input type="text" id="ni_name" class="form-control" placeholder="Es. Mozzarella, Basilico, Prosciutto..." />
+                        <label for="new_ingredient_name" class="form-label small fw-semibold text-dark">Nome Ingrediente</label>
+                        <input type="text" class="form-control" id="new_ingredient_name" placeholder="Es. Mozzarella, Basilico">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                        <i class="fas fa-times me-1"></i>
-                        Annulla
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">
+                        <i data-lucide="x" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>Annulla
                     </button>
-                    <button type="button" id="ni_save" class="btn btn-success">
-                        <i class="fas fa-plus me-1"></i>
-                        Crea Ingrediente
-                    </button>
-                </div>
             </div>
         </div>
     </div>

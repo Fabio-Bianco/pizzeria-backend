@@ -4,25 +4,24 @@
 
 @section('header')
 <div class="text-center py-4">
-  <div class="mb-2"><i data-lucide="glass-water" style="width: 48px; height: 48px; color: #3b82f6;"></i></div>
-  <h1 class="display-6 fw-bold text-dark mb-2">Le Tue Bevande</h1>
-  <p class="lead text-muted mb-4">Bibite, vini e birre del tuo menu</p>
+  <h1 class="h3 fw-semibold text-dark mb-2">
+    <i data-lucide="glass-water" style="width: 28px; height: 28px; color: #2563eb; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>
+    Bevande
+  </h1>
+  <p class="text-muted small mb-4">Gestisci le bevande del tuo menu</p>
 
-  <div class="d-flex justify-content-center mb-4">
+  <div class="d-flex justify-content-center align-items-center gap-3 mb-3">
     <a href="{{ route('admin.beverages.create') }}"
-       class="btn btn-create btn-lg px-4 py-3"
-       role="button"
-       aria-label="Aggiungi una nuova bevanda"
-       data-bs-toggle="tooltip" title="Crea una nuova bevanda">
-      <i class="fas fa-plus me-2" aria-hidden="true"></i> Aggiungi Nuova Bevanda
+       class="btn btn-outline-info btn-sm"
+       aria-label="Aggiungi una nuova bevanda">
+      <i data-lucide="plus" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>Nuova Bevanda
     </a>
+    <span class="text-muted small">
+      @php $total = method_exists($beverages,'total') ? $beverages->total() : ($beverages->count() ?? 0); @endphp
+      {{ $total }} {{ $total == 1 ? 'elemento' : 'elementi' }}
+    </span>
   </div>
-
   <div class="visually-hidden" aria-live="polite" aria-atomic="true" id="view-change-announce"></div>
-  <div class="mt-3">
-    @php $total = method_exists($beverages,'total') ? $beverages->total() : ($beverages->count() ?? 0); @endphp
-    <span class="badge bg-success fs-6 px-3 py-2">Hai {{ $total }} {{ $total == 1 ? 'bevanda' : 'bevande' }} nel menu</span>
-  </div>
 </div>
 @endsection
 
@@ -33,11 +32,11 @@
     <div class="row justify-content-center">
       <div class="col-lg-6">
         <div class="text-center py-5">
-          <div class="mb-4"><i data-lucide="glass-water" style="width: 80px; height: 80px; color: #3b82f6; opacity: .5;"></i></div>
-          <h3 class="fw-bold text-dark mb-3">Nessuna bevanda presente</h3>
-          <p class="text-muted mb-4">Aggiungi la prima bevanda al tuo menu.</p>
-          <a class="btn btn-success btn-lg px-4 py-3 fw-bold" href="{{ route('admin.beverages.create') }}">
-            <i class="fas fa-rocket me-2" aria-hidden="true"></i> Crea la Prima Bevanda
+          <div class="mb-4"><i data-lucide="glass-water" style="width: 64px; height: 64px; color: #2563eb; opacity: .4;"></i></div>
+          <h3 class="h5 fw-semibold text-dark mb-3">Nessuna bevanda presente</h3>
+          <p class="text-muted small mb-4">Crea la prima bevanda per iniziare.</p>
+          <a class="btn btn-outline-info btn-sm" href="{{ route('admin.beverages.create') }}" aria-label="Crea la prima bevanda">
+            <i data-lucide="plus" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>Crea Prima Bevanda
           </a>
         </div>
       </div>

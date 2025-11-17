@@ -3,46 +3,35 @@
 @section('title', 'Nuovo Antipasto')
 
 @section('header')
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex align-items-center gap-3 py-3">
+    <a href="{{ route('admin.appetizers.index') }}" 
+       class="btn btn-outline-secondary btn-sm"
+       aria-label="Torna agli antipasti">
+        <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+    </a>
     <div>
-        <div class="d-flex align-items-center mb-2">
-            <a href="{{ route('admin.appetizers.index') }}" class="btn btn-outline-secondary btn-sm me-3">
-                <i class="fas fa-arrow-left me-1"></i>
-                Indietro
-            </a>
-            <h1 class="page-title mb-0">
-                <i class="fas fa-plus-circle text-success me-2"></i>
-                Nuovo Antipasto
-            </h1>
-        </div>
-        <p class="page-subtitle">Aggiungi un nuovo antipasto al tuo menu</p>
-    </div>
-    <div>
-        <span class="badge bg-light text-dark fs-6 px-3 py-2">
-            <i class="fas fa-salad me-1"></i>
-            Gestione Menu
-        </span>
+        <h1 class="h4 fw-semibold text-dark mb-1">
+            <i data-lucide="salad" style="width: 24px; height: 24px; color: #059669; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>
+            Nuovo Antipasto
+        </h1>
+        <p class="text-muted small mb-0">Compila i campi per aggiungere un antipasto</p>
     </div>
 </div>
 @endsection
 
 @section('content')
     <div class="row justify-content-center">
-        <div class="col-12">
+        <div class="col-12 col-lg-8">
             <form action="{{ route('admin.appetizers.store') }}" method="POST" enctype="multipart/form-data" novalidate class="needs-validation">
                 @csrf
                 
-                <div class="row g-4">
-                    {{-- Informazioni Base (colonna sinistra) --}}
-                    <div class="col-12 col-lg-6">
-                        <div class="card border-0 shadow-sm h-100">
-                            <div class="card-header bg-white border-bottom">
-                                <h5 class="card-title mb-0">
-                                    <i class="fas fa-info-circle text-success me-2"></i>
-                                    Informazioni Base
-                                </h5>
-                            </div>
-                            <div class="card-body">
+                {{-- Informazioni Base --}}
+                <div class="card border mb-3" style="border-color: #e5e7eb !important;">
+                    <div class="card-body">
+                        <h6 class="fw-semibold text-dark mb-3">
+                            <i data-lucide="file-text" style="width: 18px; height: 18px; display: inline-block; vertical-align: middle; margin-right: 6px; color: #6b7280;"></i>
+                            Informazioni Base
+                        </h6>
                                 <div class="row g-3">
                                     <div class="col-12">
                                         <label for="name" class="form-label fw-semibold">
@@ -228,20 +217,15 @@
                         <div class="card border-0 shadow-sm">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">
-                                        <i class="fas fa-info-circle me-1"></i>
-                                        I campi contrassegnati con <span class="text-danger">*</span> sono obbligatori
-                                    </small>
-                                    <div class="d-flex gap-3">
-                                        <a href="{{ route('admin.appetizers.index') }}" class="btn btn-outline-secondary px-4">
-                                            <i class="fas fa-times me-2"></i>
-                                            Annulla
-                                        </a>
-                                        <button type="submit" class="btn btn-success px-4">
-                                            <i class="fas fa-save me-2"></i>
-                                            Salva Antipasto
-                                        </button>
-                                    </div>
+                    <small class="text-muted">I campi con <span class="text-danger">*</span> sono obbligatori</small>
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('admin.appetizers.index') }}" class="btn btn-outline-secondary btn-sm" aria-label="Annulla">
+                            <i data-lucide="x" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>Annulla
+                        </a>
+                        <button type="submit" class="btn btn-primary btn-sm" aria-label="Salva antipasto">
+                            <i data-lucide="check" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>Salva Antipasto
+                        </button>
+                    </div>
                                 </div>
                             </div>
                         </div>

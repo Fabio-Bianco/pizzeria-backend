@@ -1,11 +1,20 @@
-<x-app-layout>
-  <x-slot name="header">
-    <x-page-header :title="$pizza->name" :items="[['label'=>'Pizze','url'=>route('admin.pizzas.index')],['label'=>$pizza->name]]" :backUrl="route('admin.pizzas.index')" />
-  </x-slot>
+@extends('layouts.app-modern')
 
-  <div class="container py-3">
+@section('title', $pizza->name)
+
+@section('header')
+<div class="text-center py-4">
+    <h3 class="fw-semibold mb-2">
+        <i data-lucide="eye" style="width: 24px; height: 24px; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>
+        {{ $pizza->name }}
+    </h3>
+    <p class="text-muted mb-0">Dettagli della pizza</p>
+</div>
+@endsection
+
+@section('content')
     <div class="row justify-content-center">
-      <div class="col-12 col-lg-10 col-xl-8">
+      <div class="col-12 col-lg-8">
         <div class="card shadow-sm mb-3">
           <div class="card-body">
             <div class="d-flex gap-3 align-items-start">
@@ -33,15 +42,24 @@
           </div>
         </div>
 
-        <div class="d-flex gap-2">
-          <a href="{{ route('admin.pizzas.edit', $pizza) }}" class="btn btn-success">Modifica</a>
-          <form action="{{ route('admin.pizzas.destroy', $pizza) }}" method="POST" data-confirm="Sicuro?">
-            @csrf @method('DELETE')
-            <button class="btn btn-danger" type="submit">Elimina</button>
-          </form>
-          <a href="{{ route('admin.pizzas.index') }}" class="btn btn-outline-secondary">Torna all'elenco</a>
+        <div class="d-flex justify-content-between align-items-center">
+          <a href="{{ route('admin.pizzas.index') }}" class="btn btn-outline-secondary btn-sm">
+            Torna all'elenco
+          </a>
+          <div class="d-flex gap-2">
+            <a href="{{ route('admin.pizzas.edit', $pizza) }}" class="btn btn-outline-primary btn-sm">
+              <i data-lucide="pencil" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
+              Modifica
+            </a>
+            <form action="{{ route('admin.pizzas.destroy', $pizza) }}" method="POST" data-confirm="Sicuro?" class="d-inline">
+              @csrf @method('DELETE')
+              <button class="btn btn-outline-danger btn-sm" type="submit">
+                <i data-lucide="trash-2" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
+                Elimina
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</x-app-layout>
+@endsection

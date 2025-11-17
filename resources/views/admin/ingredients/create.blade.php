@@ -3,25 +3,18 @@
 @section('title', 'Nuovo Ingrediente')
 
 @section('header')
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex align-items-center gap-3 py-3">
+    <a href="{{ route('admin.ingredients.index') }}" 
+       class="btn btn-outline-secondary btn-sm"
+       aria-label="Torna agli ingredienti">
+        <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+    </a>
     <div>
-        <div class="d-flex align-items-center mb-2">
-            <a href="{{ route('admin.ingredients.index') }}" class="btn btn-outline-secondary btn-sm me-3">
-                <i class="fas fa-arrow-left me-1"></i>
-                Indietro
-            </a>
-            <h1 class="page-title mb-0">
-                <i class="fas fa-plus-circle text-info me-2"></i>
-                Nuovo Ingrediente
-            </h1>
-        </div>
-        <p class="page-subtitle">Aggiungi un nuovo ingrediente al database</p>
-    </div>
-    <div>
-        <span class="badge bg-light text-dark fs-6 px-3 py-2">
-            <i class="fas fa-seedling me-1"></i>
-            Gestione Ingredienti
-        </span>
+        <h1 class="h4 fw-semibold text-dark mb-1">
+            <i data-lucide="leaf" style="width: 24px; height: 24px; color: #10b981; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>
+            Nuovo Ingrediente
+        </h1>
+        <p class="text-muted small mb-0">Compila i campi per aggiungere un ingrediente</p>
     </div>
 </div>
 @endsection
@@ -129,20 +122,15 @@
                         <div class="card border-0 shadow-sm">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">
-                                        <i class="fas fa-info-circle me-1"></i>
-                                        I campi contrassegnati con <span class="text-danger">*</span> sono obbligatori
-                                    </small>
-                                    <div class="d-flex gap-3">
-                                        <a href="{{ route('admin.ingredients.index') }}" class="btn btn-outline-secondary px-4">
-                                            <i class="fas fa-times me-2"></i>
-                                            Annulla
-                                        </a>
-                                        <button type="submit" class="btn btn-info px-4">
-                                            <i class="fas fa-save me-2"></i>
-                                            Crea Ingrediente
-                                        </button>
-                                    </div>
+                    <small class="text-muted">I campi con <span class="text-danger">*</span> sono obbligatori</small>
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('admin.ingredients.index') }}" class="btn btn-outline-secondary btn-sm" aria-label="Annulla">
+                            <i data-lucide="x" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>Annulla
+                        </a>
+                        <button type="submit" class="btn btn-primary btn-sm" aria-label="Salva ingrediente">
+                            <i data-lucide="check" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>Salva Ingrediente
+                        </button>
+                    </div>
                                 </div>
                             </div>
                         </div>

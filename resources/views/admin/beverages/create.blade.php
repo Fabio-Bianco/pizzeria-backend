@@ -3,239 +3,173 @@
 @section('title', 'Nuova Bevanda')
 
 @section('header')
-<div class="d-flex justify-content-between align-items-center">
+<div class="d-flex align-items-center gap-3 py-3">
+    <a href="{{ route('admin.beverages.index') }}" 
+       class="btn btn-outline-secondary btn-sm"
+       aria-label="Torna alle bevande">
+        <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+    </a>
     <div>
-        <div class="d-flex align-items-center mb-2">
-            <a href="{{ route('admin.beverages.index') }}" class="btn btn-outline-secondary btn-sm me-3">
-                <i class="fas fa-arrow-left me-1"></i>
-                Indietro
-            </a>
-            <h1 class="page-title mb-0">
-                <i class="fas fa-plus-circle text-info me-2"></i>
-                Nuova Bevanda
-            </h1>
-        </div>
-        <p class="page-subtitle">Aggiungi una nuova bevanda alla tua carta</p>
-    </div>
-    <div>
-        <span class="badge bg-light text-dark fs-6 px-3 py-2">
-            <i class="fas fa-glass-water me-1"></i>
-            Gestione Menu
-        </span>
+        <h1 class="h4 fw-semibold text-dark mb-1">
+            <i data-lucide="glass-water" style="width: 24px; height: 24px; color: #2563eb; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>
+            Nuova Bevanda
+        </h1>
+        <p class="text-muted small mb-0">Compila i campi per aggiungere una bevanda</p>
     </div>
 </div>
 @endsection
 
 @section('content')
     <div class="row justify-content-center">
-        <div class="col-12">
+        <div class="col-12 col-lg-8">
             <form action="{{ route('admin.beverages.store') }}" method="POST" enctype="multipart/form-data" novalidate class="needs-validation">
                 @csrf
                 
-                <div class="row g-4">
-                    {{-- Informazioni Base (colonna sinistra) --}}
-                    <div class="col-12 col-lg-6">
-                        <div class="card border-0 shadow-sm h-100">
-                            <div class="card-header bg-white border-bottom">
-                                <h5 class="card-title mb-0">
-                                    <i class="fas fa-info-circle text-info me-2"></i>
-                                    Informazioni Base
-                                </h5>
+                {{-- Informazioni Base --}}
+                <div class="card border mb-3" style="border-color: #e5e7eb !important;">
+                    <div class="card-body">
+                        <h6 class="fw-semibold text-dark mb-3">
+                            <i data-lucide="file-text" style="width: 18px; height: 18px; display: inline-block; vertical-align: middle; margin-right: 6px; color: #6b7280;"></i>
+                            Informazioni Base
+                        </h6>
+                        <div class="row g-3">
+                            <div class="col-md-8">
+                                <label for="name" class="form-label small fw-semibold text-dark">Nome <span class="text-danger">*</span></label>
+                                <input id="name" name="name" type="text" 
+                                       class="form-control @error('name') is-invalid @enderror" 
+                                       value="{{ old('name') }}" 
+                                       placeholder="Es. Coca Cola, Birra Moretti"
+                                       required
+                                       autofocus>
+                                @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
-                            <div class="card-body">
-                                <div class="row g-3">
-                                    <div class="col-12">
-                                        <label for="name" class="form-label fw-semibold">
-                                            <i class="fas fa-glass-water me-1"></i>
-                                            Nome Bevanda <span class="text-danger">*</span>
-                                        </label>
-                                        <input id="name" name="name" type="text" 
-                                               class="form-control @error('name') is-invalid @enderror" 
-                                               value="{{ old('name') }}" 
-                                               placeholder="Es. Coca Cola, Birra Moretti..."
-                                               required>
-                                        @error('name')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                    </div>
 
-                                    <div class="col-12">
-                                        <label for="price" class="form-label fw-semibold">
-                                            <i class="fas fa-euro-sign me-1"></i>
-                                            Prezzo <span class="text-danger">*</span>
-                                        </label>
-                                        <div class="input-group">
-                                            <span class="input-group-text">€</span>
-                                            <input id="price" name="price" type="number" step="0.01" 
-                                                   class="form-control @error('price') is-invalid @enderror" 
-                                                   value="{{ old('price') }}" 
-                                                   placeholder="3.50"
-                                                   required>
-                                        </div>
-                                        @error('price')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                    </div>
-
-                                    <div class="col-12">
-                                        <label for="category" class="form-label fw-semibold">
-                                            <i class="fas fa-tags me-1"></i>
-                                            Categoria
-                                        </label>
-                                        <select id="category" name="category" 
-                                                class="form-select @error('category') is-invalid @enderror">
-                                            <option value="">Seleziona categoria...</option>
-                                            <option value="analcoliche" @selected(old('category') == 'analcoliche')>Analcoliche</option>
-                                            <option value="alcoliche" @selected(old('category') == 'alcoliche')>Alcoliche</option>
-                                            <option value="birre" @selected(old('category') == 'birre')>Birre</option>
-                                            <option value="vini" @selected(old('category') == 'vini')>Vini</option>
-                                            <option value="liquori" @selected(old('category') == 'liquori')>Liquori</option>
-                                            <option value="caffetteria" @selected(old('category') == 'caffetteria')>Caffetteria</option>
-                                        </select>
-                                        @error('category')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                    </div>
-
-                                    <div class="col-12">
-                                        <label for="description" class="form-label fw-semibold">
-                                            <i class="fas fa-align-left me-1"></i>
-                                            Descrizione
-                                        </label>
-                                        <textarea id="description" name="description" rows="3" 
-                                                  class="form-control @error('description') is-invalid @enderror" 
-                                                  placeholder="Descrivi la bevanda...">{{ old('description') }}</textarea>
-                                        @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                    </div>
-
-                                    <div class="col-12">
-                                        <label for="image" class="form-label fw-semibold">
-                                            <i class="fas fa-image me-1"></i>
-                                            Immagine
-                                        </label>
-                                        <input id="image" name="image" type="file" 
-                                               class="form-control @error('image') is-invalid @enderror" 
-                                               accept=".jpg,.jpeg,.png,.webp">
-                                        @error('image')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                    </div>
-                                    <div class="form-check form-switch mt-3">
-                                        <input class="form-check-input" type="checkbox" role="switch" 
-                                               id="is_gluten_free" name="is_gluten_free" value="1"
-                                               @checked(old('is_gluten_free'))>
-                                        <label class="form-check-label fw-semibold text-dark" for="is_gluten_free">
-                                            <i class="fas fa-bread-slice me-1 text-dark"></i>
-                                            <span class="text-dark">Senza Glutine</span>
-                                        </label>
-                                    </div>
-                                    <small class="text-muted">Spunta se la bevanda è senza glutine</small>
+                            <div class="col-md-4">
+                                <label for="price" class="form-label small fw-semibold text-dark">Prezzo <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text">€</span>
+                                    <input id="price" name="price" type="number" step="0.01" 
+                                           class="form-control @error('price') is-invalid @enderror" 
+                                           value="{{ old('price') }}" 
+                                           placeholder="3.50"
+                                           required>
                                 </div>
+                                @error('price')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="category" class="form-label small fw-semibold text-dark">Categoria</label>
+                                <select id="category" name="category" class="form-select @error('category') is-invalid @enderror">
+                                    <option value="">Seleziona...</option>
+                                    <option value="analcoliche" @selected(old('category') == 'analcoliche')>Analcoliche</option>
+                                    <option value="alcoliche" @selected(old('category') == 'alcoliche')>Alcoliche</option>
+                                    <option value="birre" @selected(old('category') == 'birre')>Birre</option>
+                                    <option value="vini" @selected(old('category') == 'vini')>Vini</option>
+                                    <option value="liquori" @selected(old('category') == 'liquori')>Liquori</option>
+                                    <option value="caffetteria" @selected(old('category') == 'caffetteria')>Caffetteria</option>
+                                </select>
+                                @error('category')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="formato" class="form-label small fw-semibold text-dark">Formato</label>
+                                <input id="formato" name="formato" type="text" 
+                                       class="form-control @error('formato') is-invalid @enderror" 
+                                       value="{{ old('formato') }}" 
+                                       placeholder="330ml, 0.5L, 75cl">
+                                @error('formato')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
+
+                            <div class="col-12">
+                                <label for="description" class="form-label small fw-semibold text-dark">Descrizione</label>
+                                <textarea id="description" name="description" rows="2" 
+                                          class="form-control @error('description') is-invalid @enderror" 
+                                          placeholder="Breve descrizione della bevanda">{{ old('description') }}</textarea>
+                                @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    {{-- Informazioni Aggiuntive (colonna destra) --}}
-                    <div class="col-12 col-lg-6">
-                        <div class="card border-0 shadow-sm h-100">
-                            <div class="card-header bg-white border-bottom">
-                                <h5 class="card-title mb-0">
-                                    <i class="fas fa-wine-bottle text-warning me-2"></i>
-                                    Informazioni Aggiuntive
-                                </h5>
+                {{-- Dettagli Opzionali --}}
+                <div class="card border mb-3" style="border-color: #e5e7eb !important;">
+                    <div class="card-body">
+                        <h6 class="fw-semibold text-dark mb-3">
+                            <i data-lucide="sliders" style="width: 18px; height: 18px; display: inline-block; vertical-align: middle; margin-right: 6px; color: #6b7280;"></i>
+                            Dettagli Opzionali
+                        </h6>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="gradazione_alcolica" class="form-label small fw-semibold text-dark">Gradazione Alcolica</label>
+                                <div class="input-group input-group-sm">
+                                    <input id="gradazione_alcolica" name="gradazione_alcolica" type="number" step="0.1" 
+                                           class="form-control @error('gradazione_alcolica') is-invalid @enderror" 
+                                           value="{{ old('gradazione_alcolica') }}" 
+                                           placeholder="5.0">
+                                    <span class="input-group-text">%</span>
+                                </div>
+                                @error('gradazione_alcolica')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
-                            <div class="card-body">
-                                <div class="row g-3">
-                                    <div class="col-12">
-                                        <label for="gradazione_alcolica" class="form-label fw-semibold">
-                                            <i class="fas fa-percentage me-1"></i>
-                                            Gradazione Alcolica
-                                        </label>
-                                        <div class="input-group">
-                                            <input id="gradazione_alcolica" name="gradazione_alcolica" type="number" step="0.1" 
-                                                   class="form-control @error('gradazione_alcolica') is-invalid @enderror" 
-                                                   value="{{ old('gradazione_alcolica') }}" 
-                                                   placeholder="5.0">
-                                            <span class="input-group-text">% Vol.</span>
-                                        </div>
-                                        @error('gradazione_alcolica')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                        <div class="form-text">Lascia vuoto se analcolica</div>
-                                    </div>
 
-                                    <div class="col-12">
-                                        <label for="formato" class="form-label fw-semibold">
-                                            <i class="fas fa-ruler me-1"></i>
-                                            Formato
-                                        </label>
-                                        <input id="formato" name="formato" type="text" 
-                                               class="form-control @error('formato') is-invalid @enderror" 
-                                               value="{{ old('formato') }}" 
-                                               placeholder="Es. 330ml, 0.5L, 75cl...">
-                                        @error('formato')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                    </div>
+                            <div class="col-md-4">
+                                <label for="tipologia" class="form-label small fw-semibold text-dark">Tipologia</label>
+                                <select id="tipologia" name="tipologia" class="form-select form-select-sm @error('tipologia') is-invalid @enderror">
+                                    <option value="">Seleziona...</option>
+                                    <option value="analcolica" @selected(old('tipologia') == 'analcolica')>Analcolica</option>
+                                    <option value="birra" @selected(old('tipologia') == 'birra')>Birra</option>
+                                    <option value="vino" @selected(old('tipologia') == 'vino')>Vino</option>
+                                    <option value="liquore" @selected(old('tipologia') == 'liquore')>Liquore</option>
+                                    <option value="altro" @selected(old('tipologia') == 'altro')>Altro</option>
+                                </select>
+                                @error('tipologia')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
 
-                                    <div class="col-12">
-                                        <label for="tipologia" class="form-label fw-semibold">
-                                            <i class="fas fa-wine-glass me-1"></i>
-                                            Tipologia
-                                        </label>
-                                        <select id="tipologia" name="tipologia" class="form-select @error('tipologia') is-invalid @enderror">
-                                            <option value="">Seleziona tipologia...</option>
-                                            <option value="analcolica" @selected(old('tipologia') == 'analcolica')>Analcolica</option>
-                                            <option value="birra" @selected(old('tipologia') == 'birra')>Birra</option>
-                                            <option value="vino" @selected(old('tipologia') == 'vino')>Vino</option>
-                                            <option value="liquore" @selected(old('tipologia') == 'liquore')>Liquore</option>
-                                            <option value="altro" @selected(old('tipologia') == 'altro')>Altro</option>
-                                        </select>
-                                        @error('tipologia')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                    </div>
+                            <div class="col-md-4">
+                                <label for="image" class="form-label small fw-semibold text-dark">Immagine</label>
+                                <input id="image" name="image" type="file" 
+                                       class="form-control form-control-sm @error('image') is-invalid @enderror" 
+                                       accept=".jpg,.jpeg,.png,.webp">
+                                @error('image')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
 
-                                    <div class="col-12">
-                                        <label for="notes" class="form-label fw-semibold">
-                                            <i class="fas fa-sticky-note me-1"></i>
-                                            Note Aggiuntive
-                                        </label>
-                                        <textarea id="notes" name="notes" rows="3" 
-                                                  class="form-control @error('notes') is-invalid @enderror" 
-                                                  placeholder="Temperature di servizio, abbinamenti...">{{ old('notes') }}</textarea>
-                                        @error('notes')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                    </div>
+                            <div class="col-12">
+                                <label for="notes" class="form-label small fw-semibold text-dark">Note</label>
+                                <textarea id="notes" name="notes" rows="2" 
+                                          class="form-control form-control-sm @error('notes') is-invalid @enderror" 
+                                          placeholder="Temperature, abbinamenti, note di servizio">{{ old('notes') }}</textarea>
+                                @error('notes')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
 
-                                    {{-- Spazio per info aggiuntive --}}
-                                    <div class="col-12 mt-4">
-                                        <div class="p-3 bg-light rounded">
-                                            <h6 class="mb-2">
-                                                <i class="fas fa-lightbulb text-warning me-1"></i>
-                                                Suggerimenti
-                                            </h6>
-                                            <ul class="small text-muted mb-0 ps-3">
-                                                <li>Specifica la temperatura di servizio</li>
-                                                <li>Indica eventuali allergeni</li>
-                                                <li>Suggerisci abbinamenti</li>
-                                            </ul>
-                                        </div>
-                                    </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" 
+                                           id="is_gluten_free" name="is_gluten_free" value="1"
+                                           @checked(old('is_gluten_free'))>
+                                    <label class="form-check-label small text-dark" for="is_gluten_free">
+                                        Senza Glutine
+                                    </label>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {{-- Pulsanti azione --}}
-                <div class="row mt-4">
-                    <div class="col-12">
-                        <div class="card border-0 shadow-sm">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <small class="text-muted">
-                                        <i class="fas fa-info-circle me-1"></i>
-                                        I campi contrassegnati con <span class="text-danger">*</span> sono obbligatori
-                                    </small>
-                                    <div class="d-flex gap-3">
-                                        <a href="{{ route('admin.beverages.index') }}" class="btn btn-outline-secondary px-4">
-                                            <i class="fas fa-times me-2"></i>
-                                            Annulla
-                                        </a>
-                                        <button type="submit" class="btn btn-info px-4">
-                                            <i class="fas fa-save me-2"></i>
-                                            Salva Bevanda
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                {{-- Azioni --}}
+                <div class="d-flex justify-content-between align-items-center gap-3 py-3">
+                    <small class="text-muted">
+                        I campi con <span class="text-danger">*</span> sono obbligatori
+                    </small>
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('admin.beverages.index') }}" 
+                           class="btn btn-outline-secondary btn-sm"
+                           aria-label="Annulla creazione">
+                            <i data-lucide="x" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>Annulla
+                        </a>
+                        <button type="submit" 
+                                class="btn btn-primary btn-sm"
+                                aria-label="Salva bevanda">
+                            <i data-lucide="check" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>Salva Bevanda
+                        </button>
                     </div>
                 </div>
             </form>

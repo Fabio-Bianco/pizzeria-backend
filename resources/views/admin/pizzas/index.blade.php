@@ -4,23 +4,22 @@
 
 @section('header')
 <div class="text-center py-4">
-  <div class="mb-2"><i data-lucide="pizza" style="width: 48px; height: 48px; color: #ef4444;"></i></div>
-  <h1 class="display-6 fw-bold text-dark mb-2">Pizze</h1>
-  <p class="lead text-muted mb-4">Gestisci le pizze del tuo menu</p>
+  <h1 class="h3 fw-semibold text-dark mb-2">
+    <i data-lucide="pizza" style="width: 28px; height: 28px; color: #dc2626; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>
+    Pizze
+  </h1>
+  <p class="text-muted small mb-4">Gestisci le pizze del tuo menu</p>
 
-  <div class="d-flex justify-content-center mb-4">
+  <div class="d-flex justify-content-center align-items-center gap-3 mb-3">
     <a href="{{ route('admin.pizzas.create') }}"
-       class="btn btn-create btn-lg px-4 py-3"
-       role="button"
-       aria-label="Aggiungi una nuova pizza"
-       data-bs-toggle="tooltip" title="Crea una nuova pizza">
-      <i class="fas fa-plus me-2" aria-hidden="true"></i> Aggiungi Nuova Pizza
+       class="btn btn-outline-primary btn-sm"
+       aria-label="Aggiungi una nuova pizza">
+      <i data-lucide="plus" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>Nuova Pizza
     </a>
-  </div>
-
-  <div class="mt-3">
-    @php $total = method_exists($pizzas,'total') ? $pizzas->total() : ($pizzas->count() ?? 0); @endphp
-    <span class="badge bg-success fs-6 px-3 py-2">Hai {{ $total }} {{ $total == 1 ? 'pizza' : 'pizze' }} disponibili</span>
+    <span class="text-muted small">
+      @php $total = method_exists($pizzas,'total') ? $pizzas->total() : ($pizzas->count() ?? 0); @endphp
+      {{ $total }} {{ $total == 1 ? 'elemento' : 'elementi' }}
+    </span>
   </div>
 </div>
 @endsection
@@ -32,11 +31,11 @@
     <div class="row justify-content-center">
       <div class="col-lg-6">
         <div class="text-center py-5">
-          <div class="mb-4"><i data-lucide="pizza" style="width: 80px; height: 80px; color: #ef4444; opacity: .5;"></i></div>
-          <h3 class="fw-bold text-dark mb-3">Nessuna pizza presente</h3>
-          <p class="text-muted mb-4">Crea la tua prima pizza per iniziare.</p>
-          <a class="btn btn-success btn-lg px-4 py-3 fw-bold" href="{{ route('admin.pizzas.create') }}">
-            <i class="fas fa-rocket me-2" aria-hidden="true"></i> Crea la Prima Pizza
+          <div class="mb-4"><i data-lucide="pizza" style="width: 64px; height: 64px; color: #dc2626; opacity: .4;"></i></div>
+          <h3 class="h5 fw-semibold text-dark mb-3">Nessuna pizza presente</h3>
+          <p class="text-muted small mb-4">Crea la prima pizza per iniziare.</p>
+          <a class="btn btn-outline-primary btn-sm" href="{{ route('admin.pizzas.create') }}" aria-label="Crea la prima pizza">
+            <i data-lucide="plus" style="width: 16px; height: 16px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>Crea Prima Pizza
           </a>
         </div>
       </div>
@@ -125,15 +124,15 @@
                 </div>
                 <div class="pizza-actions d-flex flex-column flex-md-row gap-2 ms-md-3 mt-3 mt-md-0">
                   <a href="{{ route('admin.pizzas.show', $pizza) }}" class="btn btn-outline-primary btn-sm d-flex align-items-center justify-content-center" data-bs-toggle="tooltip" title="Dettagli">
-                    <i class="fas fa-eye me-1"></i><span class="d-none d-md-inline">Dettagli</span>
+                    <i data-lucide="eye" style="width: 14px; height: 14px; margin-right: 4px;"></i><span class="d-none d-md-inline">Dettagli</span>
                   </a>
-                  <a href="{{ route('admin.pizzas.edit', $pizza) }}" class="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center" data-bs-toggle="tooltip" title="Modifica">
-                    <i class="fas fa-edit me-1 text-success"></i><span class="d-none d-md-inline text-success">Modifica</span>
+                  <a href="{{ route('admin.pizzas.edit', $pizza) }}" class="btn btn-outline-success btn-sm d-flex align-items-center justify-content-center" data-bs-toggle="tooltip" title="Modifica">
+                    <i data-lucide="pencil" style="width: 14px; height: 14px; margin-right: 4px;"></i><span class="d-none d-md-inline">Modifica</span>
                   </a>
                   <form method="POST" action="{{ route('admin.pizzas.destroy', $pizza) }}">
                     @csrf @method('DELETE')
                     <button type="submit" class="btn btn-outline-danger btn-sm d-flex align-items-center justify-content-center w-100" data-bs-toggle="tooltip" title="Elimina">
-                      <i class="fas fa-trash me-1 text-danger"></i><span class="d-none d-md-inline text-danger">Elimina</span>
+                      <i data-lucide="trash-2" style="width: 14px; height: 14px; margin-right: 4px;"></i><span class="d-none d-md-inline">Elimina</span>
                     </button>
                   </form>
                 </div>

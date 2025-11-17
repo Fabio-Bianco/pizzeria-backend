@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Allergen;
 use App\Models\Dessert;
 use App\Models\Ingredient;
 use App\Support\SlugService;
@@ -31,7 +32,8 @@ class DessertController extends Controller
     public function create()
     {
         $ingredients = Ingredient::orderBy('name')->get();
-        return view('admin.desserts.create', compact('ingredients'));
+        $allergens = Allergen::orderBy('name')->get();
+        return view('admin.desserts.create', compact('ingredients', 'allergens'));
     }
     
     // 💾 Salva nuovo dolce
@@ -77,8 +79,9 @@ class DessertController extends Controller
     public function edit(Dessert $dessert)
     {
         $ingredients = Ingredient::orderBy('name')->get();
+        $allergens = Allergen::orderBy('name')->get();
         $dessert->load('ingredients');
-        return view('admin.desserts.edit', compact('dessert', 'ingredients'));
+        return view('admin.desserts.edit', compact('dessert', 'ingredients', 'allergens'));
     }
     
     // 🔄 Aggiorna dolce

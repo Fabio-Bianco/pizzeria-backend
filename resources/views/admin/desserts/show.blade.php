@@ -3,32 +3,18 @@
 @section('title', $dessert->name)
 
 @section('header')
-<div class="d-flex justify-content-between align-items-center">
-    <div>
-        <div class="d-flex align-items-center mb-2">
-            <a href="{{ route('admin.desserts.index') }}" class="btn btn-outline-secondary btn-sm me-3">
-                <i class="fas fa-arrow-left me-1"></i>
-                Indietro
-            </a>
-            <h1 class="page-title mb-0">
-                <i class="fas fa-birthday-cake text-warning me-2"></i>
-                {{ $dessert->name }}
-            </h1>
-        </div>
-        <p class="page-subtitle">Dettagli del dessert</p>
-    </div>
-    <div class="d-flex gap-2">
-        <a href="{{ route('admin.desserts.edit', $dessert) }}" class="btn btn-success px-4">
-            <i class="fas fa-edit me-2"></i>
-            Modifica
-        </a>
-    </div>
+<div class="text-center py-4">
+    <h3 class="fw-semibold mb-2">
+        <i data-lucide="eye" style="width: 24px; height: 24px; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>
+        {{ $dessert->name }}
+    </h3>
+    <p class="text-muted mb-0">Dettagli del dessert</p>
 </div>
 @endsection
 
 @section('content')
     <div class="row justify-content-center">
-        <div class="col-12 col-xl-8">
+        <div class="col-12 col-lg-8">
             {{-- Informazioni principali --}}
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-header bg-white border-bottom">
@@ -165,16 +151,28 @@
                                 <i class="fas fa-edit me-2"></i>
                                 Modifica
                             </a>
-                            <form method="POST" action="{{ route('admin.desserts.destroy', $dessert) }}" 
-                                  data-confirm="Sei sicuro di voler eliminare il dessert '{{ $dessert->name }}'?" class="d-inline">
-                                @csrf @method('DELETE')
-                                <button type="submit" class="btn btn-danger px-4">
-                                    <i class="fas fa-trash me-2"></i>
-                                    Elimina
-                                </button>
-                            </form>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <a href="{{ route('admin.desserts.index') }}" class="btn btn-outline-secondary btn-sm">
+                    Torna all'elenco
+                </a>
+                <div class="d-flex gap-2">
+                    <a href="{{ route('admin.desserts.edit', $dessert) }}" class="btn btn-outline-warning btn-sm">
+                        <i data-lucide="pencil" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
+                        Modifica
+                    </a>
+                    <form method="POST" action="{{ route('admin.desserts.destroy', $dessert) }}" 
+                          data-confirm="Sei sicuro di voler eliminare il dessert '{{ $dessert->name }}'?" class="d-inline">
+                        @csrf @method('DELETE')
+                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                            <i data-lucide="trash-2" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
+                            Elimina
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
