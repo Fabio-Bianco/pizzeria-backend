@@ -35,3 +35,10 @@ note.txt
   "**/node_modules": true,
   "**/dist": true
 }
+
+# VSCode config personali
+.vscode/
+extensions.json
+launch.json
+settings.json
+tasks.json
