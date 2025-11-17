@@ -11,14 +11,14 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         
-        <!-- Lucide Icons -->
-        <script src="https://unpkg.com/lucide@latest"></script>
-
         <!-- Sidebar Styles -->
         <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        
+        <!-- Lucide Icons (defer = non blocca rendering) -->
+        <script src="https://unpkg.com/lucide@latest" defer></script>
     </head>
     <body>
         <!-- Skip navigation link per screen reader -->
@@ -51,8 +51,6 @@
                 <i data-lucide="monitor" x-show="theme === 'auto'" style="width: 20px; height: 20px;"></i>
             </button>
         </div>
-        
-        <script src="{{ asset('js/app-modern.js') }}"></script>
 
         <!-- Sidebar with proper navigation role -->
         <nav id="sidebar" role="navigation" aria-label="Menu principale">
@@ -89,7 +87,7 @@
             </div>
         </main>
 
-        <!-- Sidebar JavaScript -->
-        <script src="{{ asset('js/sidebar.js') }}"></script>
+        <!-- JavaScript unificato (caricato dopo DOM) -->
+        <script src="{{ asset('js/app-modern.js') }}" defer></script>
     </body>
 </html>

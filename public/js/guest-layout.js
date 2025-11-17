@@ -1,6 +1,8 @@
-document.addEventListener('DOMContentLoaded', () => {
-    lucide.createIcons();
-});
-document.addEventListener('alpine:initialized', () => {
-    setTimeout(() => lucide.createIcons(), 100);
-});
+// Inizializza Lucide Icons (guest layout)
+if (typeof lucide !== 'undefined') {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => lucide.createIcons());
+    } else {
+        lucide.createIcons();
+    }
+}

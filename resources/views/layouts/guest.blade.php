@@ -11,11 +11,11 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         
-        <!-- Lucide Icons -->
-        <script src="https://unpkg.com/lucide@latest"></script>
-
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        
+        <!-- Lucide Icons (defer = non blocca rendering) -->
+        <script src="https://unpkg.com/lucide@latest" defer></script>
     </head>
     <body>
         <div class="min-vh-100 d-flex align-items-center py-5">
