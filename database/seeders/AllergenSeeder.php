@@ -24,6 +24,7 @@ class AllergenSeeder extends Seeder
             'Sedano',
             'Senape',
             'Solfiti',
+            'Anidride Solforosa',
             'Lupini',
             'Nichel',
         ];
