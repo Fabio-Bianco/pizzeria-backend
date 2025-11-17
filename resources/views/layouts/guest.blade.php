@@ -11,8 +11,8 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <!-- Lucide Icons -->
+        <script src="https://unpkg.com/lucide@latest"></script>
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -38,8 +38,19 @@
                 :aria-label="'Tema: ' + label"
                 :title="'Tema: ' + label"
             >
-                <i class="fas" :class="icon" style="font-size: 1.2rem;"></i>
+                <i data-lucide="sun" x-show="theme === 'light'" style="width: 20px; height: 20px;"></i>
+                <i data-lucide="moon" x-show="theme === 'dark'" style="width: 20px; height: 20px;"></i>
+                <i data-lucide="monitor" x-show="theme === 'auto'" style="width: 20px; height: 20px;"></i>
             </button>
         </div>
+        
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                lucide.createIcons();
+            });
+            document.addEventListener('alpine:initialized', () => {
+                setTimeout(() => lucide.createIcons(), 100);
+            });
+        </script>
     </body>
 </html>

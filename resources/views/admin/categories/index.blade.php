@@ -4,7 +4,7 @@
 
 @section('header')
 <div class="text-center py-4">
-    <div class="mb-2" style="font-size:3rem;">🏷️</div>
+    <div class="mb-2"><i data-lucide="folder" style="width: 48px; height: 48px; color: #8b5cf6;"></i></div>
     <h1 class="display-6 fw-bold text-dark mb-2">Categorie</h1>
     <p class="lead text-muted mb-4">Gestisci le categorie delle pizze e dei prodotti</p>
 
@@ -36,7 +36,7 @@
         <div class="row justify-content-center">
             <div class="col-lg-6">
                 <div class="text-center py-5">
-                    <div class="mb-4" style="font-size:5rem;opacity:.5;">🏷️</div>
+                    <div class="mb-4"><i data-lucide="folder" style="width: 80px; height: 80px; color: #8b5cf6; opacity: .5;"></i></div>
                     <h3 class="fw-bold text-dark mb-3">Nessuna categoria presente</h3>
                     <p class="text-muted mb-4">Crea la tua prima categoria per iniziare.</p>
                     <a class="btn btn-create btn-lg px-4 py-3" href="{{ route('admin.categories.create') }}">

@@ -9,7 +9,7 @@
         $safetyTags[] = [
             'key' => 'alcohol_free',
             'label' => 'Analcolica',
-            'icon' => '🚫🍺',
+            'icon' => 'No Alcol',
             'color' => 'success',
             'description' => 'Bevanda senza alcol, sicura per tutti'
         ];
@@ -29,7 +29,7 @@
         $safetyTags[] = [
             'key' => 'gluten_free',
             'label' => 'Senza Glutine',
-            'icon' => '🌾🚫',
+            'icon' => 'No Glutine',
             'color' => 'info',
             'description' => 'Bevanda priva di glutine, sicura per celiaci'
         ];
@@ -49,7 +49,7 @@
         $safetyTags[] = [
             'key' => 'nut_free',
             'label' => 'Senza Frutta a Guscio',
-            'icon' => '🥜🚫',
+            'icon' => 'Noci',
             'color' => 'warning',
             'description' => 'Bevanda priva di frutta a guscio e arachidi'
         ];
@@ -61,7 +61,7 @@
         $safetyTags[] = [
             'key' => 'allergen_free',
             'label' => 'Sicura',
-            'icon' => '✅',
+            'icon' => 'OK',
             'color' => 'success',
             'description' => 'Bevanda senza allergeni principali identificati'
         ];

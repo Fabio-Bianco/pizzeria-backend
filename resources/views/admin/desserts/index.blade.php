@@ -4,7 +4,7 @@
 
 @section('header')
 <div class="text-center py-4">
-  <div class="mb-2" style="font-size:3rem;">🍰</div>
+  <div class="mb-2"><i data-lucide="cake" style="width: 48px; height: 48px; color: #f59e0b;"></i></div>
   <h1 class="display-6 fw-bold text-dark mb-2">I Tuoi Dolci</h1>
   <p class="lead text-muted mb-4">Tiramisù, gelati e delizie dolci</p>
 
@@ -35,7 +35,7 @@
     <div class="row justify-content-center">
       <div class="col-lg-6">
         <div class="text-center py-5">
-          <div class="mb-4" style="font-size:5rem;opacity:.5;">🍰</div>
+          <div class="mb-4"><i data-lucide="cake" style="width: 80px; height: 80px; color: #f59e0b; opacity: .5;"></i></div>
           <h3 class="fw-bold text-dark mb-3">Nessun dessert presente</h3>
           <p class="text-muted mb-4">Aggiungi il primo dolce al tuo menu.</p>
           <a class="btn btn-success btn-lg px-4 py-3 fw-bold" href="{{ route('admin.desserts.create') }}">

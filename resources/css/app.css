@@ -64,8 +64,8 @@
     --border-dark: #64748b;
     
     --card-bg: #1e293b;
-    --card-shadow: rgba(0, 0, 0, 0.3);
-    --card-shadow-hover: rgba(0, 0, 0, 0.4);
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3), inset 0 1px 0 0 rgba(148, 163, 184, 0.1);
+    --card-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -2px rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(148, 163, 184, 0.15);
     
     --sidebar-bg: #0f172a;
     --sidebar-border: #334155;
@@ -108,8 +108,8 @@
   --border-dark: #64748b;
   
   --card-bg: #1e293b;
-  --card-shadow: rgba(0, 0, 0, 0.3);
-  --card-shadow-hover: rgba(0, 0, 0, 0.4);
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), 0 2px 4px -1px rgba(0, 0, 0, 0.3), inset 0 1px 0 0 rgba(148, 163, 184, 0.1);
+  --card-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.6), 0 4px 6px -2px rgba(0, 0, 0, 0.4), inset 0 1px 0 0 rgba(148, 163, 184, 0.15);
   
   --sidebar-bg: #0f172a;
   --sidebar-border: #334155;
@@ -152,10 +152,26 @@ html {
 
 .card {
     border: 1px solid var(--border-light);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--card-shadow);
     background-color: var(--card-bg);
     color: var(--text-primary);
-    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-2px);
+}
+
+/* Dark mode: bordo superiore luminoso per effetto 3D */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .card {
+        border-top: 1px solid rgba(148, 163, 184, 0.15);
+    }
+}
+
+[data-theme="dark"] .card {
+    border-top: 1px solid rgba(148, 163, 184, 0.15);
 }
 
 .card-header {
@@ -776,6 +792,92 @@ hr {
 /* Bootstrap override per border utilities */
 .border {
   border-color: var(--border-light) !important;
+}
+
+/* ============================================
+   🎴 EFFETTI 3D CARD - DARK MODE ONLY
+   ============================================ */
+
+/* Dark mode: card del dashboard e menu con effetto raised */
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .hover-card {
+        background: linear-gradient(135deg, #1e293b 0%, #1a2332 100%);
+        border: 1px solid rgba(148, 163, 184, 0.1);
+        box-shadow: 
+            0 4px 6px -1px rgba(0, 0, 0, 0.5),
+            0 2px 4px -1px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 0 rgba(148, 163, 184, 0.1),
+            inset 0 -1px 0 0 rgba(15, 23, 42, 0.3);
+    }
+    
+    :root:not([data-theme="light"]) .hover-card:hover {
+        background: linear-gradient(135deg, #1e293b 0%, #1a2332 100%);
+        box-shadow: 
+            0 20px 25px -5px rgba(0, 0, 0, 0.7),
+            0 10px 10px -5px rgba(0, 0, 0, 0.5),
+            inset 0 2px 0 0 rgba(148, 163, 184, 0.2),
+            inset 0 -2px 0 0 rgba(15, 23, 42, 0.4);
+        transform: translateY(-5px) scale(1.01);
+        border-color: rgba(96, 165, 250, 0.3);
+    }
+    
+    /* Menu recap cards - effetto subtle ma visibile */
+    :root:not([data-theme="light"]) .card.border-2 {
+        background: linear-gradient(135deg, #1e293b 0%, #1a2332 100%);
+        box-shadow: 
+            0 4px 6px -1px rgba(0, 0, 0, 0.5),
+            0 2px 4px -1px rgba(0, 0, 0, 0.3),
+            inset 0 1px 0 0 rgba(148, 163, 184, 0.15);
+        border-top: 2px solid rgba(40, 167, 69, 0.3) !important;
+    }
+    
+    :root:not([data-theme="light"]) .card.border-2:hover {
+        box-shadow: 
+            0 10px 15px -3px rgba(0, 0, 0, 0.6),
+            0 4px 6px -2px rgba(0, 0, 0, 0.4),
+            inset 0 2px 0 0 rgba(148, 163, 184, 0.2);
+        transform: translateY(-3px);
+        border-top-color: rgba(40, 167, 69, 0.5) !important;
+    }
+}
+
+[data-theme="dark"] .hover-card {
+    background: linear-gradient(135deg, #1e293b 0%, #1a2332 100%);
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.5),
+        0 2px 4px -1px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 0 rgba(148, 163, 184, 0.1),
+        inset 0 -1px 0 0 rgba(15, 23, 42, 0.3);
+}
+
+[data-theme="dark"] .hover-card:hover {
+    background: linear-gradient(135deg, #1e293b 0%, #1a2332 100%);
+    box-shadow: 
+        0 20px 25px -5px rgba(0, 0, 0, 0.7),
+        0 10px 10px -5px rgba(0, 0, 0, 0.5),
+        inset 0 2px 0 0 rgba(148, 163, 184, 0.2),
+        inset 0 -2px 0 0 rgba(15, 23, 42, 0.4);
+    transform: translateY(-5px) scale(1.01);
+    border-color: rgba(96, 165, 250, 0.3);
+}
+
+[data-theme="dark"] .card.border-2 {
+    background: linear-gradient(135deg, #1e293b 0%, #1a2332 100%);
+    box-shadow: 
+        0 4px 6px -1px rgba(0, 0, 0, 0.5),
+        0 2px 4px -1px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 0 rgba(148, 163, 184, 0.15);
+    border-top: 2px solid rgba(40, 167, 69, 0.3) !important;
+}
+
+[data-theme="dark"] .card.border-2:hover {
+    box-shadow: 
+        0 10px 15px -3px rgba(0, 0, 0, 0.6),
+        0 4px 6px -2px rgba(0, 0, 0, 0.4),
+        inset 0 2px 0 0 rgba(148, 163, 184, 0.2);
+    transform: translateY(-3px);
+    border-top-color: rgba(40, 167, 69, 0.5) !important;
 }
 
 .border-light {

@@ -4,7 +4,10 @@
 
 @section('header')
 <div class="text-center py-4">
-    <h1 class="display-5 fw-bold text-dark">🏠 Benvenuto nella tua Pizzeria</h1>
+    <h1 class="display-5 fw-bold text-dark">
+        <i data-lucide="home" style="width: 40px; height: 40px; display: inline-block; vertical-align: middle; margin-right: 12px;"></i>
+        Benvenuto nella tua Pizzeria
+    </h1>
     <p class="lead text-muted">Cosa vuoi fare oggi?</p>
 </div>
 @endsection
@@ -14,7 +17,10 @@
     {{-- Azioni Principali Semplificate --}}
     <div class="row justify-content-center mb-5">
         <div class="col-12 text-center mb-4">
-            <h2 class="h3 fw-bold text-dark">🍕 Cosa vuoi aggiungere al menu?</h2>
+            <h2 class="h3 fw-bold text-dark">
+                <i data-lucide="utensils-crossed" style="width: 28px; height: 28px; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>
+                Cosa vuoi aggiungere al menu?
+            </h2>
             <p class="text-muted">Clicca su una delle opzioni qui sotto</p>
         </div>
         
@@ -30,11 +36,13 @@
                        title="Clicca qui per aggiungere una nuova pizza al menu"
                        tabindex="0">
                         <div class="card-body text-center py-5">
-                            <div class="mb-3" style="font-size: 4rem;">🍕</div>
+                            <div class="mb-3">
+                                <i data-lucide="pizza" style="width: 80px; height: 80px; stroke-width: 1.5; color: #ef4444;"></i>
+                            </div>
                             <h3 class="card-title fw-bold text-dark mb-2">Aggiungi Pizza</h3>
                             <p class="text-muted mb-3">Crea una nuova pizza per il tuo menu</p>
                             <span class="btn btn-success btn-lg fw-bold">
-                                <i class="fas fa-plus me-2"></i>Crea Pizza
+                                <i data-lucide="plus-circle" style="width: 20px; height: 20px; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>Crea Pizza
                             </span>
                         </div>
                     </a>
@@ -43,11 +51,13 @@
                 <div class="col-md-6">
                     <a href="{{ route('admin.appetizers.create') }}" class="card h-100 text-decoration-none border-0 shadow-sm hover-card" style="transition: all 0.3s ease;">
                         <div class="card-body text-center py-5">
-                            <div class="mb-3" style="font-size: 4rem;">🥗</div>
+                            <div class="mb-3">
+                                <i data-lucide="salad" style="width: 80px; height: 80px; stroke-width: 1.5; color: #10b981;"></i>
+                            </div>
                             <h3 class="card-title fw-bold text-dark mb-2">Aggiungi Antipasto</h3>
                             <p class="text-muted mb-3">Crea un nuovo antipasto per il tuo menu</p>
                             <span class="btn btn-success btn-lg fw-bold">
-                                <i class="fas fa-plus me-2"></i>Crea Antipasto
+                                <i data-lucide="plus-circle" style="width: 20px; height: 20px; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>Crea Antipasto
                             </span>
                         </div>
                     </a>
@@ -56,11 +66,13 @@
                 <div class="col-md-6">
                     <a href="{{ route('admin.beverages.create') }}" class="card h-100 text-decoration-none border-0 shadow-sm hover-card" style="transition: all 0.3s ease;">
                         <div class="card-body text-center py-5">
-                            <div class="mb-3" style="font-size: 4rem;">🥤</div>
+                            <div class="mb-3">
+                                <i data-lucide="glass-water" style="width: 80px; height: 80px; stroke-width: 1.5; color: #3b82f6;"></i>
+                            </div>
                             <h3 class="card-title fw-bold text-dark mb-2">Aggiungi Bevanda</h3>
                             <p class="text-muted mb-3">Crea una nuova bevanda per il tuo menu</p>
                             <span class="btn btn-success btn-lg fw-bold">
-                                <i class="fas fa-plus me-2"></i>Crea Bevanda
+                                <i data-lucide="plus-circle" style="width: 20px; height: 20px; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>Crea Bevanda
                             </span>
                         </div>
                     </a>
@@ -69,11 +81,13 @@
                 <div class="col-md-6">
                     <a href="{{ route('admin.desserts.create') }}" class="card h-100 text-decoration-none border-0 shadow-sm hover-card" style="transition: all 0.3s ease;">
                         <div class="card-body text-center py-5">
-                            <div class="mb-3" style="font-size: 4rem;">🍰</div>
+                            <div class="mb-3">
+                                <i data-lucide="cake" style="width: 80px; height: 80px; stroke-width: 1.5; color: #f59e0b;"></i>
+                            </div>
                             <h3 class="card-title fw-bold text-dark mb-2">Aggiungi Dessert</h3>
                             <p class="text-muted mb-3">Crea un nuovo dolce per il tuo menu</p>
                             <span class="btn btn-success btn-lg fw-bold">
-                                <i class="fas fa-plus me-2"></i>Crea Dessert
+                                <i data-lucide="plus-circle" style="width: 20px; height: 20px; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>Crea Dessert
                             </span>
                         </div>
                     </a>
@@ -88,7 +102,10 @@
     {{-- Visualizza Menu Esistente --}}
     <div class="row justify-content-center">
         <div class="col-12 text-center mb-4">
-            <h2 class="h3 fw-bold text-dark">👀 Guarda il tuo menu attuale</h2>
+            <h2 class="h3 fw-bold text-dark">
+                <i data-lucide="eye" style="width: 28px; height: 28px; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>
+                Guarda il tuo menu attuale
+            </h2>
             <p class="text-muted">Controlla cosa hai già nel menu</p>
         </div>
         
@@ -97,7 +114,9 @@
                 <div class="col-md-6 col-lg-3">
                     <a href="{{ route('admin.pizzas.index') }}" class="card text-decoration-none border-2 h-100 hover-card" style="border-color: #28a745 !important; transition: all 0.3s ease;">
                         <div class="card-body text-center py-4">
-                            <div class="fs-1 mb-2">🍕</div>
+                            <div class="mb-2">
+                                <i data-lucide="pizza" style="width: 48px; height: 48px; stroke-width: 1.5; color: #ef4444;"></i>
+                            </div>
                             <h5 class="card-title text-dark fw-bold">Le Tue Pizze</h5>
                             <div class="badge bg-success fs-6 mb-2">{{ $countPizzas ?? 0 }} pizze</div>
                             <div class="small text-muted">Clicca per vedere tutte</div>
@@ -108,7 +127,9 @@
                 <div class="col-md-6 col-lg-3">
                     <a href="{{ route('admin.appetizers.index') }}" class="card text-decoration-none border-2 h-100 hover-card" style="border-color: #28a745 !important; transition: all 0.3s ease;">
                         <div class="card-body text-center py-4">
-                            <div class="fs-1 mb-2">🥗</div>
+                            <div class="mb-2">
+                                <i data-lucide="salad" style="width: 48px; height: 48px; stroke-width: 1.5; color: #10b981;"></i>
+                            </div>
                             <h5 class="card-title text-dark fw-bold">I Tuoi Antipasti</h5>
                             <div class="badge bg-success fs-6 mb-2">{{ $countAppetizers ?? 0 }} antipasti</div>
                             <div class="small text-muted">Clicca per vedere tutti</div>
@@ -119,7 +140,9 @@
                 <div class="col-md-6 col-lg-3">
                     <a href="{{ route('admin.beverages.index') }}" class="card text-decoration-none border-2 h-100 hover-card" style="border-color: #28a745 !important; transition: all 0.3s ease;">
                         <div class="card-body text-center py-4">
-                            <div class="fs-1 mb-2">🥤</div>
+                            <div class="mb-2">
+                                <i data-lucide="glass-water" style="width: 48px; height: 48px; stroke-width: 1.5; color: #3b82f6;"></i>
+                            </div>
                             <h5 class="card-title text-dark fw-bold">Le Tue Bevande</h5>
                             <div class="badge bg-success fs-6 mb-2">{{ $countBeverages ?? 0 }} bevande</div>
                             <div class="small text-muted">Clicca per vedere tutte</div>
@@ -130,7 +153,9 @@
                 <div class="col-md-6 col-lg-3">
                     <a href="{{ route('admin.desserts.index') }}" class="card text-decoration-none border-2 h-100 hover-card" style="border-color: #28a745 !important; transition: all 0.3s ease;">
                         <div class="card-body text-center py-4">
-                            <div class="fs-1 mb-2">🍰</div>
+                            <div class="mb-2">
+                                <i data-lucide="cake" style="width: 48px; height: 48px; stroke-width: 1.5; color: #f59e0b;"></i>
+                            </div>
                             <h5 class="card-title text-dark fw-bold">I Tuoi Dessert</h5>
                             <div class="badge bg-success fs-6 mb-2">{{ $countDesserts ?? 0 }} dolci</div>
                             <div class="small text-muted">Clicca per vedere tutti</div>
@@ -146,11 +171,13 @@
     <div class="row justify-content-center mt-5">
         <div class="col-lg-8">
             <div class="alert alert-info border-0 shadow-sm text-center py-4" style="background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);">
-                <div class="fs-2 mb-3">�</div>
+                <div class="mb-3">
+                    <i data-lucide="lightbulb" style="width: 64px; height: 64px; stroke-width: 1.5; color: #fbbf24;"></i>
+                </div>
                 <h4 class="fw-bold text-dark">Inizia subito!</h4>
                 <p class="mb-3">Il tuo menu è ancora vuoto. Inizia aggiungendo la tua prima pizza!</p>
                 <a href="{{ route('admin.pizzas.create') }}" class="btn btn-success btn-lg fw-bold">
-                    <i class="fas fa-rocket me-2"></i>Crea la Prima Pizza
+                    <i data-lucide="rocket" style="width: 20px; height: 20px; display: inline-block; vertical-align: middle; margin-right: 8px;"></i>Crea la Prima Pizza
                 </a>
             </div>
         </div>
@@ -287,11 +314,11 @@
         const steps = [
             {
                 element: '.col-md-6:first-child .card',
-                message: '👋 Benvenuto! Questo è il modo più semplice per aggiungere una pizza. Clicca qui per iniziare!'
+                message: 'Benvenuto! Questo è il modo più semplice per aggiungere una pizza. Clicca qui per iniziare!'
             },
             {
                 element: '.col-lg-10:last-child',
-                message: '👀 Qui puoi vedere tutto quello che hai già creato nel tuo menu'
+                message: 'Qui puoi vedere tutto quello che hai già creato nel tuo menu'
             }
         ];
         

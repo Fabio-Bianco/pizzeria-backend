@@ -10,10 +10,10 @@
       <div class="nav-section mb-2">
         <a href="{{ route('dashboard') }}" 
            class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
-           style="background: linear-gradient(135deg, #9ceeafff 0%, #75ff93ff 100%); color: white; border-radius: 8px; margin: 0 8px;">
-          <span class="nav-icon"><i class="fas fa-home"></i></span>
-          <span class="nav-text fw-semibold">GESTISCI IL MENU</span>
-          <i class="fas fa-home ms-auto"></i>
+           style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border-radius: 8px; margin: 0 8px;">
+          <span class="nav-icon"><i data-lucide="layout-dashboard" style="width: 20px; height: 20px;"></i></span>
+          <span class="nav-text fw-semibold">DASHBOARD</span>
+          <i data-lucide="chevron-right" style="width: 18px; height: 18px;" class="ms-auto"></i>
         </a>
       </div>
 
@@ -21,16 +21,16 @@
       <div class="nav-section">
         <div class="nav-section-header" data-bs-target="#menuSection" aria-expanded="{{ request()->routeIs('admin.pizzas.*', 'admin.appetizers.*', 'admin.beverages.*', 'admin.desserts.*') ? 'true' : 'false' }}">
           <div class="nav-section-title px-3 py-2 small text-muted fw-semibold text-uppercase d-flex justify-content-between align-items-center">
-            <span>🍽️ Il Tuo Menu</span>
-            <i class="fas fa-chevron-down transition-icon"></i>
+            <span><i data-lucide="utensils" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>Menu</span>
+            <i data-lucide="chevron-down" class="transition-icon" style="width: 14px; height: 14px;"></i>
           </div>
         </div>
         
         <div id="menuSection" class="collapse nav-section-content {{ request()->routeIs('admin.pizzas.*', 'admin.appetizers.*', 'admin.beverages.*', 'admin.desserts.*') ? 'show' : '' }}">
           <a href="{{ route('admin.pizzas.index') }}" 
              class="nav-link {{ request()->routeIs('admin.pizzas.*') ? 'active' : '' }}"
-             title="🍕 {{ $countPizzas ?? 0 }} pizze nel menu">
-            <span class="nav-icon">🍕</span>
+             title="{{ $countPizzas ?? 0 }} pizze nel menu">
+            <span class="nav-icon"><i data-lucide="pizza" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Pizze</span>
             @if(isset($countPizzas))
               <span class="nav-badge nav-badge-neutral">{{ $countPizzas }}</span>
@@ -39,8 +39,8 @@
 
           <a href="{{ route('admin.appetizers.index') }}" 
              class="nav-link {{ request()->routeIs('admin.appetizers.*') ? 'active' : '' }}"
-             title="🥗 {{ $countAppetizers ?? 0 }} antipasti disponibili">
-            <span class="nav-icon">🥗</span>
+             title="{{ $countAppetizers ?? 0 }} antipasti disponibili">
+            <span class="nav-icon"><i data-lucide="salad" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Antipasti</span>
             @if(isset($countAppetizers))
               <span class="nav-badge nav-badge-neutral">{{ $countAppetizers }}</span>
@@ -49,8 +49,8 @@
 
           <a href="{{ route('admin.beverages.index') }}" 
              class="nav-link {{ request()->routeIs('admin.beverages.*') ? 'active' : '' }}"
-             title="🥤 {{ $countBeverages ?? 0 }} bevande in carta">
-            <span class="nav-icon">🥤</span>
+             title="{{ $countBeverages ?? 0 }} bevande in carta">
+            <span class="nav-icon"><i data-lucide="glass-water" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Bevande</span>
             @if(isset($countBeverages))
               <span class="nav-badge nav-badge-neutral">{{ $countBeverages }}</span>
@@ -59,8 +59,8 @@
 
           <a href="{{ route('admin.desserts.index') }}" 
              class="nav-link {{ request()->routeIs('admin.desserts.*') ? 'active' : '' }}"
-             title="🍰 {{ $countDesserts ?? 0 }} dessert disponibili">
-            <span class="nav-icon">🍰</span>
+             title="{{ $countDesserts ?? 0 }} dessert disponibili">
+            <span class="nav-icon"><i data-lucide="cake" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Dessert</span>
             @if(isset($countDesserts))
               <span class="nav-badge nav-badge-neutral">{{ $countDesserts }}</span>
@@ -73,16 +73,16 @@
       <div class="nav-section">
         <div class="nav-section-header" data-bs-target="#configSection" aria-expanded="{{ request()->routeIs('admin.ingredients.*', 'admin.allergens.*', 'admin.categories.*') ? 'true' : 'false' }}">
           <div class="nav-section-title px-3 py-2 small text-muted fw-semibold text-uppercase d-flex justify-content-between align-items-center">
-            <span>🔧 Impostazioni Base</span>
-            <i class="fas fa-chevron-down transition-icon"></i>
+            <span><i data-lucide="settings" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>Configurazione</span>
+            <i data-lucide="chevron-down" class="transition-icon" style="width: 14px; height: 14px;"></i>
           </div>
         </div>
         
         <div id="configSection" class="collapse nav-section-content {{ request()->routeIs('admin.ingredients.*', 'admin.allergens.*', 'admin.categories.*') ? 'show' : '' }}">
           <a href="{{ route('admin.ingredients.index') }}" 
              class="nav-link {{ request()->routeIs('admin.ingredients.*') ? 'active' : '' }}"
-             title="🥬 {{ $countIngredients ?? 0 }} ingredienti catalogati">
-            <span class="nav-icon">🥬</span>
+             title="{{ $countIngredients ?? 0 }} ingredienti catalogati">
+            <span class="nav-icon"><i data-lucide="leaf" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Ingredienti</span>
             @if(isset($countIngredients))
               <span class="nav-badge nav-badge-warning">{{ $countIngredients }}</span>
@@ -91,8 +91,8 @@
 
           <a href="{{ route('admin.allergens.index') }}" 
              class="nav-link {{ request()->routeIs('admin.allergens.*') ? 'active' : '' }}"
-             title="⚠️ {{ $countAllergens ?? 0 }} allergeni configurati - Sistema attivo">
-            <span class="nav-icon">⚠️</span>
+             title="{{ $countAllergens ?? 0 }} allergeni configurati - Sistema attivo">
+            <span class="nav-icon"><i data-lucide="shield-alert" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Allergeni</span>
             <div class="nav-stats">
               @if(isset($countAllergens))
@@ -104,8 +104,8 @@
 
           <a href="{{ route('admin.categories.index') }}" 
              class="nav-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}"
-             title="📂 {{ $countCategories ?? 0 }} categorie per organizzare il menu">
-            <span class="nav-icon">📂</span>
+             title="{{ $countCategories ?? 0 }} categorie per organizzare il menu">
+            <span class="nav-icon"><i data-lucide="folder" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Categorie</span>
             @if(isset($countCategories))
               <span class="nav-badge nav-badge-secondary">{{ $countCategories }}</span>
@@ -118,29 +118,29 @@
       <div class="nav-section">
         <div class="nav-section-header" data-bs-target="#actionsSection" aria-expanded="false">
           <div class="nav-section-title px-3 py-2 small text-muted fw-semibold text-uppercase d-flex justify-content-between align-items-center">
-            <span>⚡ Azioni Rapide</span>
-            <i class="fas fa-chevron-down transition-icon"></i>
+            <span><i data-lucide="zap" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 6px;"></i>Azioni Rapide</span>
+            <i data-lucide="chevron-down" class="transition-icon" style="width: 14px; height: 14px;"></i>
           </div>
         </div>
         
         <div id="actionsSection" class="collapse nav-section-content">
           <a href="{{ route('admin.pizzas.create') }}" class="nav-link nav-link-action">
-            <span class="nav-icon">➕</span>
+            <span class="nav-icon"><i data-lucide="plus-circle" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Nuova Pizza</span>
           </a>
 
           <a href="{{ route('admin.appetizers.create') }}" class="nav-link nav-link-action">
-            <span class="nav-icon">➕</span>
+            <span class="nav-icon"><i data-lucide="plus-circle" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Nuovo Antipasto</span>
           </a>
 
           <a href="{{ route('admin.beverages.create') }}" class="nav-link nav-link-action">
-            <span class="nav-icon">➕</span>
+            <span class="nav-icon"><i data-lucide="plus-circle" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Nuova Bevanda</span>
           </a>
 
           <a href="{{ route('admin.desserts.create') }}" class="nav-link nav-link-action">
-            <span class="nav-icon">➕</span>
+            <span class="nav-icon"><i data-lucide="plus-circle" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Nuovo Dessert</span>
           </a>
         </div>
@@ -158,13 +158,14 @@
         <div class="tiny text-muted">{{ auth()->user()->email ?? 'admin@pizzeria.com' }}</div>
       </div>
       <div class="sidebar-profile-actions d-flex gap-2">
-        <button id="theme-toggle-sidebar" class="btn btn-sm btn-outline-darkmode px-3" title="Dark mode" aria-label="Attiva/disattiva dark mode" type="button" onclick="toggleTheme()">
-          <i class="fas fa-moon"></i>
-        </button>
-        <a href="{{ route('profile.edit') }}" class="btn btn-sm btn-outline-secondary px-3" title="Profilo"><i class="fas fa-user-edit"></i></a>
+        <a href="{{ route('profile.edit') }}" class="btn btn-sm btn-outline-secondary px-3" title="Profilo">
+          <i data-lucide="user-cog" style="width: 16px; height: 16px;"></i>
+        </a>
         <form method="POST" action="{{ route('logout') }}" class="m-0">
           @csrf
-          <button type="submit" class="btn btn-sm btn-outline-danger px-3" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+          <button type="submit" class="btn btn-sm btn-outline-danger px-3" title="Logout">
+            <i data-lucide="log-out" style="width: 16px; height: 16px;"></i>
+          </button>
         </form>
       </div>
     </div>
@@ -503,3 +504,15 @@
   border-color: #222;
 }
 </style>
+
+<script>
+  // Inizializza Lucide Icons nella sidebar
+  document.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons();
+  });
+  
+  // Reinizializza dopo operazioni dinamiche
+  document.addEventListener('shown.bs.collapse', () => {
+    setTimeout(() => lucide.createIcons(), 50);
+  });
+</script>
