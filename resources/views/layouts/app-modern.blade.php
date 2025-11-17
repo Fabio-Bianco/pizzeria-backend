@@ -14,6 +14,9 @@
         <!-- Lucide Icons -->
         <script src="https://unpkg.com/lucide@latest"></script>
 
+        <!-- Sidebar Styles -->
+        <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
@@ -95,5 +98,8 @@
                 </section>
             </div>
         </main>
+
+        <!-- Sidebar JavaScript -->
+        <script src="{{ asset('js/sidebar.js') }}"></script>
     </body>
 </html>

@@ -14,6 +14,9 @@
         <!-- Lucide Icons -->
         <script src="https://unpkg.com/lucide@latest"></script>
 
+        <!-- Sidebar Styles -->
+        <link rel="stylesheet" href="<?php echo e(asset('css/sidebar.css')); ?>">
+
         <!-- Scripts -->
         <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
     </head>
@@ -97,5 +100,8 @@
                 </section>
             </div>
         </main>
+
+        <!-- Sidebar JavaScript -->
+        <script src="<?php echo e(asset('js/sidebar.js')); ?>"></script>
     </body>
 </html><?php /**PATH C:\Users\Utente\Desktop\Backoffice-vetrrina-pizzeria-laravel\pizzeria-backend\resources\views/layouts/app-modern.blade.php ENDPATH**/ ?>
