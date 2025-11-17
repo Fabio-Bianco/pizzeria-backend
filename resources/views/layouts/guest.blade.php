@@ -44,13 +44,6 @@
             </button>
         </div>
         
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                lucide.createIcons();
-            });
-            document.addEventListener('alpine:initialized', () => {
-                setTimeout(() => lucide.createIcons(), 100);
-            });
-        </script>
+        <script src="{{ asset('js/guest-layout.js') }}"></script>
     </body>
 </html>

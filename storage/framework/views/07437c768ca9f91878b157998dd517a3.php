@@ -52,17 +52,7 @@
             </button>
         </div>
         
-        <script>
-            // Inizializza Lucide Icons
-            document.addEventListener('DOMContentLoaded', () => {
-                lucide.createIcons();
-            });
-            
-            // Reinizializza icone dopo toggle Alpine
-            document.addEventListener('alpine:initialized', () => {
-                setTimeout(() => lucide.createIcons(), 100);
-            });
-        </script>
+        <script src="<?php echo e(asset('js/app-modern.js')); ?>"></script>
 
         <!-- Sidebar with proper navigation role -->
         <nav id="sidebar" role="navigation" aria-label="Menu principale">

@@ -1,0 +1,37 @@
+/* Migliora contrasto Choices.js */
+.choices__inner {
+    background-color: #ffffff !important;
+    border: 1px solid #dee2e6 !important;
+    min-height: 44px !important;
+}
+
+.choices__list--multiple .choices__item {
+    background-color: #10b981 !important;
+    border: 1px solid #059669 !important;
+    color: #ffffff !important;
+    font-weight: 500 !important;
+}
+
+.choices__list--dropdown .choices__item--selectable {
+    background-color: #ffffff !important;
+    color: #1f2937 !important;
+}
+
+.choices__list--dropdown .choices__item--selectable.is-highlighted {
+    background-color: #10b981 !important;
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .choices__inner {
+    background-color: #1f2937 !important;
+    border-color: #374151 !important;
+}
+
+[data-theme="dark"] .choices__list--dropdown .choices__item--selectable {
+    background-color: #1f2937 !important;
+    color: #f3f4f6 !important;
+}
+
+[data-theme="dark"] .choices__list--dropdown .choices__item--selectable.is-highlighted {
+    background-color: #10b981 !important;
+}
