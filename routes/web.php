@@ -48,6 +48,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // 🔗 AJAX endpoint per ingredienti-allergeni
     Route::get('ajax/ingredients-allergens', [IngredientController::class, 'getAllergensForIngredients'])
         ->name('admin.ajax.ingredients-allergens');
+    
+    // 🤖 Auto-rilevamento allergeni
+    Route::post('ajax/suggest-allergens', [\App\Http\Controllers\Admin\AllergenSuggestionController::class, 'suggest'])
+        ->name('admin.ajax.suggest-allergens');
+    Route::post('ajax/auto-detect-allergens', [\App\Http\Controllers\Admin\AllergenSuggestionController::class, 'autoDetectAll'])
+        ->name('admin.ajax.auto-detect-allergens');
+    Route::post('ingredients/{ingredient}/detect-allergens', [\App\Http\Controllers\Admin\AllergenSuggestionController::class, 'forceDetect'])
+        ->name('admin.ingredients.detect-allergens');
 });
 
-require __DIR__ . '/auth.php';
+require __DIR__.'/auth.php';
