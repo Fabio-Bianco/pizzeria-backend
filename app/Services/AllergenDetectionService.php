@@ -54,15 +54,15 @@ class AllergenDetectionService
         'cipolla' => ['Nichel'],
         
         // Frutta a guscio
-        'noci' => ['Noci'],
-        'nocciole' => ['Noci'],
-        'mandorle' => ['Noci'],
-        'pistacchi' => ['Noci'],
-        'pistacchio' => ['Noci'],
-        'crema di pistacchio' => ['Noci', 'Lattosio'],
-        'granella di pistacchio' => ['Noci'],
-        'pinoli' => ['Noci'],
-        'anacardi' => ['Noci'],
+        'noci' => ['Frutta a guscio'],
+        'nocciole' => ['Frutta a guscio'],
+        'mandorle' => ['Frutta a guscio'],
+        'pistacchi' => ['Frutta a guscio'],
+        'pistacchio' => ['Frutta a guscio'],
+        'crema di pistacchio' => ['Frutta a guscio', 'Lattosio'],
+        'granella di pistacchio' => ['Frutta a guscio'],
+        'pinoli' => ['Frutta a guscio'],
+        'anacardi' => ['Frutta a guscio'],
         
         // Glutine
         'farina' => ['Glutine'],
@@ -219,7 +219,7 @@ class AllergenDetectionService
             'en:fish' => 'Pesce',
             'en:crustaceans' => 'Crostacei',
             'en:molluscs' => 'Molluschi',
-            'en:nuts' => 'Noci',
+            'en:nuts' => 'Frutta a guscio',
             'en:peanuts' => 'Arachidi',
             'en:soybeans' => 'Soia',
             'en:celery' => 'Sedano',
