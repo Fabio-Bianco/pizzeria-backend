@@ -1,0 +1,883 @@
+{
+	"info": {
+		"_postman_id": "c3d4e5f6-g7h8-9012-cdef-gh3456789012",
+		"name": "Pizzeria Backend - Admin CRUD",
+		"description": "Collection completa delle operazioni CRUD per gestire il backoffice della pizzeria (richiede autenticazione)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12345680"
+	},
+	"item": [
+		{
+			"name": "Pizzas CRUD",
+			"item": [
+				{
+					"name": "List All Pizzas",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/pizzas",
+							"host": ["{{base_url}}"],
+							"path": ["pizzas"]
+						},
+						"description": "Lista tutte le pizze (richiede autenticazione)"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Pizza",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Margherita\",\n    \"category_id\": 1,\n    \"price\": 6.50,\n    \"description\": \"Pizza classica con pomodoro e mozzarella\",\n    \"ingredients\": [1, 2, 3],\n    \"is_vegan\": false,\n    \"is_gluten_free\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/pizzas",
+							"host": ["{{base_url}}"],
+							"path": ["pizzas"]
+						},
+						"description": "Crea una nuova pizza"
+					},
+					"response": []
+				},
+				{
+					"name": "Show Pizza",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/pizzas/1",
+							"host": ["{{base_url}}"],
+							"path": ["pizzas", "1"]
+						},
+						"description": "Mostra i dettagli di una pizza specifica"
+					},
+					"response": []
+				},
+				{
+					"name": "Update Pizza",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Margherita Speciale\",\n    \"category_id\": 1,\n    \"price\": 7.00,\n    \"description\": \"Pizza margherita con mozzarella di bufala\",\n    \"ingredients\": [1, 2, 3, 4],\n    \"is_vegan\": false,\n    \"is_gluten_free\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/pizzas/1",
+							"host": ["{{base_url}}"],
+							"path": ["pizzas", "1"]
+						},
+						"description": "Aggiorna una pizza esistente"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Pizza",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/pizzas/1",
+							"host": ["{{base_url}}"],
+							"path": ["pizzas", "1"]
+						},
+						"description": "Elimina una pizza"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categories CRUD",
+			"item": [
+				{
+					"name": "List All Categories",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/categories",
+							"host": ["{{base_url}}"],
+							"path": ["categories"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Classiche\",\n    \"description\": \"Pizze classiche tradizionali\",\n    \"is_white\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/categories",
+							"host": ["{{base_url}}"],
+							"path": ["categories"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show Category",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/categories/1",
+							"host": ["{{base_url}}"],
+							"path": ["categories", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Category",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Pizze Classiche\",\n    \"description\": \"Le migliori pizze della tradizione italiana\",\n    \"is_white\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/categories/1",
+							"host": ["{{base_url}}"],
+							"path": ["categories", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Category",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/categories/1",
+							"host": ["{{base_url}}"],
+							"path": ["categories", "1"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ingredients CRUD",
+			"item": [
+				{
+					"name": "List All Ingredients",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/ingredients",
+							"host": ["{{base_url}}"],
+							"path": ["ingredients"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Ingredient",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Mozzarella\",\n    \"allergens\": [1, 7],\n    \"is_tomato\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/ingredients",
+							"host": ["{{base_url}}"],
+							"path": ["ingredients"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show Ingredient",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/ingredients/1",
+							"host": ["{{base_url}}"],
+							"path": ["ingredients", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Ingredient",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Mozzarella di Bufala\",\n    \"allergens\": [1, 7],\n    \"is_tomato\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/ingredients/1",
+							"host": ["{{base_url}}"],
+							"path": ["ingredients", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Ingredient",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/ingredients/1",
+							"host": ["{{base_url}}"],
+							"path": ["ingredients", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Allergens for Ingredients (AJAX)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/ajax/ingredients-allergens?ingredients[]=1&ingredients[]=2&ingredients[]=3",
+							"host": ["{{base_url}}"],
+							"path": ["ajax", "ingredients-allergens"],
+							"query": [
+								{
+									"key": "ingredients[]",
+									"value": "1"
+								},
+								{
+									"key": "ingredients[]",
+									"value": "2"
+								},
+								{
+									"key": "ingredients[]",
+									"value": "3"
+								}
+							]
+						},
+						"description": "Ottiene gli allergeni associati a una lista di ingredienti"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Allergens CRUD",
+			"item": [
+				{
+					"name": "List All Allergens",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/allergens",
+							"host": ["{{base_url}}"],
+							"path": ["allergens"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Allergen",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Glutine\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/allergens",
+							"host": ["{{base_url}}"],
+							"path": ["allergens"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show Allergen",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/allergens/1",
+							"host": ["{{base_url}}"],
+							"path": ["allergens", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Allergen",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Glutine (Cereali)\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/allergens/1",
+							"host": ["{{base_url}}"],
+							"path": ["allergens", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Allergen",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/allergens/1",
+							"host": ["{{base_url}}"],
+							"path": ["allergens", "1"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Appetizers CRUD",
+			"item": [
+				{
+					"name": "List All Appetizers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/appetizers",
+							"host": ["{{base_url}}"],
+							"path": ["appetizers"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Appetizer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Bruschetta\",\n    \"price\": 4.50,\n    \"description\": \"Pane tostato con pomodoro fresco e basilico\",\n    \"is_vegan\": true,\n    \"is_gluten_free\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/appetizers",
+							"host": ["{{base_url}}"],
+							"path": ["appetizers"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show Appetizer",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/appetizers/1",
+							"host": ["{{base_url}}"],
+							"path": ["appetizers", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Appetizer",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Bruschetta al Pomodoro\",\n    \"price\": 5.00,\n    \"description\": \"Pane tostato con pomodorini freschi, aglio e basilico\",\n    \"is_vegan\": true,\n    \"is_gluten_free\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/appetizers/1",
+							"host": ["{{base_url}}"],
+							"path": ["appetizers", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Appetizer",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/appetizers/1",
+							"host": ["{{base_url}}"],
+							"path": ["appetizers", "1"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Beverages CRUD",
+			"item": [
+				{
+					"name": "List All Beverages",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/beverages",
+							"host": ["{{base_url}}"],
+							"path": ["beverages"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Beverage",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Coca Cola\",\n    \"price\": 3.00,\n    \"description\": \"Bibita gasata\",\n    \"formato\": \"33cl\",\n    \"tipologia\": \"Soft Drink\",\n    \"gradazione\": null,\n    \"is_vegan\": true,\n    \"is_gluten_free\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/beverages",
+							"host": ["{{base_url}}"],
+							"path": ["beverages"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show Beverage",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/beverages/1",
+							"host": ["{{base_url}}"],
+							"path": ["beverages", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Beverage",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Coca Cola\",\n    \"price\": 3.50,\n    \"description\": \"Bibita gasata classica\",\n    \"formato\": \"50cl\",\n    \"tipologia\": \"Soft Drink\",\n    \"gradazione\": null,\n    \"is_vegan\": true,\n    \"is_gluten_free\": true\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/beverages/1",
+							"host": ["{{base_url}}"],
+							"path": ["beverages", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Beverage",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/beverages/1",
+							"host": ["{{base_url}}"],
+							"path": ["beverages", "1"]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Desserts CRUD",
+			"item": [
+				{
+					"name": "List All Desserts",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/desserts",
+							"host": ["{{base_url}}"],
+							"path": ["desserts"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Dessert",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Tiramisù\",\n    \"price\": 5.00,\n    \"description\": \"Dolce al cucchiaio con caffè e mascarpone\",\n    \"ingredients\": [5, 6, 7],\n    \"manual_allergens\": [3],\n    \"is_vegan\": false,\n    \"is_gluten_free\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/desserts",
+							"host": ["{{base_url}}"],
+							"path": ["desserts"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Show Dessert",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/desserts/1",
+							"host": ["{{base_url}}"],
+							"path": ["desserts", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Dessert",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Tiramisù Classico\",\n    \"price\": 5.50,\n    \"description\": \"Il classico dolce italiano con caffè, mascarpone e cacao\",\n    \"ingredients\": [5, 6, 7, 8],\n    \"manual_allergens\": [3],\n    \"is_vegan\": false,\n    \"is_gluten_free\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/desserts/1",
+							"host": ["{{base_url}}"],
+							"path": ["desserts", "1"]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Dessert",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/desserts/1",
+							"host": ["{{base_url}}"],
+							"path": ["desserts", "1"]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		}
+	]
+}
