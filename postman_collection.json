@@ -1,0 +1,338 @@
+{
+	"info": {
+		"_postman_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+		"name": "Pizzeria Backend API v1",
+		"description": "Collection completa delle API pubbliche per il backend della pizzeria",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12345678"
+	},
+	"item": [
+		{
+			"name": "Menu",
+			"item": [
+				{
+					"name": "Menu Completo",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/menu",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "menu"]
+						},
+						"description": "Ritorna il menu completo con tutte le categorie, pizze, antipasti, bevande e dolci"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pizze",
+			"item": [
+				{
+					"name": "Lista Pizze",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pizzas",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "pizzas"]
+						},
+						"description": "Ritorna tutte le pizze con ingredienti e allergeni"
+					},
+					"response": []
+				},
+				{
+					"name": "Dettaglio Pizza",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/pizzas/margherita",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "pizzas", "margherita"]
+						},
+						"description": "Ritorna i dettagli di una singola pizza (sostituisci 'margherita' con lo slug desiderato)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Categorie",
+			"item": [
+				{
+					"name": "Lista Categorie",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/categories",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "categories"]
+						},
+						"description": "Ritorna tutte le categorie di pizze"
+					},
+					"response": []
+				},
+				{
+					"name": "Dettaglio Categoria",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/categories/classiche",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "categories", "classiche"]
+						},
+						"description": "Ritorna i dettagli di una categoria (sostituisci 'classiche' con lo slug desiderato)"
+					},
+					"response": []
+				},
+				{
+					"name": "Pizze per Categoria",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/categories/classiche/pizzas",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "categories", "classiche", "pizzas"]
+						},
+						"description": "Ritorna tutte le pizze di una specifica categoria"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Antipasti",
+			"item": [
+				{
+					"name": "Lista Antipasti",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/appetizers",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "appetizers"]
+						},
+						"description": "Ritorna tutti gli antipasti"
+					},
+					"response": []
+				},
+				{
+					"name": "Dettaglio Antipasto",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/appetizers/bruschetta",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "appetizers", "bruschetta"]
+						},
+						"description": "Ritorna i dettagli di un antipasto (sostituisci 'bruschetta' con lo slug desiderato)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bevande",
+			"item": [
+				{
+					"name": "Lista Bevande",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/beverages",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "beverages"]
+						},
+						"description": "Ritorna tutte le bevande"
+					},
+					"response": []
+				},
+				{
+					"name": "Dettaglio Bevanda",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/beverages/coca-cola",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "beverages", "coca-cola"]
+						},
+						"description": "Ritorna i dettagli di una bevanda (sostituisci 'coca-cola' con lo slug desiderato)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dolci",
+			"item": [
+				{
+					"name": "Lista Dolci",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/desserts",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "desserts"]
+						},
+						"description": "Ritorna tutti i dolci"
+					},
+					"response": []
+				},
+				{
+					"name": "Dettaglio Dolce",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/desserts/tiramisu",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "desserts", "tiramisu"]
+						},
+						"description": "Ritorna i dettagli di un dolce (sostituisci 'tiramisu' con lo slug desiderato)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ingredienti",
+			"item": [
+				{
+					"name": "Lista Ingredienti",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/ingredients",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "ingredients"]
+						},
+						"description": "Ritorna tutti gli ingredienti disponibili (utile per filtri frontend)"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Allergeni",
+			"item": [
+				{
+					"name": "Lista Allergeni",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/allergens",
+							"host": ["{{base_url}}"],
+							"path": ["api", "v1", "allergens"]
+						},
+						"description": "Ritorna tutti gli allergeni (utile per filtri frontend)"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000",
+			"type": "string"
+		}
+	]
+}
