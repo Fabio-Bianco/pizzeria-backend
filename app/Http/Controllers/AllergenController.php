@@ -48,7 +48,7 @@ class AllergenController extends Controller
             'slug' => SlugService::unique(new Allergen(), $request->name)
         ]);
         
-        return redirect()->route('allergens.index')
+        return redirect()->route('admin.allergens.index')
                         ->with('success', 'Allergene creato!');
     }
     
@@ -82,7 +82,7 @@ class AllergenController extends Controller
                 : $allergen->slug
         ]);
         
-        return redirect()->route('allergens.index')
+        return redirect()->route('admin.allergens.index')
                         ->with('success', 'Allergene aggiornato!');
     }
     
@@ -96,7 +96,7 @@ class AllergenController extends Controller
         
         $allergen->delete();
         
-        return redirect()->route('allergens.index')
+        return redirect()->route('admin.allergens.index')
                         ->with('success', 'Allergene eliminato!');
     }
 }

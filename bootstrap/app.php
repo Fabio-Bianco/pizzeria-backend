@@ -14,6 +14,26 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         // Ensure CORS is handled for API requests
         $middleware->append(\Illuminate\Http\Middleware\HandleCors::class);
+        
+        // Escludi rotte dal CSRF per permettere test con Postman
+        $middleware->validateCsrfTokens(except: [
+            'login',
+            'register',
+            'pizzas',
+            'pizzas/*',
+            'categories',
+            'categories/*',
+            'ingredients',
+            'ingredients/*',
+            'allergens',
+            'allergens/*',
+            'appetizers',
+            'appetizers/*',
+            'beverages',
+            'beverages/*',
+            'desserts',
+            'desserts/*',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
