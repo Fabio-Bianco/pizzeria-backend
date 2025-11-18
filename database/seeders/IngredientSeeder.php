@@ -12,36 +12,52 @@ class IngredientSeeder extends Seeder
     public function run(): void
     {
         $map = [
+            // Formaggi e latticini
             'Mozzarella' => ['Lattosio'],
-            'Pomodoro' => ['Nichel'],
-            'Basilico' => [],
-            'Prosciutto cotto' => [],
-            'Prosciutto crudo' => [],
-            'Funghi champignon' => ['Nichel'],
-            'Funghi porcini' => ['Nichel'],
             'Gorgonzola' => ['Lattosio'],
             'Parmigiano' => ['Lattosio'],
             'Scamorza' => ['Lattosio'],
-            'Uova' => ['Uova'],
-            'Tonno' => [],
-            'Acciughe' => [],
-            'Olive nere' => [],
-            'Olive verdi' => [],
+            'Ricotta' => ['Lattosio'],
+            'Mascarpone' => ['Lattosio'],
+            'Stracchino' => ['Lattosio'],
+            
+            // Verdure e vegetali
+            'Pomodoro' => ['Nichel'],
+            'Basilico' => [],
+            'Funghi champignon' => ['Nichel'],
+            'Funghi porcini' => ['Nichel'],
             'Rucola' => [],
-            'Salame piccante' => [],
-            'Salame dolce' => [],
             'Cipolla rossa' => [],
             'Carciofi' => [],
             'Peperoni' => [],
             'Zucchine' => [],
             'Melanzane' => [],
-            'Wurstel' => [],
-            'Speck' => [],
-            'Frutti di mare' => ['Noci'],
             'Patate' => [],
             'Mais' => [],
             'Spinaci' => [],
+            
+            // Salumi e carni
+            'Prosciutto cotto' => [],
+            'Prosciutto crudo' => [],
+            'Salame piccante' => [],
+            'Salame dolce' => [],
+            'Wurstel' => [],
+            'Speck' => [],
             'Bresaola' => [],
+            'Salsiccia' => [],
+            
+            // Pesce e frutti di mare
+            'Tonno' => ['Pesce'],
+            'Acciughe' => ['Pesce'],
+            'Salmone' => ['Pesce'],
+            'Frutti di mare' => ['Molluschi', 'Crostacei'],
+            'Gamberetti' => ['Crostacei'],
+            
+            // Altro
+            'Olive nere' => [],
+            'Olive verdi' => [],
+            'Uova' => ['Uova'],
+            'Farina' => ['Glutine'],
         ];
 
         foreach ($map as $name => $allergens) {
