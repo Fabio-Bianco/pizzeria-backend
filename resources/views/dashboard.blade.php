@@ -4,11 +4,11 @@
 
 @section('header')
 <div class="text-center py-4">
-    <h1 class="display-5 fw-bold text-dark">
-        <i data-lucide="layout-dashboard" style="width: 40px; height: 40px; display: inline-block; vertical-align: middle; margin-right: 12px;"></i>
-        Dashboard
+    <h1 class="display-5 fw-bold text-dark d-flex align-items-center justify-content-center" style="gap: 8px;">
+        <i data-lucide="layout-dashboard" style="width: 40px; height: 40px;"></i>
+        <span>Dashboard</span>
     </h1>
-    <p class="lead text-muted">Gestione rapida del menu</p>
+    <p class="lead text-muted mb-0" style="margin-left: 48px;">Gestione rapida del menu</p>
 </div>
 @endsection
 
