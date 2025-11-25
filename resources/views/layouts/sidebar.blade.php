@@ -33,7 +33,7 @@
             <span class="nav-icon"><i data-lucide="pizza" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Pizze</span>
             @if(isset($countPizzas))
-              <span class="nav-badge nav-badge-neutral">{{ $countPizzas }}</span>
+              <span class="nav-badge nav-badge-neutral {{ ($countPizzas ?? 0) > 0 ? 'nav-badge-new' : '' }}">{{ $countPizzas }}</span>
             @endif
           </a>
 
@@ -43,7 +43,7 @@
             <span class="nav-icon"><i data-lucide="salad" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Antipasti</span>
             @if(isset($countAppetizers))
-              <span class="nav-badge nav-badge-neutral">{{ $countAppetizers }}</span>
+              <span class="nav-badge nav-badge-neutral {{ ($countAppetizers ?? 0) > 0 ? 'nav-badge-new' : '' }}">{{ $countAppetizers }}</span>
             @endif
           </a>
 
@@ -53,7 +53,7 @@
             <span class="nav-icon"><i data-lucide="glass-water" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Bevande</span>
             @if(isset($countBeverages))
-              <span class="nav-badge nav-badge-neutral">{{ $countBeverages }}</span>
+              <span class="nav-badge nav-badge-neutral {{ ($countBeverages ?? 0) > 0 ? 'nav-badge-new' : '' }}">{{ $countBeverages }}</span>
             @endif
           </a>
 
@@ -63,7 +63,7 @@
             <span class="nav-icon"><i data-lucide="cake" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Dessert</span>
             @if(isset($countDesserts))
-              <span class="nav-badge nav-badge-neutral">{{ $countDesserts }}</span>
+              <span class="nav-badge nav-badge-neutral {{ ($countDesserts ?? 0) > 0 ? 'nav-badge-new' : '' }}">{{ $countDesserts }}</span>
             @endif
           </a>
         </div>
@@ -85,7 +85,7 @@
             <span class="nav-icon"><i data-lucide="leaf" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Ingredienti</span>
             @if(isset($countIngredients))
-              <span class="nav-badge nav-badge-warning">{{ $countIngredients }}</span>
+              <span class="nav-badge nav-badge-warning {{ ($countIngredients ?? 0) > 0 ? 'nav-badge-new' : '' }}">{{ $countIngredients }}</span>
             @endif
           </a>
 
@@ -96,7 +96,7 @@
             <span class="nav-text">Allergeni</span>
             <div class="nav-stats">
               @if(isset($countAllergens))
-                <span class="nav-badge nav-badge-danger">{{ $countAllergens }}</span>
+                <span class="nav-badge nav-badge-danger nav-badge-new">{{ $countAllergens }}</span>
               @endif
               <div class="nav-status nav-status-active"></div>
             </div>
@@ -108,7 +108,7 @@
             <span class="nav-icon"><i data-lucide="folder" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Categorie</span>
             @if(isset($countCategories))
-              <span class="nav-badge nav-badge-secondary">{{ $countCategories }}</span>
+              <span class="nav-badge nav-badge-secondary {{ ($countCategories ?? 0) > 0 ? 'nav-badge-new' : '' }}">{{ $countCategories }}</span>
             @endif
           </a>
         </div>

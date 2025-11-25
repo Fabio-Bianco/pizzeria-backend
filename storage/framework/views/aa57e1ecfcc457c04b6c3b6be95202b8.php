@@ -192,6 +192,75 @@
     <link rel="stylesheet" href="<?php echo e(asset('css/dashboard.css')); ?>">
     <script src="<?php echo e(asset('js/dashboard.js')); ?>"></script>
 
+    <style>
+    /* Microinterazioni Card */
+    .hover-card {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .hover-card::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(16, 185, 129, 0.08);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s ease-out, height 0.6s ease-out;
+        pointer-events: none;
+    }
+
+    .hover-card:hover::before {
+        width: 400px;
+        height: 400px;
+    }
+
+    .hover-card:hover [data-lucide] {
+        animation: iconPulse 0.6s ease-in-out;
+    }
+
+    @keyframes iconPulse {
+        0%, 100% { transform: scale(1); }
+        50% { 
+            transform: scale(1.12); 
+            filter: drop-shadow(0 0 8px currentColor);
+        }
+    }
+
+    /* Typography Hierarchy */
+    h1, .h1 {
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+    }
+
+    h2, .h2 {
+        font-weight: 700;
+        letter-spacing: -0.01em;
+        line-height: 1.3;
+    }
+
+    h3, .h3 {
+        font-weight: 600;
+        letter-spacing: -0.01em;
+    }
+
+    p.lead {
+        font-size: 1.15rem;
+        font-weight: 400;
+        line-height: 1.6;
+    }
+
+    .small, small {
+        font-size: 0.875rem;
+        line-height: 1.5;
+    }
+    </style>
+
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.app-modern', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\Utente\Desktop\my_project\Backoffice-vetrrina-pizzeria-laravel\pizzeria-backend\resources\views/dashboard.blade.php ENDPATH**/ ?>

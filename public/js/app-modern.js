@@ -6,6 +6,13 @@ if (typeof lucide !== 'undefined') {
     } else {
         initIcons();
     }
+    
+    // Reinizializza quando si torna indietro con il browser (fix placeholder)
+    window.addEventListener('pageshow', function(event) {
+        if (event.persisted || performance.getEntriesByType("navigation")[0]?.type === 'back_forward') {
+            initIcons();
+        }
+    });
 }
 
 function initIcons() {

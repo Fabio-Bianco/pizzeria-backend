@@ -730,6 +730,108 @@ hr {
 }
 
 /* ============================================
+   ⚡ SKELETON LOADING
+   ============================================ */
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+[data-theme="dark"] .skeleton {
+  background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+  background-size: 200% 100%;
+}
+
+/* ============================================
+   🔔 TOAST NOTIFICATIONS MODERNE
+   ============================================ */
+
+.toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.toast-modern {
+  min-width: 320px;
+  max-width: 420px;
+  background: white;
+  border-left: 4px solid #10b981;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  animation: slideInRight 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  pointer-events: all;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.toast-modern.toast-success {
+  border-left-color: #10b981;
+}
+
+.toast-modern.toast-error {
+  border-left-color: #ef4444;
+}
+
+.toast-modern.toast-warning {
+  border-left-color: #f59e0b;
+}
+
+.toast-modern.toast-info {
+  border-left-color: #3b82f6;
+}
+
+[data-theme="dark"] .toast-modern {
+  background: #1e293b;
+  color: #f8fafc;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(400px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.toast-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.toast-content {
+  flex: 1;
+}
+
+.toast-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.toast-message {
+  font-size: 0.875rem;
+  opacity: 0.9;
+}
+
+/* ============================================
    🎨 SCROLLBAR DARK MODE (WebKit)
    ============================================ */
 

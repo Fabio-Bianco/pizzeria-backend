@@ -33,7 +33,7 @@
             <span class="nav-icon"><i data-lucide="pizza" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Pizze</span>
             <?php if(isset($countPizzas)): ?>
-              <span class="nav-badge nav-badge-neutral"><?php echo e($countPizzas); ?></span>
+              <span class="nav-badge nav-badge-neutral <?php echo e(($countPizzas ?? 0) > 0 ? 'nav-badge-new' : ''); ?>"><?php echo e($countPizzas); ?></span>
             <?php endif; ?>
           </a>
 
@@ -43,7 +43,7 @@
             <span class="nav-icon"><i data-lucide="salad" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Antipasti</span>
             <?php if(isset($countAppetizers)): ?>
-              <span class="nav-badge nav-badge-neutral"><?php echo e($countAppetizers); ?></span>
+              <span class="nav-badge nav-badge-neutral <?php echo e(($countAppetizers ?? 0) > 0 ? 'nav-badge-new' : ''); ?>"><?php echo e($countAppetizers); ?></span>
             <?php endif; ?>
           </a>
 
@@ -53,7 +53,7 @@
             <span class="nav-icon"><i data-lucide="glass-water" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Bevande</span>
             <?php if(isset($countBeverages)): ?>
-              <span class="nav-badge nav-badge-neutral"><?php echo e($countBeverages); ?></span>
+              <span class="nav-badge nav-badge-neutral <?php echo e(($countBeverages ?? 0) > 0 ? 'nav-badge-new' : ''); ?>"><?php echo e($countBeverages); ?></span>
             <?php endif; ?>
           </a>
 
@@ -63,7 +63,7 @@
             <span class="nav-icon"><i data-lucide="cake" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Dessert</span>
             <?php if(isset($countDesserts)): ?>
-              <span class="nav-badge nav-badge-neutral"><?php echo e($countDesserts); ?></span>
+              <span class="nav-badge nav-badge-neutral <?php echo e(($countDesserts ?? 0) > 0 ? 'nav-badge-new' : ''); ?>"><?php echo e($countDesserts); ?></span>
             <?php endif; ?>
           </a>
         </div>
@@ -85,7 +85,7 @@
             <span class="nav-icon"><i data-lucide="leaf" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Ingredienti</span>
             <?php if(isset($countIngredients)): ?>
-              <span class="nav-badge nav-badge-warning"><?php echo e($countIngredients); ?></span>
+              <span class="nav-badge nav-badge-warning <?php echo e(($countIngredients ?? 0) > 0 ? 'nav-badge-new' : ''); ?>"><?php echo e($countIngredients); ?></span>
             <?php endif; ?>
           </a>
 
@@ -96,7 +96,7 @@
             <span class="nav-text">Allergeni</span>
             <div class="nav-stats">
               <?php if(isset($countAllergens)): ?>
-                <span class="nav-badge nav-badge-danger"><?php echo e($countAllergens); ?></span>
+                <span class="nav-badge nav-badge-danger nav-badge-new"><?php echo e($countAllergens); ?></span>
               <?php endif; ?>
               <div class="nav-status nav-status-active"></div>
             </div>
@@ -108,7 +108,7 @@
             <span class="nav-icon"><i data-lucide="folder" style="width: 18px; height: 18px;"></i></span>
             <span class="nav-text">Categorie</span>
             <?php if(isset($countCategories)): ?>
-              <span class="nav-badge nav-badge-secondary"><?php echo e($countCategories); ?></span>
+              <span class="nav-badge nav-badge-secondary <?php echo e(($countCategories ?? 0) > 0 ? 'nav-badge-new' : ''); ?>"><?php echo e($countCategories); ?></span>
             <?php endif; ?>
           </a>
         </div>
