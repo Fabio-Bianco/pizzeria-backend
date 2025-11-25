@@ -1,9 +1,3 @@
-<?php $__env->startPush('scripts'); ?>
-<script src="<?php echo e(asset('js/profile-edit.js')); ?>"></script>
-<script src="<?php echo e(asset('js/avatar-preview.js')); ?>"></script>
-<?php $__env->stopPush(); ?>
-
-
 <?php $__env->startSection('title', 'Profilo personale'); ?>
 
 <?php $__env->startSection('header'); ?>
@@ -50,23 +44,38 @@
 </div>
 
 
-<div id="profile-success-overlay" class="position-fixed top-0 start-0 w-100 h-100 d-none" style="z-index: 2000; background: rgba(0,0,0,0.35);" data-status="<?php echo e(session('status')); ?>">
-    <div class="d-flex justify-content-center align-items-center h-100">
-        <div class="bg-white rounded shadow p-4 text-center" style="min-width:320px;max-width:90vw;">
-            <div class="mb-3"><i data-lucide="check-circle" style="width: 40px; height: 40px; color: #10b981;"></i></div>
-            <?php $status = session('status'); ?>
-            <?php if($status === 'profile-updated'): ?>
-                <h5 class="mb-3">Dati profilo aggiornati correttamente.</h5>
-            <?php elseif($status === 'password-updated'): ?>
-                <h5 class="mb-3">Password aggiornata correttamente.</h5>
-            <?php else: ?>
-                <h5 class="mb-3">Operazione completata con successo.</h5>
-            <?php endif; ?>
-            <a href="<?php echo e(route('dashboard')); ?>" class="btn btn-success px-4">Torna al pannello di gestione</a>
-            <button type="button" class="btn btn-link mt-2 close-profile-success">Chiudi</button>
+<?php if(session('status') === 'profile-updated' || session('status') === 'password-updated'): ?>
+<div id="profile-success-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 9999; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; overflow: hidden;">
+    <div class="bg-white rounded-3 shadow-lg p-4 text-center" style="width: 420px; max-width: 90vw; position: relative;">
+        <div class="mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+        </div>
+        <?php if(session('status') === 'profile-updated'): ?>
+            <h5 class="mb-2 fw-semibold">Dati profilo aggiornati</h5>
+            <p class="text-muted small mb-4">Le tue informazioni sono state salvate correttamente</p>
+        <?php elseif(session('status') === 'password-updated'): ?>
+            <h5 class="mb-2 fw-semibold">Password aggiornata</h5>
+            <p class="text-muted small mb-4">La tua password è stata modificata correttamente</p>
+        <?php endif; ?>
+        <div class="d-flex gap-2 justify-content-center">
+            <button type="button" class="btn btn-success btn-sm px-4" onclick="document.getElementById('profile-success-overlay').style.display='none'">OK</button>
+            <a href="<?php echo e(route('dashboard')); ?>" class="btn btn-outline-secondary btn-sm px-3">Dashboard</a>
         </div>
     </div>
 </div>
+
+<style>
+    body:has(#profile-success-overlay) {
+        overflow: hidden;
+    }
+</style>
+<?php endif; ?>
+
+<script src="<?php echo e(asset('js/profile-edit.js')); ?>"></script>
+<script src="<?php echo e(asset('js/avatar-preview.js')); ?>"></script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.app-modern', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\Utente\Desktop\my_project\Backoffice-vetrrina-pizzeria-laravel\pizzeria-backend\resources\views/profile/edit.blade.php ENDPATH**/ ?>

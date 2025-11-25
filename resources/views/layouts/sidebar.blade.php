@@ -149,9 +149,13 @@
     {{-- Area profilo/logout in basso --}}
     <div class="sidebar-profile-area border-top p-3 d-flex flex-column align-items-center">
       <div class="sidebar-profile-avatar mb-2">
-        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; font-size: 1.3rem;">
-          {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}
-        </div>
+        @if(auth()->user()->avatar)
+          <img src="{{ asset('storage/' . auth()->user()->avatar) }}" alt="{{ auth()->user()->name }}" class="rounded-circle" style="width: 44px; height: 44px; object-fit: cover; border: 2px solid #e5e7eb;">
+        @else
+          <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; font-size: 1.3rem;">
+            {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}
+          </div>
+        @endif
       </div>
       <div class="sidebar-profile-info text-center mb-2">
         <div class="fw-semibold text-dark small">{{ auth()->user()->name ?? 'Utente' }}</div>

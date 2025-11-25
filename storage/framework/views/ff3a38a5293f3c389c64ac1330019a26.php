@@ -1,5 +1,5 @@
 
-<?php if(session('status') || session('success')): ?>
+<?php if((session('status') && !in_array(session('status'), ['profile-updated', 'password-updated'])) || session('success')): ?>
     <div class="alert alert-success d-flex align-items-center slide-up" data-auto-dismiss="10000" role="alert">
         <div class="me-2">
             <i class="fas fa-check-circle"></i>

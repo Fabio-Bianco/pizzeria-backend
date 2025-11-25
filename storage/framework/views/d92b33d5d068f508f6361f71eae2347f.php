@@ -149,10 +149,14 @@
     
     <div class="sidebar-profile-area border-top p-3 d-flex flex-column align-items-center">
       <div class="sidebar-profile-avatar mb-2">
-        <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; font-size: 1.3rem;">
-          <?php echo e(strtoupper(substr(auth()->user()->name ?? 'U', 0, 1))); ?>
+        <?php if(auth()->user()->avatar): ?>
+          <img src="<?php echo e(asset('storage/' . auth()->user()->avatar)); ?>" alt="<?php echo e(auth()->user()->name); ?>" class="rounded-circle" style="width: 44px; height: 44px; object-fit: cover; border: 2px solid #e5e7eb;">
+        <?php else: ?>
+          <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 44px; height: 44px; font-size: 1.3rem;">
+            <?php echo e(strtoupper(substr(auth()->user()->name ?? 'U', 0, 1))); ?>
 
-        </div>
+          </div>
+        <?php endif; ?>
       </div>
       <div class="sidebar-profile-info text-center mb-2">
         <div class="fw-semibold text-dark small"><?php echo e(auth()->user()->name ?? 'Utente'); ?></div>

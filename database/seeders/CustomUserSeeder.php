@@ -11,10 +11,10 @@ class CustomUserSeeder extends Seeder
     public function run(): void
     {
         User::updateOrCreate(
-            ['email' => 'prova1234@mailchef.it'],
+            ['email' => 'chefcarlo@mailchef.it'],
             [
                 'name' => 'Admin Personalizzato',
-                'password' => Hash::make('Ciaopassword'),
+                'password' => Hash::make('T3enatrena1!'),
                 'email_verified_at' => now(),
             ]
         );

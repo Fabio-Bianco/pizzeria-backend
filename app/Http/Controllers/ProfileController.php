@@ -35,6 +35,9 @@ class ProfileController extends Controller
             
             // Salva nuova immagine
             $data['avatar'] = $request->file('avatar')->store('avatars', 'public');
+        } else {
+            // Mantieni avatar esistente se non viene caricato uno nuovo
+            unset($data['avatar']);
         }
 
         // Se l'email cambia, azzera la verifica
@@ -49,7 +52,7 @@ class ProfileController extends Controller
             $user->update($data);
         }
 
-        return redirect('/profile')->with('success', 'Profilo aggiornato.');
+        return redirect()->route('profile.edit')->with('status', 'profile-updated');
     }
 
     public function destroy(Request $request)

@@ -13,18 +13,19 @@
                 <div class="mb-4 text-center">
                     <div class="mb-3">
                         <?php if($user->avatar): ?>
-                            <img src="<?php echo e(asset('storage/' . $user->avatar)); ?>" alt="Avatar" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #e5e7eb;">
+                            <img id="avatar-preview" src="<?php echo e(asset('storage/' . $user->avatar)); ?>" alt="Avatar" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #e5e7eb;">
                         <?php else: ?>
-                            <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px; border: 3px solid #e5e7eb;">
+                            <div id="avatar-placeholder" class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px; border: 3px solid #e5e7eb;">
                                 <i data-lucide="user" style="width: 60px; height: 60px; color: white;"></i>
                             </div>
+                            <img id="avatar-preview" src="" alt="Avatar" class="rounded-circle d-none" style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #e5e7eb;">
                         <?php endif; ?>
                     </div>
                     <div>
                         <label for="avatar" class="btn btn-sm btn-outline-primary">
                             <i data-lucide="camera" style="width: 16px; height: 16px;"></i> Cambia foto
                         </label>
-                        <input type="file" id="avatar" name="avatar" class="d-none" accept="image/*">
+                        <input type="file" id="avatar" name="avatar" class="d-none" accept="image/*" onchange="previewAvatar(event)">
                         <small class="text-muted d-block mt-2">JPG, PNG, GIF (max 2MB)</small>
                         <?php if (isset($component)) { $__componentOriginalf94ed9c5393ef72725d159fe01139746 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalf94ed9c5393ef72725d159fe01139746 = $attributes; } ?>
@@ -48,6 +49,27 @@
 <?php endif; ?>
                     </div>
                 </div>
+
+                <script>
+                function previewAvatar(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const preview = document.getElementById('avatar-preview');
+                            const placeholder = document.getElementById('avatar-placeholder');
+                            
+                            preview.src = e.target.result;
+                            preview.classList.remove('d-none');
+                            
+                            if (placeholder) {
+                                placeholder.classList.add('d-none');
+                            }
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                }
+                </script>
 
                 <div class="mb-3">
                     <?php if (isset($component)) { $__componentOriginale3da9d84bb64e4bc2eeebaafabfb2581 = $component; } ?>

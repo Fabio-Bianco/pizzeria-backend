@@ -13,22 +13,44 @@
                 <div class="mb-4 text-center">
                     <div class="mb-3">
                         @if($user->avatar)
-                            <img src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #e5e7eb;">
+                            <img id="avatar-preview" src="{{ asset('storage/' . $user->avatar) }}" alt="Avatar" class="rounded-circle" style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #e5e7eb;">
                         @else
-                            <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px; border: 3px solid #e5e7eb;">
+                            <div id="avatar-placeholder" class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px; border: 3px solid #e5e7eb;">
                                 <i data-lucide="user" style="width: 60px; height: 60px; color: white;"></i>
                             </div>
+                            <img id="avatar-preview" src="" alt="Avatar" class="rounded-circle d-none" style="width: 120px; height: 120px; object-fit: cover; border: 3px solid #e5e7eb;">
                         @endif
                     </div>
                     <div>
                         <label for="avatar" class="btn btn-sm btn-outline-primary">
                             <i data-lucide="camera" style="width: 16px; height: 16px;"></i> Cambia foto
                         </label>
-                        <input type="file" id="avatar" name="avatar" class="d-none" accept="image/*">
+                        <input type="file" id="avatar" name="avatar" class="d-none" accept="image/*" onchange="previewAvatar(event)">
                         <small class="text-muted d-block mt-2">JPG, PNG, GIF (max 2MB)</small>
                         <x-input-error class="mt-2 text-danger" :messages="$errors->get('avatar')" />
                     </div>
                 </div>
+
+                <script>
+                function previewAvatar(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const preview = document.getElementById('avatar-preview');
+                            const placeholder = document.getElementById('avatar-placeholder');
+                            
+                            preview.src = e.target.result;
+                            preview.classList.remove('d-none');
+                            
+                            if (placeholder) {
+                                placeholder.classList.add('d-none');
+                            }
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                }
+                </script>
 
                 <div class="mb-3">
                     <x-input-label for="name" value="Nome" />
