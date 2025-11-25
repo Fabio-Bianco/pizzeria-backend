@@ -158,7 +158,17 @@
         <div class="fw-semibold text-dark small"><?php echo e(auth()->user()->name ?? 'Utente'); ?></div>
         <div class="tiny text-muted"><?php echo e(auth()->user()->email ?? 'admin@pizzeria.com'); ?></div>
       </div>
-      <div class="sidebar-profile-actions d-flex gap-2">
+      <div class="sidebar-profile-actions d-flex gap-2" x-data="darkMode">
+        <button 
+          @click="toggle()" 
+          class="btn btn-sm btn-outline-secondary px-3" 
+          :title="'Tema: ' + label"
+          :aria-label="'Tema: ' + label"
+        >
+          <i data-lucide="sun" x-show="theme === 'light'" style="width: 16px; height: 16px;"></i>
+          <i data-lucide="moon" x-show="theme === 'dark'" style="width: 16px; height: 16px;"></i>
+          <i data-lucide="monitor" x-show="theme === 'auto'" style="width: 16px; height: 16px;"></i>
+        </button>
         <a href="<?php echo e(route('profile.edit')); ?>" class="btn btn-sm btn-outline-secondary px-3" title="Profilo">
           <i data-lucide="user-cog" style="width: 16px; height: 16px;"></i>
         </a>
