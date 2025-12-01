@@ -15,6 +15,7 @@ class PizzaController extends Controller
     // 📋 Mostra tutte le pizze
     public function index(Request $request)
     {
+        // Eager Loading per N+1 query problems
         $pizzas = Pizza::with('category', 'ingredients');
         
         // 🔍 Cerca per nome
@@ -26,7 +27,7 @@ class PizzaController extends Controller
         $pizzas->orderBy('name');
         
         return view('admin.pizzas.index', [
-            'pizzas' => $pizzas->paginate(10)
+            'pizzas' => $pizzas->paginate(5)
         ]);
     }
     

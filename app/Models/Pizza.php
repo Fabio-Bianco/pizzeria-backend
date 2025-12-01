@@ -20,19 +20,48 @@ class Pizza extends Model
         'image_path' => 'string',
     ];
 
+    /**
+     * ═══════════════════════════════════════════════════════════
+       RELAZIONI ELOQUENT
+     * ═══════════════════════════════════════════════════════════
+     */
+
+    /**
+     Una pizza appartiene a una categoria
+     Cerca automaticamente il campo 'category_id' nella tabella pizzas
+     */
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
+    /**
+      Una pizza ha molti ingredienti
+      Usa tabella pivot 'ingredient_pizza' con timestamps
+
+     */
     public function ingredients(): BelongsToMany
     {
         return $this->belongsToMany(Ingredient::class)->withTimestamps();
     }
 
     /**
-     * Ottieni gli allergeni aggiunti automaticamente tramite gli ingredienti         
-     */           
+     * ═══════════════════════════════════════════════════════════
+      METODI CUSTOM - LOGICA BUSINESS ALLERGENI
+     * ═══════════════════════════════════════════════════════════
+     */
+
+    /**
+     * Ottieni gli allergeni calcolati automaticamente dagli ingredienti
+     * 
+     * Processo:
+     * 1. Prende tutti gli ingredienti della pizza
+     * 2. Estrae gli allergeni da ogni ingrediente (pluck)
+     * 3. Appiattisce la collection nested (flatten)
+     * 4. Rimuove duplicati per ID (unique)
+     * 
+     * Ottimizzazione: usa relationLoaded() per evitare query se già in eager loading
+     */
     public function getAutomaticAllergens(): Collection
     {
         //verifica se ingredienti e i loro allergeni sono già caricati
@@ -42,7 +71,7 @@ class Pizza extends Model
                 ->flatten() // appiattisce la collection di collection in una singola collection
                 ->unique('id'); //rimuove duplicati
         }
-        
+
         // Fallback: query normale (solo se non in eager loading)
         return $this->ingredients()
             ->with('allergens')
@@ -53,7 +82,7 @@ class Pizza extends Model
     }
 
     /**
-     * Ottieni gli allergeni aggiunti manualmente         
+      Ottieni gli allergeni aggiunti manualmente         
      */
     public function getManualAllergens(): Collection
     {
@@ -65,13 +94,13 @@ class Pizza extends Model
         if (!isset($this->_cached_manual_allergens)) {
             $this->_cached_manual_allergens = Allergen::whereIn('id', $this->manual_allergens)->get();
         }
-        
+
         return $this->_cached_manual_allergens;
     }
 
     /**
-     * Ottieni tutti gli allergeni finali (automatici + manuali, senza duplicati)
-     * Unisce allergeni automatici e manuali, rimuove duplicati e li ordina per nome
+      Ottieni tutti gli allergeni finali (automatici + manuali, senza duplicati)
+      Unisce allergeni automatici e manuali, rimuove duplicati e li ordina per nome
      */
     public function getAllAllergens(): Collection
     {
@@ -86,7 +115,7 @@ class Pizza extends Model
     }
 
     /**
-     * Verifica se la pizza contiene un allergene specifico
+      Verifica se la pizza contiene un allergene specifico
      */
     public function hasAllergen(int $allergenId): bool
     {
