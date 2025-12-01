@@ -31,18 +31,16 @@ class Pizza extends Model
     }
 
     /**
-     * Ottieni tutti gli allergeni calcolati automaticamente dagli ingredienti
-     
-     * Restituisce tutti gli allergeni derivati dagli ingredienti della pizza, ottimizzando l’uso delle relazioni già caricate.
-     */
+     * Ottieni gli allergeni aggiunti automaticamente tramite gli ingredienti         
+     */           
     public function getAutomaticAllergens(): Collection
     {
-        // Se gli ingredienti e i loro allergeni sono già caricati, usali
+        //verifica se ingredienti e i loro allergeni sono già caricati
         if ($this->relationLoaded('ingredients')) {
-            return $this->ingredients
-                ->pluck('allergens')
-                ->flatten()
-                ->unique('id');
+            return $this->ingredients // collection di ingrediennti già caricata
+                ->pluck('allergens') // prende solo la lista degli allergeni da ogni ingrediente
+                ->flatten() // appiattisce la collection di collection in una singola collection
+                ->unique('id'); //rimuove duplicati
         }
         
         // Fallback: query normale (solo se non in eager loading)
@@ -55,8 +53,7 @@ class Pizza extends Model
     }
 
     /**
-     * Ottieni gli allergeni aggiunti manualmente
-     * Restituisce gli allergeni aggiunti manualmente tramite l’attributo manual_allergens.
+     * Ottieni gli allergeni aggiunti manualmente         
      */
     public function getManualAllergens(): Collection
     {

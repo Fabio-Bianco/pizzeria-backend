@@ -8,54 +8,29 @@ use App\Models\Ingredient;
 use App\Models\Allergen;
 use App\Support\SlugService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class PizzaController extends Controller
 {
-    /**
-     * Display a listing of the pizzas.
-     */
+    // 📋 Mostra tutte le pizze
     public function index(Request $request)
     {
-        // Base query with relationships
-        $query = Pizza::with(['category:id,name', 'ingredients:id,name']);
+        $pizzas = Pizza::with('category', 'ingredients');
         
-        // Search functionality
-        if ($request->filled('search')) {
-            $search = $request->get('search');
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%")
-                  ->orWhere('notes', 'like', "%{$search}%");
-            });
+        // 🔍 Cerca per nome
+        if ($request->search) {
+            $pizzas->where('name', 'like', "%{$request->search}%");
         }
         
-        // Sorting
-        $sortField = $request->get('sort', 'name');
-        $sortDirection = $request->get('direction', 'asc');
+        // 📊 Ordina per nome
+        $pizzas->orderBy('name');
         
-        if (in_array($sortField, ['name', 'price', 'created_at'])) {
-            $query->orderBy($sortField, $sortDirection);
-        }
-        
-        // Pagination
-        $pizzas = $query->paginate(10);
-        
-        // Return appropriate response
-        if ($request->expectsJson()) {
-            return response()->json([
-                'success' => true,
-                'data' => $pizzas
-            ]);
-        }
-        
-        return view('admin.pizzas.index', compact('pizzas'));
+        return view('admin.pizzas.index', [
+            'pizzas' => $pizzas->paginate(10)
+        ]);
     }
     
-    /**
-     * Show the form for creating a new pizza.
-     */
+    // ➕ Form per creare nuova pizza
     public function create()
     {
         $categories = Category::orderBy('name')->get();
@@ -65,16 +40,14 @@ class PizzaController extends Controller
         return view('admin.pizzas.create', compact('categories', 'ingredients', 'allergens'));
     }
     
-    /**
-     * Store a newly created pizza in storage.
-     */
+    // 💾 Salva nuova pizza
     public function store(Request $request)
     {
-        // Validation
+        // ✅ Controlla che i dati siano corretti
         $request->validate([
-            'name' => 'required|string|max:255|unique:pizzas,name',
-            'description' => 'nullable|string',
-            'notes' => 'nullable|string',
+            'name' => 'required|max:255|unique:pizzas',
+            'description' => 'nullable',
+            'notes' => 'nullable',
             'price' => 'required|numeric|min:0',
             'category_id' => 'nullable|exists:categories,id',
             'ingredients' => 'array',
@@ -82,96 +55,57 @@ class PizzaController extends Controller
             'manual_allergens' => 'array',
             'manual_allergens.*' => 'exists:allergens,id',
             'is_vegan' => 'boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image' => 'nullable|image|max:2048'
         ]);
         
-        try {
-            // Prepare data
-            $data = $request->only(['name', 'description', 'notes', 'price', 'category_id', 'is_vegan']);
-            $data['slug'] = SlugService::unique(new Pizza(), $data['name']);
-            $data['is_vegan'] = $request->boolean('is_vegan');
-            $data['manual_allergens'] = $request->get('manual_allergens', []);
-            
-            // Handle image upload
-            if ($request->hasFile('image')) {
-                $data['image_path'] = $request->file('image')->store('pizzas', 'public');
-            }
-            
-            // Create pizza
-            $pizza = Pizza::create($data);
-            
-            // Sync ingredients relationship
-            if ($request->filled('ingredients')) {
-                $pizza->ingredients()->sync($request->get('ingredients'));
-            }
-            
-            // Success response
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Pizza creata con successo.',
-                    'data' => $pizza->load(['category', 'ingredients'])
-                ], 201);
-            }
-            
-            return redirect()->route('pizzas.index')
-                           ->with('success', 'Pizza creata con successo.');
-                           
-        } catch (\Exception $e) {
-            Log::error('Errore nella creazione pizza: ' . $e->getMessage());
-            
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Errore nella creazione della pizza.'
-                ], 500);
-            }
-            
-            return back()->withInput()
-                        ->with('error', 'Errore nella creazione della pizza.');
+        // 📝 Crea la pizza
+        $pizza = Pizza::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'notes' => $request->notes,
+            'price' => $request->price,
+            'category_id' => $request->category_id,
+            'is_vegan' => $request->boolean('is_vegan'),
+            'manual_allergens' => $request->manual_allergens ?? [],
+            'slug' => SlugService::unique(new Pizza(), $request->name),
+            'image_path' => $request->hasFile('image') ? $request->file('image')->store('pizzas', 'public') : null
+        ]);
+        
+        // 🔗 Collega gli ingredienti
+        if ($request->ingredients) {
+            $pizza->ingredients()->sync($request->ingredients);
         }
+        
+        return redirect()->route('pizzas.index')
+                        ->with('success', 'Pizza creata!');
     }
     
-    /**
-     * Display the specified pizza.
-     */
+    // 👁️ Mostra pizza specifica
     public function show(Pizza $pizza)
     {
-        $pizza->load(['category', 'ingredients']);
-        
-        if (request()->expectsJson()) {
-            return response()->json([
-                'success' => true,
-                'data' => $pizza
-            ]);
-        }
-        
+        $pizza->load('category', 'ingredients');
         return view('admin.pizzas.show', compact('pizza'));
     }
     
-    /**
-     * Show the form for editing the specified pizza.
-     */
+    // ✏️ Form per modificare pizza
     public function edit(Pizza $pizza)
     {
         $categories = Category::orderBy('name')->get();
         $ingredients = Ingredient::orderBy('name')->get();
         $allergens = Allergen::orderBy('name')->get();
-        $pizza->load(['category', 'ingredients']);
+        $pizza->load('category', 'ingredients');
         
         return view('admin.pizzas.edit', compact('pizza', 'categories', 'ingredients', 'allergens'));
     }
     
-    /**
-     * Update the specified pizza in storage.
-     */
+    // 🔄 Aggiorna pizza
     public function update(Request $request, Pizza $pizza)
     {
-        // Validation
+        // ✅ Controlla che i dati siano corretti
         $request->validate([
-            'name' => 'required|string|max:255|unique:pizzas,name,' . $pizza->id,
-            'description' => 'nullable|string',
-            'notes' => 'nullable|string',
+            'name' => 'required|max:255|unique:pizzas,name,' . $pizza->id,
+            'description' => 'nullable',
+            'notes' => 'nullable',
             'price' => 'required|numeric|min:0',
             'category_id' => 'nullable|exists:categories,id',
             'ingredients' => 'array',
@@ -179,105 +113,49 @@ class PizzaController extends Controller
             'manual_allergens' => 'array',
             'manual_allergens.*' => 'exists:allergens,id',
             'is_vegan' => 'boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image' => 'nullable|image|max:2048'
         ]);
         
-        try {
-            // Prepare data
-            $data = $request->only(['name', 'description', 'notes', 'price', 'category_id', 'is_vegan']);
-            $data['is_vegan'] = $request->boolean('is_vegan');
-            $data['manual_allergens'] = $request->get('manual_allergens', []);
-            
-            // Update slug if name changed
-            if ($data['name'] !== $pizza->name) {
-                $data['slug'] = SlugService::unique(new Pizza(), $data['name'], $pizza->id);
-            }
-            
-            // Handle image upload
-            if ($request->hasFile('image')) {
-                // Delete old image
-                if ($pizza->image_path) {
-                    Storage::disk('public')->delete($pizza->image_path);
-                }
-                $data['image_path'] = $request->file('image')->store('pizzas', 'public');
-            }
-            
-            // Update pizza
-            $pizza->update($data);
-            
-            // Sync ingredients relationship
-            if ($request->filled('ingredients')) {
-                $pizza->ingredients()->sync($request->get('ingredients'));
-            } else {
-                $pizza->ingredients()->sync([]);
-            }
-            
-            // Success response
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Pizza aggiornata con successo.',
-                    'data' => $pizza->fresh()->load(['category', 'ingredients'])
-                ]);
-            }
-            
-            return redirect()->route('pizzas.index')
-                           ->with('success', 'Pizza aggiornata con successo.');
-                           
-        } catch (\Exception $e) {
-            Log::error('Errore nell\'aggiornamento pizza: ' . $e->getMessage());
-            
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Errore nell\'aggiornamento della pizza.'
-                ], 500);
-            }
-            
-            return back()->withInput()
-                        ->with('error', 'Errore nell\'aggiornamento della pizza.');
+        // 🗑️ Elimina vecchia immagine se carica una nuova
+        if ($request->hasFile('image') && $pizza->image_path) {
+            Storage::disk('public')->delete($pizza->image_path);
         }
+        
+        // 📝 Aggiorna la pizza
+        $pizza->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'notes' => $request->notes,
+            'price' => $request->price,
+            'category_id' => $request->category_id,
+            'is_vegan' => $request->boolean('is_vegan'),
+            'manual_allergens' => $request->manual_allergens ?? [],
+            'slug' => $request->name !== $pizza->name ? SlugService::unique(new Pizza(), $request->name, $pizza->id) : $pizza->slug,
+            'image_path' => $request->hasFile('image') ? $request->file('image')->store('pizzas', 'public') : $pizza->image_path
+        ]);
+        
+        // 🔗 Aggiorna gli ingredienti
+        $pizza->ingredients()->sync($request->ingredients ?? []);
+        
+        return redirect()->route('pizzas.index')
+                        ->with('success', 'Pizza aggiornata!');
     }
     
-    /**
-     * Remove the specified pizza from storage.
-     */
+    // 🗑️ Elimina pizza
     public function destroy(Pizza $pizza)
     {
-        try {
-            // Delete image if exists
-            if ($pizza->image_path) {
-                Storage::disk('public')->delete($pizza->image_path);
-            }
-            
-            // Delete relationships
-            $pizza->ingredients()->detach();
-            
-            // Delete pizza
-            $pizza->delete();
-            
-            // Success response
-            if (request()->expectsJson()) {
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Pizza eliminata con successo.'
-                ]);
-            }
-            
-            return redirect()->route('pizzas.index')
-                           ->with('success', 'Pizza eliminata con successo.');
-                           
-        } catch (\Exception $e) {
-            Log::error('Errore nell\'eliminazione pizza: ' . $e->getMessage());
-            
-            if (request()->expectsJson()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Errore nell\'eliminazione della pizza.'
-                ], 500);
-            }
-            
-            return back()->with('error', 'Errore nell\'eliminazione della pizza.');
+        // 🗑️ Elimina immagine
+        if ($pizza->image_path) {
+            Storage::disk('public')->delete($pizza->image_path);
         }
+        
+        // 🔗 Rimuovi ingredienti
+        $pizza->ingredients()->detach();
+        
+        // 🗑️ Elimina la pizza
+        $pizza->delete();
+        
+        return redirect()->route('pizzas.index')
+                        ->with('success', 'Pizza eliminata!');
     }
 }
