@@ -62,7 +62,7 @@ class IngredientController extends Controller
             $ingredient->allergens()->sync($request->allergens);
         }
         
-        return redirect()->route('ingredients.index')
+        return redirect()->route('admin.ingredients.index')
                         ->with('success', 'Ingrediente creato!');
     }
     
@@ -112,7 +112,7 @@ class IngredientController extends Controller
         // 🔗 Aggiorna gli allergeni
         $ingredient->allergens()->sync($request->allergens ?? []);
         
-        return redirect()->route('ingredients.index')
+        return redirect()->route('admin.ingredients.index')
                         ->with('success', 'Ingrediente aggiornato!');
     }
     
@@ -135,7 +135,7 @@ class IngredientController extends Controller
         // 🗑️ Elimina l'ingrediente
         $ingredient->delete();
         
-        return redirect()->route('ingredients.index')
+        return redirect()->route('admin.ingredients.index')
                         ->with('success', 'Ingrediente eliminato!');
     }
     
@@ -143,6 +143,12 @@ class IngredientController extends Controller
     public function getAllergensForIngredients(Request $request)
     {
         $ingredientIds = $request->ingredient_ids ?? [];
+        
+        // Se arriva come stringa separata da virgole, converti in array
+        if (is_string($ingredientIds)) {
+            $ingredientIds = explode(',', $ingredientIds);
+            $ingredientIds = array_map('intval', $ingredientIds);
+        }
         
         if (empty($ingredientIds)) {
             return response()->json(['allergens' => []]);

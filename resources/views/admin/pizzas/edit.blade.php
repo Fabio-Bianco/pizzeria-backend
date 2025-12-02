@@ -78,6 +78,19 @@
                         </div>
 
                         <div class="mb-3">
+                            <label for="description" class="form-label small text-muted mb-1">Descrizione</label>
+                            <textarea 
+                                class="form-control @error('description') is-invalid @enderror" 
+                                id="description" 
+                                name="description" 
+                                rows="2"
+                            >{{ old('description', $pizza->description) }}</textarea>
+                            @error('description')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
                             <label for="notes" class="form-label small text-muted mb-1">Note</label>
                             <textarea 
                                 class="form-control @error('notes') is-invalid @enderror" 
@@ -92,9 +105,9 @@
 
                         <div class="mb-3">
                             <label for="image" class="form-label small text-muted mb-1">Immagine</label>
-                            @if($pizza->image)
+                            @if($pizza->image_path)
                                 <div class="mb-2">
-                                    <img src="{{ asset('storage/' . $pizza->image) }}" alt="{{ $pizza->name }}" class="img-thumbnail" style="max-width: 200px;">
+                                    <img src="{{ asset('storage/' . $pizza->image_path) }}" alt="{{ $pizza->name }}" class="img-thumbnail" style="max-width: 200px;">
                                 </div>
                             @endif
                             <input 
@@ -164,10 +177,10 @@
                                     <input 
                                         class="form-check-input allergen-checkbox" 
                                         type="checkbox" 
-                                        name="allergens[]" 
+                                        name="manual_allergens[]" 
                                         value="{{ $allergen->id }}" 
                                         id="allergen_{{ $allergen->id }}"
-                                        {{ in_array($allergen->id, old('allergens', $pizza->allergens ? $pizza->allergens->pluck('id')->toArray() : [])) ? 'checked' : '' }}
+                                        {{ in_array($allergen->id, old('manual_allergens', $pizza->manual_allergens ?? [])) ? 'checked' : '' }}
                                     >
                                     <label class="form-check-label small" for="allergen_{{ $allergen->id }}">
                                         {{ $allergen->name }}

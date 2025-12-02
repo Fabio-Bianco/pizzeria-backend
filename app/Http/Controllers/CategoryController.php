@@ -52,7 +52,7 @@ class CategoryController extends Controller
         ]);
         
         // ✅ Torna alla lista con messaggio di successo
-        return redirect()->route('categories.index')
+        return redirect()->route('admin.categories.index')
                         ->with('success', 'Categoria creata!');
     }
     
@@ -89,7 +89,7 @@ class CategoryController extends Controller
         ]);
         
         // ✅ Torna alla lista con messaggio di successo
-        return redirect()->route('categories.index')
+        return redirect()->route('admin.categories.index')
                         ->with('success', 'Categoria aggiornata!');
     }
     
@@ -105,7 +105,7 @@ class CategoryController extends Controller
         $category->delete();
         
         // ✅ Torna alla lista con messaggio di successo
-        return redirect()->route('categories.index')
+        return redirect()->route('admin.categories.index')
                         ->with('success', 'Categoria eliminata!');
     }
 }

@@ -92,6 +92,14 @@
                                           placeholder="Breve descrizione della pizza">{{ old('description') }}</textarea>
                                 @error('description')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
+
+                            <div class="col-12">
+                                <label for="notes" class="form-label small fw-semibold text-dark">Note</label>
+                                <textarea id="notes" name="notes" rows="2"
+                                          class="form-control @error('notes') is-invalid @enderror"
+                                          placeholder="Note interne (es. varianti, suggerimenti)">{{ old('notes') }}</textarea>
+                                @error('notes')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -256,6 +264,10 @@
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/scripts/choices.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js@10.2.0/public/assets/styles/choices.min.css">
+    <link rel="stylesheet" href="{{ asset('css/choices-custom.css') }}">
 
     @include('partials.pizza-create-script')
 

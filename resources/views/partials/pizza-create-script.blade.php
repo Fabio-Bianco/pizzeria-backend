@@ -1,7 +1,23 @@
 {{-- Script per sistema allergeni intelligente --}}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const ingredientsSelect = document.getElementById('ingredients');
+    // Inizializza Choices.js
+    const ingredientsChoices = new Choices('#ingredients', {
+        removeItemButton: true,
+        searchEnabled: true,
+        searchPlaceholderValue: 'Cerca ingredienti...',
+        noResultsText: 'Nessun risultato',
+        itemSelectText: 'Clicca per selezionare',
+        placeholderValue: 'Seleziona ingredienti'
+    });
+    
+    const categoryChoices = new Choices('#category_id', {
+        searchEnabled: false,
+        itemSelectText: 'Clicca per selezionare',
+        placeholderValue: 'Seleziona categoria'
+    });
+    
+    const ingredientsElement = document.getElementById('ingredients');
     const categorySelect = document.getElementById('category_id');
     const automaticAllergensDiv = document.getElementById('automatic-allergens');
     const manualAllergensContainer = document.getElementById('manual-allergens-container');
@@ -18,48 +34,53 @@ document.addEventListener('DOMContentLoaded', function() {
         if (isWhite) {
             whiteHelp.classList.remove('d-none');
             
-            // Disabilita opzioni pomodoro
-            Array.from(ingredientsSelect.options).forEach(option => {
-                if (option.dataset.isTomato === '1') {
-                    option.disabled = true;
-                    option.selected = false;
+            // Disabilita ingredienti pomodoro in Choices.js
+            const choices = ingredientsChoices._currentState.choices;
+            choices.forEach(choice => {
+                const originalOption = document.querySelector(`#ingredients option[value="${choice.value}"]`);
+                if (originalOption && originalOption.dataset.isTomato === '1') {
+                    choice.disabled = true;
+                    ingredientsChoices.removeActiveItemsByValue(choice.value);
                 }
             });
+            ingredientsChoices.setChoices(choices, 'value', 'label', true);
         } else {
             whiteHelp.classList.add('d-none');
             
-            // Riabilita opzioni pomodoro
-            Array.from(ingredientsSelect.options).forEach(option => {
-                if (option.dataset.isTomato === '1') {
-                    option.disabled = false;
+            // Riabilita ingredienti pomodoro
+            const choices = ingredientsChoices._currentState.choices;
+            choices.forEach(choice => {
+                const originalOption = document.querySelector(`#ingredients option[value="${choice.value}"]`);
+                if (originalOption && originalOption.dataset.isTomato === '1') {
+                    choice.disabled = false;
                 }
             });
+            ingredientsChoices.setChoices(choices, 'value', 'label', true);
         }
         
         updateAutomaticAllergens();
     });
     
     function updateAutomaticAllergens() {
-        const selectedIngredients = Array.from(ingredientsSelect.selectedOptions).map(option => option.value);
+        const selectedIngredients = ingredientsChoices.getValue(true);
         
         if (selectedIngredients.length === 0) {
             automaticAllergens = [];
-            automaticAllergensDiv.innerHTML = '<em class="text-muted"><i class="fas fa-arrow-up me-1"></i>Seleziona ingredienti sopra per vedere gli allergeni automatici</em>';
+            automaticAllergensDiv.innerHTML = '<em class="text-muted small">Seleziona ingredienti per vedere gli allergeni</em>';
             updateFinalPreview();
             return;
         }
         
         // Loading state
-        automaticAllergensDiv.innerHTML = '<div class="d-flex align-items-center text-muted"><div class="spinner-border spinner-border-sm me-2"></div>Caricamento allergeni...</div>';
+        automaticAllergensDiv.innerHTML = '<div class="d-flex align-items-center text-muted"><div class="spinner-border spinner-border-sm me-2"></div>Caricamento...</div>';
         
-        // Chiamata AJAX per ottenere allergeni
+        // Chiamata AJAX
         fetch('{{ route("admin.ajax.ingredients-allergens") }}?' + new URLSearchParams({
             ingredient_ids: selectedIngredients
         }), {
             headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
             }
         })
         .then(response => response.json())
@@ -67,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
             automaticAllergens = data.allergens || [];
             
             if (automaticAllergens.length === 0) {
-                automaticAllergensDiv.innerHTML = '<div class="text-success"><i class="fas fa-check-circle me-1"></i>Nessun allergene automatico</div>';
+                automaticAllergensDiv.innerHTML = '<div class="text-success small"><i class="fas fa-check-circle me-1"></i>Nessun allergene</div>';
             } else {
                 automaticAllergensDiv.innerHTML = automaticAllergens.map(allergen => 
                     `<span class="badge bg-warning text-dark me-1 mb-1">${allergen.name}</span>`
@@ -77,8 +98,8 @@ document.addEventListener('DOMContentLoaded', function() {
             updateFinalPreview();
         })
         .catch(error => {
-            console.error('Errore nel caricamento allergeni:', error);
-            automaticAllergensDiv.innerHTML = '<div class="text-danger"><i class="fas fa-exclamation-triangle me-1"></i>Errore nel caricamento</div>';
+            console.error('Errore:', error);
+            automaticAllergensDiv.innerHTML = '<div class="text-danger small"><i class="fas fa-times me-1"></i>Errore</div>';
         });
     }
     
@@ -89,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function() {
             name: cb.nextElementSibling.textContent.trim()
         }));
         
-        // Merge automatic + manual, rimuovi duplicati
+        // Merge, rimuovi duplicati
         const allAllergens = [...automaticAllergens];
         manualAllergens.forEach(manual => {
             if (!allAllergens.find(auto => auto.id == manual.id)) {
@@ -101,13 +122,13 @@ document.addEventListener('DOMContentLoaded', function() {
             finalAllergensPreview.innerHTML = '<em class="text-muted">Nessun allergene</em>';
         } else {
             finalAllergensPreview.innerHTML = allAllergens.map(allergen => 
-                `<span class="badge bg-danger text-white me-1 mb-1">${allergen.name}</span>`
+                `<span class="badge bg-danger me-1">${allergen.name}</span>`
             ).join('');
         }
     }
     
     // Event listeners
-    ingredientsSelect.addEventListener('change', updateAutomaticAllergens);
+    ingredientsElement.addEventListener('change', updateAutomaticAllergens);
     
     manualAllergensContainer.addEventListener('change', function(e) {
         if (e.target.type === 'checkbox') {

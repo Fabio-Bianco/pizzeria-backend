@@ -64,7 +64,7 @@ class DessertController extends Controller
             $dessert->ingredients()->sync($request->ingredients);
         }
         
-        return redirect()->route('desserts.index')
+        return redirect()->route('admin.desserts.index')
                         ->with('success', 'Dolce creato!');
     }
     
@@ -112,7 +112,7 @@ class DessertController extends Controller
         // 🔗 Aggiorna gli ingredienti
         $dessert->ingredients()->sync($request->ingredients ?? []);
         
-        return redirect()->route('desserts.index')
+        return redirect()->route('admin.desserts.index')
                         ->with('success', 'Dolce aggiornato!');
     }
     
@@ -125,7 +125,7 @@ class DessertController extends Controller
         // 🗑️ Elimina il dolce
         $dessert->delete();
         
-        return redirect()->route('desserts.index')
+        return redirect()->route('admin.desserts.index')
                         ->with('success', 'Dolce eliminato!');
     }
 }

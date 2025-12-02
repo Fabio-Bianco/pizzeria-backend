@@ -64,7 +64,7 @@ class AppetizerController extends Controller
             $appetizer->ingredients()->sync($request->ingredients);
         }
         
-        return redirect()->route('appetizers.index')
+        return redirect()->route('admin.appetizers.index')
                         ->with('success', 'Antipasto creato!');
     }
     
@@ -116,7 +116,7 @@ class AppetizerController extends Controller
         // 🔗 Aggiorna gli ingredienti
         $appetizer->ingredients()->sync($request->ingredients ?? []);
         
-        return redirect()->route('appetizers.index')
+        return redirect()->route('admin.appetizers.index')
                         ->with('success', 'Antipasto aggiornato!');
     }
     
@@ -134,7 +134,7 @@ class AppetizerController extends Controller
         // 🗑️ Elimina l'antipasto
         $appetizer->delete();
         
-        return redirect()->route('appetizers.index')
+        return redirect()->route('admin.appetizers.index')
                         ->with('success', 'Antipasto eliminato!');
     }
 }

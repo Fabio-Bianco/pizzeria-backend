@@ -53,7 +53,7 @@ class BeverageController extends Controller
             'slug' => SlugService::unique(new Beverage(), $request->name)
         ]);
         
-        return redirect()->route('beverages.index')
+        return redirect()->route('admin.beverages.index')
                         ->with('success', 'Bevanda creata!');
     }
     
@@ -91,7 +91,7 @@ class BeverageController extends Controller
                 : $beverage->slug
         ]);
         
-        return redirect()->route('beverages.index')
+        return redirect()->route('admin.beverages.index')
                         ->with('success', 'Bevanda aggiornata!');
     }
     
@@ -100,7 +100,7 @@ class BeverageController extends Controller
     {
         $beverage->delete();
         
-        return redirect()->route('beverages.index')
+        return redirect()->route('admin.beverages.index')
                         ->with('success', 'Bevanda eliminata!');
     }
 }

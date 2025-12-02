@@ -120,6 +120,33 @@ unset($__errorArgs, $__bag); ?>
                         </div>
 
                         <div class="mb-3">
+                            <label for="description" class="form-label small text-muted mb-1">Descrizione</label>
+                            <textarea 
+                                class="form-control <?php $__errorArgs = ['description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> is-invalid <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>" 
+                                id="description" 
+                                name="description" 
+                                rows="2"
+                            ><?php echo e(old('description', $pizza->description)); ?></textarea>
+                            <?php $__errorArgs = ['description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                                <div class="invalid-feedback"><?php echo e($message); ?></div>
+                            <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                        </div>
+
+                        <div class="mb-3">
                             <label for="notes" class="form-label small text-muted mb-1">Note</label>
                             <textarea 
                                 class="form-control <?php $__errorArgs = ['notes'];
@@ -148,9 +175,9 @@ unset($__errorArgs, $__bag); ?>
 
                         <div class="mb-3">
                             <label for="image" class="form-label small text-muted mb-1">Immagine</label>
-                            <?php if($pizza->image): ?>
+                            <?php if($pizza->image_path): ?>
                                 <div class="mb-2">
-                                    <img src="<?php echo e(asset('storage/' . $pizza->image)); ?>" alt="<?php echo e($pizza->name); ?>" class="img-thumbnail" style="max-width: 200px;">
+                                    <img src="<?php echo e(asset('storage/' . $pizza->image_path)); ?>" alt="<?php echo e($pizza->name); ?>" class="img-thumbnail" style="max-width: 200px;">
                                 </div>
                             <?php endif; ?>
                             <input 
@@ -250,10 +277,10 @@ unset($__errorArgs, $__bag); ?>
                                     <input 
                                         class="form-check-input allergen-checkbox" 
                                         type="checkbox" 
-                                        name="allergens[]" 
+                                        name="manual_allergens[]" 
                                         value="<?php echo e($allergen->id); ?>" 
                                         id="allergen_<?php echo e($allergen->id); ?>"
-                                        <?php echo e(in_array($allergen->id, old('allergens', $pizza->allergens ? $pizza->allergens->pluck('id')->toArray() : [])) ? 'checked' : ''); ?>
+                                        <?php echo e(in_array($allergen->id, old('manual_allergens', $pizza->manual_allergens ?? [])) ? 'checked' : ''); ?>
 
                                     >
                                     <label class="form-check-label small" for="allergen_<?php echo e($allergen->id); ?>">

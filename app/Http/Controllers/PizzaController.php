@@ -77,7 +77,7 @@ class PizzaController extends Controller
             $pizza->ingredients()->sync($request->ingredients);
         }
         
-        return redirect()->route('pizzas.index')
+        return redirect()->route('admin.pizzas.index')
                         ->with('success', 'Pizza creata!');
     }
     
@@ -138,7 +138,7 @@ class PizzaController extends Controller
         // 🔗 Aggiorna gli ingredienti
         $pizza->ingredients()->sync($request->ingredients ?? []);
         
-        return redirect()->route('pizzas.index')
+        return redirect()->route('admin.pizzas.index')
                         ->with('success', 'Pizza aggiornata!');
     }
     
@@ -156,7 +156,7 @@ class PizzaController extends Controller
         // 🗑️ Elimina la pizza
         $pizza->delete();
         
-        return redirect()->route('pizzas.index')
+        return redirect()->route('admin.pizzas.index')
                         ->with('success', 'Pizza eliminata!');
     }
 }
