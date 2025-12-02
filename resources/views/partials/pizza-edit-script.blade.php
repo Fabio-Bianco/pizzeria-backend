@@ -1,51 +1,67 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // ========================================
+        // 1. INIZIALIZZAZIONE ELEMENTI DOM
+        // ========================================
         const ingredientsElement = document.getElementById('ingredients');
         const categorySelect = document.getElementById('category_id');
         
-        // SALVA ingredienti selezionati PRIMA di toccare il DOM
+        // ========================================
+        // 2. PREVENZIONE DUPLICATI CHOICES.JS
+        // ========================================
+        // Salva gli ingredienti già selezionati dal database
         const preSelectedIngredients = Array.from(ingredientsElement.selectedOptions).map(opt => opt.value);
         
-        // RIMUOVI attributo selected da tutte le option (previene duplicati)
+        // Pulisce il DOM rimuovendo gli attributi 'selected'
+        // Questo è necessario perché Choices.js legge lo stato del DOM all'inizializzazione
+        // e duplicherebbe gli elementi se non puliamo prima
         Array.from(ingredientsElement.options).forEach(opt => opt.removeAttribute('selected'));
         
-        // Inizializza Choices.js su select PULITO
+        // ========================================
+        // 3. CONFIGURAZIONE CHOICES.JS
+        // ========================================
         const ingredientsSelect = new Choices('#ingredients', {
-            removeItemButton: true,
-            searchEnabled: true,
+            removeItemButton: true,              // Mostra bottone X per rimuovere
+            searchEnabled: true,                 // Abilita ricerca nel dropdown
             searchPlaceholderValue: 'Cerca ingredienti...',
             noResultsText: 'Nessun risultato trovato',
             itemSelectText: 'Clicca per selezionare',
             placeholderValue: 'Seleziona ingredienti',
-            duplicateItemsAllowed: false,
-            shouldSort: false,
+            duplicateItemsAllowed: false,        // Previene selezioni duplicate
+            shouldSort: false,                   // Mantiene ordine originale delle option
             removeItems: true,
-            position: 'top'  // Apre il dropdown verso l'alto
+            position: 'top'                      // Dropdown si apre verso l'alto
         });
         
-        // ADESSO imposta le selezioni programmaticamente (senza duplicati)
+        // Ripristina le selezioni dopo che Choices.js è pronto
         if (preSelectedIngredients.length > 0) {
             setTimeout(() => {
                 ingredientsSelect.setChoiceByValue(preSelectedIngredients);
             }, 100);
         }
 
+        // ========================================
+        // 4. GESTIONE PIZZA BIANCA
+        // ========================================
+        // Le pizze bianche non possono avere ingredienti con pomodoro
         let currentCategoryIsWhite = false;
 
-        // Controlla categoria iniziale
         function checkCategory() {
             const selectedOption = categorySelect.options[categorySelect.selectedIndex];
             currentCategoryIsWhite = selectedOption && selectedOption.dataset.isWhite === '1';
             updateTomatoIngredients();
         }
 
-        // Disabilita ingredienti con pomodoro per pizze bianche
         function updateTomatoIngredients() {
             const allChoices = ingredientsSelect._currentState.choices;
+            
             allChoices.forEach(choice => {
                 const option = document.querySelector(`#ingredients option[value="${choice.value}"]`);
+                
+                // Se l'ingrediente contiene pomodoro (data-is-tomato="1")
                 if (option && option.dataset.isTomato === '1') {
                     if (currentCategoryIsWhite) {
+                        // Rimuove l'ingrediente se selezionato e disabilita la scelta
                         ingredientsSelect.removeActiveItemsByValue(choice.value);
                         choice.disabled = true;
                     } else {
@@ -53,25 +69,32 @@
                     }
                 }
             });
+            
+            // Aggiorna il dropdown con le nuove scelte
             ingredientsSelect.setChoices(allChoices, 'value', 'label', true);
         }
 
         categorySelect.addEventListener('change', checkCategory);
         checkCategory();
 
-        // Salva manual_allergens iniziali (dal DB)
-        const initialManualAllergens = Array.from(document.querySelectorAll('.allergen-checkbox:checked')).map(cb => parseInt(cb.value));
+        // ========================================
+        // 5. SISTEMA RILEVAMENTO ALLERGENI
+        // ========================================
+        // Salva gli allergeni manuali già selezionati nel database
+        // Questi devono essere mantenuti anche quando cambiano gli ingredienti
+        const initialManualAllergens = Array.from(
+            document.querySelectorAll('.allergen-checkbox:checked')
+        ).map(cb => parseInt(cb.value));
         
-        console.log('Manual allergens iniziali:', initialManualAllergens);
-        
-        // Rilevamento automatico allergeni
+        /**
+         * Aggiorna la lista degli allergeni basandosi sugli ingredienti selezionati
+         * Combina allergeni automatici (da ingredienti) + allergeni manuali (da DB)
+         */
         function updateAllergens() {
             const selectedIngredients = ingredientsSelect.getValue(true);
             
-            console.log('Ingredienti selezionati:', selectedIngredients);
-            
+            // Se non ci sono ingredienti, mostra solo gli allergeni manuali
             if (selectedIngredients.length === 0) {
-                console.log('Nessun ingrediente, mostro solo manual');
                 document.querySelectorAll('.allergen-checkbox').forEach(cb => {
                     cb.checked = initialManualAllergens.includes(parseInt(cb.value));
                 });
@@ -80,13 +103,12 @@
                 return;
             }
 
-            // AJAX
+            // Costruisce URL per chiamata AJAX
             const url = '{{ route("admin.ajax.ingredients-allergens") }}?' + new URLSearchParams({
                 ingredient_ids: selectedIngredients
             });
-            
-            console.log('Chiamata AJAX a:', url);
 
+            // Chiamata AJAX per ottenere allergeni degli ingredienti selezionati
             fetch(url, {
                 method: 'GET',
                 headers: {
@@ -94,33 +116,21 @@
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 }
             })
-            .then(response => {
-                console.log('Risposta ricevuta:', response.status);
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                console.log('Dati allergeni:', data);
-                
                 const automaticAllergens = data.allergens || [];
                 const automaticIds = automaticAllergens.map(a => parseInt(a.id));
                 
-                console.log('IDs allergeni automatici:', automaticIds);
-                console.log('IDs allergeni manuali:', initialManualAllergens);
-                
-                // Combina automatici + manuali
+                // Combina allergeni automatici + manuali (rimuove duplicati con Set)
                 const allIds = [...new Set([...automaticIds, ...initialManualAllergens])];
                 
-                console.log('Tutti gli IDs da checkare:', allIds);
-                
-                // Aggiorna checkbox
+                // Aggiorna stato delle checkbox
                 document.querySelectorAll('.allergen-checkbox').forEach(cb => {
                     const id = parseInt(cb.value);
-                    const shouldCheck = allIds.includes(id);
-                    cb.checked = shouldCheck;
-                    console.log(`Checkbox ${id}: ${shouldCheck ? 'checked' : 'unchecked'}`);
+                    cb.checked = allIds.includes(id);
                 });
 
-                // Aggiorna preview
+                // Aggiorna preview visuale degli allergeni automatici
                 const preview = document.getElementById('final-allergen-preview');
                 const listContainer = document.getElementById('final-allergen-list');
                 
@@ -134,44 +144,42 @@
                 }
             })
             .catch(error => {
-                console.error('ERRORE AJAX:', error);
+                console.error('Errore nel caricamento degli allergeni:', error);
                 const preview = document.getElementById('final-allergen-preview');
                 if (preview) preview.style.display = 'none';
             });
         }
 
-        // Evento change ingredienti
-        ingredientsElement.addEventListener('change', function() {
-            console.log('Ingredienti cambiati!');
-            updateAllergens();
-        });
+        // ========================================
+        // 6. EVENT LISTENERS
+        // ========================================
         
-        // Fix per menu collassabili: ri-trigghera quando la sezione ingredienti si espande
+        // Trigger aggiornamento allergeni quando cambiano gli ingredienti
+        ingredientsElement.addEventListener('change', updateAllergens);
+        
+        // Gestione sezioni collapsabili Bootstrap
         const ingredientsCard = document.querySelector('#ingredients')?.closest('.card');
         if (ingredientsCard) {
             const collapseElement = ingredientsCard.closest('.collapse');
             if (collapseElement) {
-                collapseElement.addEventListener('shown.bs.collapse', function() {
-                    console.log('Sezione ingredienti espansa, re-init...');
-                    updateAllergens();
-                });
+                // Aggiorna allergeni quando la sezione si espande
+                collapseElement.addEventListener('shown.bs.collapse', updateAllergens);
                 
-                // Chiudi dropdown quando la sezione si chiude
+                // Chiude il dropdown quando la sezione si chiude
                 collapseElement.addEventListener('hide.bs.collapse', function() {
                     ingredientsSelect.hideDropdown();
                 });
             }
         }
         
-        // Fix: chiudi dropdown quando scrolli (previene overlap)
-        let scrollTimer;
+        // Chiude dropdown durante lo scroll per evitare sovrapposizioni
         window.addEventListener('scroll', function() {
             if (ingredientsSelect.dropdown.isActive) {
                 ingredientsSelect.hideDropdown();
             }
         }, { passive: true });
         
-        // Fix: chiudi dropdown quando clicchi fuori dalla sezione ingredienti
+        // Chiude dropdown quando si clicca fuori dal componente
         document.addEventListener('click', function(e) {
             const choicesContainer = document.querySelector('.choices');
             if (choicesContainer && !choicesContainer.contains(e.target)) {
@@ -179,13 +187,12 @@
             }
         });
         
-        // Carica all'avvio
-        setTimeout(function() {
-            console.log('Caricamento iniziale allergeni...');
-            updateAllergens();
-        }, 500);
+        // Caricamento iniziale degli allergeni (con delay per attendere il render completo)
+        setTimeout(updateAllergens, 500);
 
-        // Gestione modale nuovo ingrediente
+        // ========================================
+        // 7. CREAZIONE NUOVO INGREDIENTE (MODALE)
+        // ========================================
         const newIngredientForm = document.getElementById('newIngredientForm');
         if (newIngredientForm) {
             newIngredientForm.addEventListener('submit', function(e) {
@@ -193,6 +200,7 @@
 
                 const formData = new FormData(this);
 
+                // Invia richiesta POST per creare nuovo ingrediente
                 fetch('{{ route("admin.ingredients.store") }}', {
                     method: 'POST',
                     headers: {
@@ -203,23 +211,26 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        // Aggiunge il nuovo ingrediente al dropdown e lo seleziona
                         ingredientsSelect.setChoices([{
                             value: data.ingredient.id,
                             label: data.ingredient.name,
                             selected: true
                         }], 'value', 'label', false);
 
+                        // Chiude modale e resetta form
                         const modal = bootstrap.Modal.getInstance(document.getElementById('addIngredientModal'));
                         modal.hide();
                         newIngredientForm.reset();
 
+                        // Aggiorna allergeni con il nuovo ingrediente
                         updateAllergens();
                     } else {
                         alert('Errore nella creazione dell\'ingrediente');
                     }
                 })
                 .catch(error => {
-                    console.error('Errore:', error);
+                    console.error('Errore nella creazione ingrediente:', error);
                     alert('Errore nella richiesta');
                 });
             });

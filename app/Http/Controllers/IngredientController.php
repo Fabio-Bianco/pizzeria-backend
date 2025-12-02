@@ -139,21 +139,36 @@ class IngredientController extends Controller
                         ->with('success', 'Ingrediente eliminato!');
     }
     
-    // 💬 Ottieni allergeni per ingredienti specifici (AJAX)
+    /**
+     * Endpoint AJAX per ottenere gli allergeni degli ingredienti selezionati
+     * 
+     * Utilizzato in pizza-create e pizza-edit per rilevamento automatico allergeni.
+     * Accetta ingredient_ids come array o stringa separata da virgole.
+     * 
+     * @param Request $request - Contiene ingredient_ids (array|string)
+     * @return \Illuminate\Http\JsonResponse - Array di allergeni con id e name
+     * 
+     * Esempio richiesta: GET /ajax/ingredients-allergens?ingredient_ids=1,5,12
+     * Esempio risposta: {"allergens": [{"id": 1, "name": "Lattosio"}, {"id": 4, "name": "Glutine"}]}
+     */
     public function getAllergensForIngredients(Request $request)
     {
         $ingredientIds = $request->ingredient_ids ?? [];
         
-        // Se arriva come stringa separata da virgole, converti in array
+        // Gestisce sia formato array che stringa CSV
+        // JavaScript URLSearchParams invia come stringa "1,2,3"
         if (is_string($ingredientIds)) {
             $ingredientIds = explode(',', $ingredientIds);
             $ingredientIds = array_map('intval', $ingredientIds);
         }
         
+        // Se nessun ingrediente, ritorna array vuoto
         if (empty($ingredientIds)) {
             return response()->json(['allergens' => []]);
         }
         
+        // Query Eloquent: trova allergeni che hanno almeno uno degli ingredienti selezionati
+        // Usa whereHas per filtrare attraverso la relazione many-to-many
         $allergens = Allergen::whereHas('ingredients', function ($query) use ($ingredientIds) {
             $query->whereIn('ingredients.id', $ingredientIds);
         })->get(['id', 'name']);
